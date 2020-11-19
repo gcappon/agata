@@ -8,6 +8,8 @@
 %
 % ---------------------------------------------------------------------
 
+addpath(fullfile('..','..','src','analysis'));
+
 time = datetime(2000,1,1,0,0,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(60);
 data = timetable(randn(length(time),1)*30+140,'VariableNames', {'glucose'}, 'RowTimes', time);
 
