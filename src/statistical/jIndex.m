@@ -1,0 +1,21 @@
+function jIndex = jIndex(data)
+%jIndex function that computes the jIndex of the glucose concentration
+%(ignores nan values).
+%
+%Input:
+%   - data: a timeseries containing the glucose data to analyze (in mg/dl). 
+%Output:
+%   - jIndex: jIndex of the glucose concentration.
+%
+% ---------------------------------------------------------------------
+%
+% Copyright (C) 2020 Giacomo Cappon
+%
+% This file is part of AGATA.
+%
+% ---------------------------------------------------------------------
+    
+    jIndex = 1e-3 * (meanGlucose(data) + stdGlucose(data)) ^ 2;
+    
+end
+
