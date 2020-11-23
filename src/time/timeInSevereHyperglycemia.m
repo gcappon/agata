@@ -3,7 +3,8 @@ function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
 %hyperglycemia (ignoring nan values).
 %
 %Input:
-%   - data: a timeseries containing the glucose data to analyze (in mg/dl). 
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInSevereHyperglycemia: percentage of time in hyperglycemia (i.e., 
 %   > 250 mg/dl).

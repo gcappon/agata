@@ -3,7 +3,8 @@ function timeInHypoglycemia = timeInHypoglycemia(data)
 %(ignoring nan values).
 %
 %Input:
-%   - data: a timeseries containing the glucose data to analyze (in mg/dl). 
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInHypoglycemia: percentage of time in hypoglycemia (i.e., 
 %   <70 mg/dl).

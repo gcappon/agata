@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Inspection | AGATA</title>
+    <meta name="generator" content="VuePress 1.7.1">
+    <link rel="icon" href="/agata/agata-logo.png">
+    <meta name="description" content="AGATA (Automated Glucose dATa Analysis) is a MATLAB® toolbox to analyse glucose data.">
+    <meta name="theme-color" content="#56772c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <link rel="preload" href="/agata/assets/css/0.styles.7618fbed.css" as="style"><link rel="preload" href="/agata/assets/js/app.dc67da04.js" as="script"><link rel="preload" href="/agata/assets/js/2.90666651.js" as="script"><link rel="preload" href="/agata/assets/js/11.4ee3271f.js" as="script"><link rel="prefetch" href="/agata/assets/js/10.9596f8b5.js"><link rel="prefetch" href="/agata/assets/js/12.05bdfaae.js"><link rel="prefetch" href="/agata/assets/js/13.41126130.js"><link rel="prefetch" href="/agata/assets/js/14.a07ff2bc.js"><link rel="prefetch" href="/agata/assets/js/15.91636101.js"><link rel="prefetch" href="/agata/assets/js/16.37fc2dae.js"><link rel="prefetch" href="/agata/assets/js/17.e6b21bbf.js"><link rel="prefetch" href="/agata/assets/js/18.e37b11ff.js"><link rel="prefetch" href="/agata/assets/js/3.95aadac3.js"><link rel="prefetch" href="/agata/assets/js/4.08538cd7.js"><link rel="prefetch" href="/agata/assets/js/5.f1fc104c.js"><link rel="prefetch" href="/agata/assets/js/6.f73d82aa.js"><link rel="prefetch" href="/agata/assets/js/7.b92e7fd8.js"><link rel="prefetch" href="/agata/assets/js/8.b2770fe6.js"><link rel="prefetch" href="/agata/assets/js/9.ca04fb78.js">
+    <link rel="stylesheet" href="/agata/assets/css/0.styles.7618fbed.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/agata/" class="home-link router-link-active"><!----> <span class="site-name">AGATA</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/agata/guides/" class="nav-link">
+  Guides
+</a></div><div class="nav-item"><a href="/agata/api/" class="nav-link router-link-active">
+  API Docs
+</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/agata/guides/" class="nav-link">
+  Guides
+</a></div><div class="nav-item"><a href="/agata/api/" class="nav-link router-link-active">
+  API Docs
+</a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>AGATA Reference</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/agata/api/time.html" class="sidebar-link">Time</a></li><li><a href="/agata/api/statistical.html" class="sidebar-link">Statistical</a></li><li><a href="/agata/api/metrics.html" class="sidebar-link">Metrics</a></li><li><a href="/agata/api/inspection.html" aria-current="page" class="active sidebar-link">Inspection</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/agata/api/inspection.html#findnanislands" class="sidebar-link">findNanIslands</a></li></ul></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="inspection"><a href="#inspection" class="header-anchor">#</a> Inspection</h1> <h2 id="findnanislands"><a href="#findnanislands" class="header-anchor">#</a> findNanIslands</h2> <div class="language-MATLAB extra-class"><pre class="language-matlab"><code><span class="token keyword">function</span> <span class="token punctuation">[</span>shortNan<span class="token punctuation">,</span> longNan<span class="token punctuation">,</span> nanStart<span class="token punctuation">,</span> nanEnd<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token function">findNanIslands</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span>TH<span class="token punctuation">)</span>
+</code></pre></div><p>Function that locates nan sequences in vector <code>data</code>, and classifies them based on their length (longer or not than the specified threshold <code>TH</code>).</p> <h3 id="inputs"><a href="#inputs" class="header-anchor">#</a> Inputs</h3> <ul><li><strong>data: vector of double (required)</strong> <br>
+A vector of double of equally spaced (in time) values;</li> <li><strong>TH: integer (required)</strong>
+A integer defining the threshold, expressed in number of samples, to distinguish between long and short nan sequences.</li></ul> <h3 id="outputs"><a href="#outputs" class="header-anchor">#</a> Outputs</h3> <ul><li><strong>shortNan: vector of integer</strong> <br>
+Vector of integer that contains the indices of &quot;short nan&quot; sequences (i.e., sequences shorter than <code>TH</code> consecutive nan samples);</li> <li><strong>longNan: vector of integer</strong> <br>
+Vector of integer that contains the indices of &quot;long nan&quot; sequences (i.e., sequences having <code>TH</code> consecutive nan samples or more);</li> <li><strong>nanStart: vector of integer</strong> <br>
+Vector of integer containing the start indices of the nan sequences;</li> <li><strong>nanEnd: vector of integer</strong> <br>
+Vector of integer containing the last indices of the nan sequences.</li></ul></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/agata/api/metrics.html" class="prev">
+        Metrics
+      </a></span> <!----></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/agata/assets/js/app.dc67da04.js" defer></script><script src="/agata/assets/js/2.90666651.js" defer></script><script src="/agata/assets/js/11.4ee3271f.js" defer></script>
+  </body>
+</html>

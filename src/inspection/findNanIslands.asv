@@ -9,9 +9,9 @@ function [shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,TH)
 %   long and short nan sequences.
 % Outputs:
 %   - shortNan: indices of "short nan" sequences (i.e., sequences shorter
-%   than TH consecutive nan samples);
+%   than TH consecutive samples);
 %   - longNan: indices of "long nan" sequences (i.e., sequences having TH 
-%   consecutive nan samples or more);
+%   consecutive samples or more);
 %   - nanStart: start of nan sequences;
 %   - nanEnd: end of nan sequences.
 %

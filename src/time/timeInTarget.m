@@ -3,7 +3,8 @@ function timeInTarget = timeInTarget(data)
 %(ignoring nan values).
 %
 %Input:
-%   - data: a timeseries containing the glucose data to analyze (in mg/dl). 
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInTarget: percentage of time in hypoglycemia (i.e., 
 %   between 70 and 180 mg/dl).

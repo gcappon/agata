@@ -3,7 +3,8 @@ function meanGlucose = meanGlucose(data)
 %(ignores nan values).
 %
 %Input:
-%   - data: a timeseries containing the glucose data to analyze (in mg/dl). 
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl). 
 %Output:
 %   - meanGlucose: mean glucose concentration.
 %

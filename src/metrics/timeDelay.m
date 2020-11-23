@@ -1,11 +1,13 @@
 function timeDelay = timeDelay(data,dataHat, sampleTime)
-%timeDelay function that computes the delay of a predicted glucose trace.
+%timeDelay function that computes the delay of a predicted glucose trace. 
+%The time delay is computed as the time shift necessary to maximize the 
+%correlation between the two traces.
 %
 %Inputs:
-%   - data: a timeseries containing the reference (true) glucose data (in 
-%   mg/dl); 
-%   - dataHat: a timeseries containing the inferred glucose data (in 
-%   mg/dl) to compare with data;
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl);
+%   - data: a timetable with column `Time` and `glucose` containing the inferred 
+%   glucose data (in mg/dl) to compare with `data`;
 %   - sampleTime: the sample time of the given data (in min).
 %Output:
 %   - timeDelay: the computed delay (min).

@@ -1,3 +1,0 @@
-# AGATA documentation
-
-TBD

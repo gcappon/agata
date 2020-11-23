@@ -3,10 +3,10 @@ function mad = mad(data,dataHat)
 %between two glucose traces.
 %
 %Inputs:
-%   - data: a timeseries containing the reference (true) glucose data (in 
-%   mg/dl); 
-%   - dataHat: a timeseries containing the inferred glucose data (in 
-%   mg/dl) to compare with data.
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl);
+%   - data: a timetable with column `Time` and `glucose` containing the inferred 
+%   glucose data (in mg/dl) to compare with `data`.
 %Output:
 %   - mad: the computed mean absolute difference (mg/dl).
 %

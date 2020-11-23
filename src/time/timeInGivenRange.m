@@ -3,7 +3,8 @@ function timeInGivenRange = timeInGivenRange(data, minValue, maxValue)
 %(ignoring nan values).
 %
 %Input:
-%   - data: a timeseries containing the glucose data to analyze (in mg/dl);
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl);
 %   - minValue: the minimum value of the specified range (in mg/dl);
 %   - maxValue: the maximum value of the specified range (in mg/dl).
 %Output:
