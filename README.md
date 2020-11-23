@@ -48,4 +48,8 @@ tHyper = timeInHyperglycemia(data);
 assert(results == 40);
 ```
 
+## Documentation
+
+AGATA's documentation can be found at [https://gcappon.github.io/agata/](https://gcappon.github.io/agata/)
+
 
