@@ -45,7 +45,7 @@ data.glucose(11) = nan;
 
 ```MATLAB
 tHyper = timeInHyperglycemia(data);
-assert(results == 40);
+assert(tHyper == 40);
 ```
 
 ## Documentation
