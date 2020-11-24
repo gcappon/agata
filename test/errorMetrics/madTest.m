@@ -1,4 +1,4 @@
-% Test units of the timeDelay function
+% Test units of the mad function
 %
 % ---------------------------------------------------------------------
 %
@@ -8,11 +8,11 @@
 %
 % ---------------------------------------------------------------------
 
-addpath(fullfile('..','..','src','metrics'));
+addpath(fullfile('..','..','src','errorMetrics'));
 
 time = datetime(2000,1,1,0,0,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(50); % length = 11;
 data = timetable(zeros(length(time),1),'VariableNames', {'glucose'}, 'RowTimes', time);
-data.glucose(1) = 80;
+data.glucose(1) = 40;
 data.glucose(2:3) = 50;
 data.glucose(4) = 80;
 data.glucose(5:6) = 120;
@@ -30,10 +30,12 @@ dataHat.glucose(7:8) = nan;
 dataHat.glucose(9:10) = 260;
 dataHat.glucose(11) = 260;
 
+res = mean(abs([40 50 50 80 120 120 260 260]-[30 70 70 70 130 130 260 260]));
+
 %% Test 1: check NaN presence
-results = timeDelay(data,dataHat,5);
+results = mad(data,dataHat);
 assert(~isnan(results));
 
 %% Test 2: check results calculation
-results = timeDelay(data,dataHat,5);
-assert(results == 0);
+results = mad(data,dataHat);
+assert(results == res);

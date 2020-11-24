@@ -1,4 +1,4 @@
-% Test units of the mad function
+% Test units of the rmse function
 %
 % ---------------------------------------------------------------------
 %
@@ -8,7 +8,7 @@
 %
 % ---------------------------------------------------------------------
 
-addpath(fullfile('..','..','src','statistical'));
+addpath(fullfile('..','..','src','errorMetrics'));
 
 time = datetime(2000,1,1,0,0,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(50); % length = 11;
 data = timetable(zeros(length(time),1),'VariableNames', {'glucose'}, 'RowTimes', time);
@@ -30,12 +30,12 @@ dataHat.glucose(7:8) = nan;
 dataHat.glucose(9:10) = 260;
 dataHat.glucose(11) = 260;
 
-res = mean(abs([40 50 50 80 120 120 260 260]-[30 70 70 70 130 130 260 260]));
+res = sqrt(mean(([40 50 50 80 120 120 260 260]-[30 70 70 70 130 130 260 260]).^2));
 
 %% Test 1: check NaN presence
-results = mad(data,dataHat);
+results = rmse(data,dataHat);
 assert(~isnan(results));
 
 %% Test 2: check results calculation
-results = mad(data,dataHat);
+results = rmse(data,dataHat);
 assert(results == res);
