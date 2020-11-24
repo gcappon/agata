@@ -7,7 +7,7 @@ function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
 %   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInHypoglycemia: percentage of time in hypoglycemia (i.e., 
-%   < 50 mg/dl).
+%   < 54 mg/dl).
 %
 % ---------------------------------------------------------------------
 %
@@ -19,7 +19,7 @@ function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
     
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
-    timeInSevereHypoglycemia = 100*sum(nonNanGlucose < 50)/length(nonNanGlucose);
+    timeInSevereHypoglycemia = 100*sum(nonNanGlucose < 54)/length(nonNanGlucose);
     
 end
 

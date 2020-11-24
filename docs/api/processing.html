@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Processing | AGATA</title>
+    <meta name="generator" content="VuePress 1.7.1">
+    <link rel="icon" href="/agata/agata-logo.png">
+    <meta name="description" content="AGATA (Automated Glucose dATa Analysis) is a MATLAB® toolbox to analyse glucose data.">
+    <meta name="theme-color" content="#56772c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    
+    <link rel="preload" href="/agata/assets/css/0.styles.90af7557.css" as="style"><link rel="preload" href="/agata/assets/js/app.ccb93cc7.js" as="script"><link rel="preload" href="/agata/assets/js/2.90666651.js" as="script"><link rel="preload" href="/agata/assets/js/13.43090948.js" as="script"><link rel="prefetch" href="/agata/assets/js/10.047b61b7.js"><link rel="prefetch" href="/agata/assets/js/11.14633097.js"><link rel="prefetch" href="/agata/assets/js/12.fa944177.js"><link rel="prefetch" href="/agata/assets/js/14.ee6b17c0.js"><link rel="prefetch" href="/agata/assets/js/15.6fe420f6.js"><link rel="prefetch" href="/agata/assets/js/16.3ee0945b.js"><link rel="prefetch" href="/agata/assets/js/17.72cdd613.js"><link rel="prefetch" href="/agata/assets/js/18.e2cec0d7.js"><link rel="prefetch" href="/agata/assets/js/19.7a13efc0.js"><link rel="prefetch" href="/agata/assets/js/20.b81c1047.js"><link rel="prefetch" href="/agata/assets/js/3.2b8c3066.js"><link rel="prefetch" href="/agata/assets/js/4.08538cd7.js"><link rel="prefetch" href="/agata/assets/js/5.43a83393.js"><link rel="prefetch" href="/agata/assets/js/6.c97ed6c2.js"><link rel="prefetch" href="/agata/assets/js/7.a82147b8.js"><link rel="prefetch" href="/agata/assets/js/8.04595a4f.js"><link rel="prefetch" href="/agata/assets/js/9.e9f7b0d5.js">
+    <link rel="stylesheet" href="/agata/assets/css/0.styles.90af7557.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/agata/" class="home-link router-link-active"><!----> <span class="site-name">AGATA</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/agata/guides/" class="nav-link">
+  Guides
+</a></div><div class="nav-item"><a href="/agata/api/" class="nav-link router-link-active">
+  API Docs
+</a></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/agata/guides/" class="nav-link">
+  Guides
+</a></div><div class="nav-item"><a href="/agata/api/" class="nav-link router-link-active">
+  API Docs
+</a></div> <!----></nav>  <ul class="sidebar-links"><li><section class="sidebar-group depth-0"><p class="sidebar-heading open"><span>AGATA Reference</span> <!----></p> <ul class="sidebar-links sidebar-group-items"><li><a href="/agata/api/time.html" class="sidebar-link">Time</a></li><li><a href="/agata/api/statistical.html" class="sidebar-link">Statistical</a></li><li><a href="/agata/api/errorMetrics.html" class="sidebar-link">Error metrics</a></li><li><a href="/agata/api/riskMetrics.html" class="sidebar-link">Risk metrics</a></li><li><a href="/agata/api/processing.html" aria-current="page" class="active sidebar-link">Processing</a><ul class="sidebar-sub-headers"><li class="sidebar-sub-header"><a href="/agata/api/processing.html#retimeglucose" class="sidebar-link">retimeGlucose</a></li></ul></li><li><a href="/agata/api/inspection.html" class="sidebar-link">Inspection</a></li></ul></section></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="processing"><a href="#processing" class="header-anchor">#</a> Processing</h1> <h2 id="retimeglucose"><a href="#retimeglucose" class="header-anchor">#</a> retimeGlucose</h2> <div class="language-MATLAB extra-class"><pre class="language-matlab"><code><span class="token keyword">function</span> dataRetimed <span class="token operator">=</span> <span class="token function">retimeGlucose</span><span class="token punctuation">(</span>data<span class="token punctuation">,</span> timestep<span class="token punctuation">)</span>
+</code></pre></div><p>Function that retimes the given <code>data</code> timetable to a<br>
+new timetable with homogeneous <code>timestep</code>. It puts nans where glucose datapoints are missing and it uses mean to solve conflicts (i.e., when two glucose datapoints have the same retimed timestamp.</p> <h3 id="inputs"><a href="#inputs" class="header-anchor">#</a> Inputs</h3> <ul><li><strong>data: timetable (required)</strong> <br>
+A timetable with columns <code>Time</code> and <code>glucose</code> containing the glucose data to analyze (mg/dl);</li> <li><strong>timestep: integer (required)</strong> <br>
+An integer defining the timestep to use in the new timetable.</li></ul> <h3 id="output"><a href="#output" class="header-anchor">#</a> Output</h3> <ul><li><strong>dataRetimed: timetable</strong> <br>
+The retimed timetable with columns <code>Time</code> and <code>glucose</code>.</li></ul></div> <footer class="page-edit"><!----> <!----></footer> <div class="page-nav"><p class="inner"><span class="prev">
+      ←
+      <a href="/agata/api/riskMetrics.html" class="prev">
+        Risk metrics
+      </a></span> <span class="next"><a href="/agata/api/inspection.html">
+        Inspection
+      </a>
+      →
+    </span></p></div> </main></div><div class="global-ui"></div></div>
+    <script src="/agata/assets/js/app.ccb93cc7.js" defer></script><script src="/agata/assets/js/2.90666651.js" defer></script><script src="/agata/assets/js/13.43090948.js" defer></script>
+  </body>
+</html>

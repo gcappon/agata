@@ -26,4 +26,4 @@ assert(~isnan(results));
 
 %% Test 2: check percentages calculation
 results = timeInSevereHypoglycemia(data);
-assert(results == 10);
+assert(results == 30);
