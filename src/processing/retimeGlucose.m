@@ -11,6 +11,10 @@ function dataRetimed = retimeGlucose(data, timestep)
 %Output:
 %   - dataRetimed: the retimed timetable.
 %
+%Preconditions:
+%   - data must be a timetable;
+%   - timestep must be an integer.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -18,6 +22,15 @@ function dataRetimed = retimeGlucose(data, timestep)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+
+    %Check preconditions 
+    if(~istimetable(data))
+        error('retimeGlucose: data must be a timetable.');
+    end
+    if( ~( isnumeric(timestep) && ((timestep - round(timestep)) == 0) ) )
+        error('retimeGlucose: timestep must be an integer.')
+    end
+    
     
     %Create the new timetable
     data.Time.Second(1) = round(data.Time.Second(1)/60)*60;

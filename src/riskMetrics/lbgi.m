@@ -8,6 +8,9 @@ function lbgi = lbgi(data)
 %Output:
 %   - lbgi: the low blood glucose index of the glucose concentration.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -15,6 +18,15 @@ function lbgi = lbgi(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('lbgi: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('lbgi: data must have a homogeneous time grid.')
+    end
+    
     
     %Get rid of nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));

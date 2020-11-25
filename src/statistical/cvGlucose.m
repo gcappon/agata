@@ -8,6 +8,9 @@ function cvGlucose = cvGlucose(data)
 %Output:
 %   - cvGlucose: coefficient of variation of the glucose concentration.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -15,6 +18,15 @@ function cvGlucose = cvGlucose(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('cvGlucose: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('cvGlucose: data must have a homogeneous time grid.')
+    end
+    
     
     cvGlucose = 100 * stdGlucose(data) / meanGlucose(data);
 

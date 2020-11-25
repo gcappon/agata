@@ -8,6 +8,9 @@ function medianGlucose = medianGlucose(data)
 %Output:
 %   - medianGlucose: median glucose concentration.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -15,6 +18,15 @@ function medianGlucose = medianGlucose(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('medianGlucose: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('medianGlucose: data must have a homogeneous time grid.')
+    end
+    
     
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     

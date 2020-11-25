@@ -9,6 +9,9 @@ function timeInTightTarget = timeInTightTarget(data)
 %   - timeInTightTarget: percentage of time in hypoglycemia (i.e., 
 %   between 90 and 140 mg/dl).
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -16,6 +19,15 @@ function timeInTightTarget = timeInTightTarget(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('timeInTightTarget: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('timeInTightTarget: data must have a homogeneous time grid.')
+    end
+    
     
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     

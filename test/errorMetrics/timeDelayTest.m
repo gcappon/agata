@@ -31,9 +31,9 @@ dataHat.glucose(9:10) = 260;
 dataHat.glucose(11) = 260;
 
 %% Test 1: check NaN presence
-results = timeDelay(data,dataHat,5);
+results = timeDelay(data,dataHat);
 assert(~isnan(results));
 
 %% Test 2: check results calculation
-results = timeDelay(data,dataHat,5);
+results = timeDelay(data,dataHat);
 assert(results == 0);

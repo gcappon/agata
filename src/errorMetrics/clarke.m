@@ -14,6 +14,13 @@ function results = clarke(data,dataHat)
 %       - D: the percentage of time spent in Zone D;
 %       - E: the percentage of time spent in Zone E.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid;
+%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must start from the same timestamp;
+%   - data and dataHat must end with the same timestamp;
+%   - data and dataHat must have the same length.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -22,21 +29,32 @@ function results = clarke(data,dataHat)
 %
 % ---------------------------------------------------------------------
 
-    % Error checking
-    if nargin == 0
-     error('clarke:Inputs','There are no inputs.')
+    %Check preconditions 
+    if(~istimetable(data))
+        error('clarke: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('clarke: data must have a homogeneous time grid.')
+    end
+    if(~istimetable(data))
+        error('clarke: dataHat must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('clarke: dataHat must have a homogeneous time grid.')
+    end
+    if(data.Time(1) ~= dataHat.Time(1))
+        error('clarke: data and dataHat must start from the same timestamp.')
+    end
+    if(data.Time(end) ~= dataHat.Time(end))
+        error('clarke: data and dataHat must end with the same timestamp.')
+    end
+    if(height(data) ~= height(dataHat))
+        error('clarke: data and dataHat must have the same length.')
     end
     
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
     y = data.glucose(idx);
     yp = dataHat.glucose(idx);
-    
-    if length(yp) ~= length(y)
-        error('clarke:Inputs','Vectors y and yp must be the same length.')
-    end
-    if (max(y) > 400) || (max(yp) > 400) || (min(y) < 0) || (min(yp) < 0)
-        warning('clarke:Inputs','Vectors y and yp are not in the physiological range of glucose (<400mg/dl).')
-    end
     
     n = length(y);
     total = zeros(5,1);                        

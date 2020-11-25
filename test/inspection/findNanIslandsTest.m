@@ -25,7 +25,7 @@ data.glucose(20) = 140;
 data.glucose(21:24) = nan;
 
 %% Test 1: check NaN presence
-[shortNan, longNan, nanStart, nanEnd] = findNanIslands(data.glucose,0);
+[shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,0);
 
 assert(~any(isnan(shortNan)));
 assert(~any(isnan(longNan)));
@@ -33,7 +33,7 @@ assert(~any(isnan(nanStart)));
 assert(~any(isnan(nanEnd)));
 
 %% Test 2: check nanStart calculation
-[~, ~, nanStart, ~] = findNanIslands(data.glucose,2);
+[~, ~, nanStart, ~] = findNanIslands(data,2);
 
 assert(nanStart(1) == 5);
 assert(nanStart(2) == 16);
@@ -42,7 +42,7 @@ assert(nanStart(4) == 21);
 assert(length(nanStart) == 4);
 
 %% Test 3: check nanEnd calculation
-[~, ~, ~, nanEnd] = findNanIslands(data.glucose,2);
+[~, ~, ~, nanEnd] = findNanIslands(data,2);
 
 assert(nanEnd(1) == 9);
 assert(nanEnd(2) == 17);
@@ -51,23 +51,23 @@ assert(nanEnd(4) == 24);
 assert(length(nanEnd) == 4);
 
 %% Test 4a: check shortNan calculation (TH = 3)
-[shortNan, ~, ~, ~] = findNanIslands(data.glucose,3);
+[shortNan, ~, ~, ~] = findNanIslands(data,3);
 
 assert(shortNan(1) == 16);
 assert(shortNan(2) == 17);
 assert(shortNan(3) == 19);
 assert(length(shortNan) == 3);
 
-%% Test 4b: check shortNan calculation (TH = inf)
-[shortNan, ~, ~, ~] = findNanIslands(data.glucose,inf);
+%% Test 4b: check shortNan calculation (TH = 10000)
+[shortNan, ~, ~, ~] = findNanIslands(data,10000);
 assert(length(shortNan) == 12);
 
 %% Test 4c: check shortNan calculation (TH = 1)
-[shortNan, ~, ~, ~] = findNanIslands(data.glucose,1);
+[shortNan, ~, ~, ~] = findNanIslands(data,1);
 assert(length(shortNan) == 0);
 
 %% Test 5a: check longNan calculation (TH = 4)
-[~, longNan, ~, ~] = findNanIslands(data.glucose,4);
+[~, longNan, ~, ~] = findNanIslands(data,4);
 
 assert(longNan(1) == 5);
 assert(longNan(2) == 6);
@@ -80,10 +80,10 @@ assert(longNan(8) == 23);
 assert(longNan(9) == 24);
 assert(length(longNan) == 9);
 
-%% Test 5b: check longNan calculation (TH = inf)
-[~, longNan, ~, ~] = findNanIslands(data.glucose,inf);
+%% Test 5b: check longNan calculation (TH = 10000)
+[~, longNan, ~, ~] = findNanIslands(data,10000);
 assert(length(longNan) == 0);
 
 %% Test 5c: check longNan calculation (TH = 1)
-[~, longNan, ~, ~] = findNanIslands(data.glucose,1);
+[~, longNan, ~, ~] = findNanIslands(data,1);
 assert(length(longNan) == 12);

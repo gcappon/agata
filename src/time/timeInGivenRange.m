@@ -11,6 +11,10 @@ function timeInGivenRange = timeInGivenRange(data, minValue, maxValue)
 %   - timeInGivenRange: percentage of time spent in the given range (i.e.
 %   >= minValue and <= maxValue).
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid;
+%   - minValue must be smaller or equal to maxValue.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -19,8 +23,17 @@ function timeInGivenRange = timeInGivenRange(data, minValue, maxValue)
 %
 % ---------------------------------------------------------------------
     
-    %precondition
-    assert(minValue <= maxValue);
+    %Check preconditions 
+    if(~istimetable(data))
+        error('timeInGivenRange: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('timeInGivenRange: data must have a homogeneous time grid.')
+    end
+    if(minValue > maxValue)
+        error('timeInGivenRange: minValue must be smaller or equal to maxValue.')
+    end
+
     
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     

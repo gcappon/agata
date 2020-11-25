@@ -8,6 +8,9 @@ function bgri = bgri(data)
 %Output:
 %   - bgri: the blood glucose risk index of the glucose concentration.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -15,6 +18,15 @@ function bgri = bgri(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('bgri: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('bgri: data must have a homogeneous time grid.')
+    end
+    
     
     bgri = lbgi(data) + hbgi(data);
 

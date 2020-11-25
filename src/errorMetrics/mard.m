@@ -10,6 +10,13 @@ function mard = mard(data,dataHat)
 %Output:
 %   - mard: the computed mean absolute relative difference (%).
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid;
+%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must start from the same timestamp;
+%   - data and dataHat must end with the same timestamp;
+%   - data and dataHat must have the same length.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -17,6 +24,30 @@ function mard = mard(data,dataHat)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('mard: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('mard: data must have a homogeneous time grid.')
+    end
+    if(~istimetable(data))
+        error('mard: dataHat must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('mard: dataHat must have a homogeneous time grid.')
+    end
+    if(data.Time(1) ~= dataHat.Time(1))
+        error('mard: data and dataHat must start from the same timestamp.')
+    end
+    if(data.Time(end) ~= dataHat.Time(end))
+        error('mard: data and dataHat must end with the same timestamp.')
+    end
+    if(height(data) ~= height(dataHat))
+        error('mard: data and dataHat must have the same length.')
+    end
+    
     
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
     

@@ -15,6 +15,10 @@ function [shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,TH)
 %   - nanStart: start of nan sequences;
 %   - nanEnd: end of nan sequences.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid;
+%   - TH must be an integer.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Lorenzo Meneghetti
@@ -22,9 +26,21 @@ function [shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,TH)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
-
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('findNanIslands: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('findNanIslands: data must have a homogeneous time grid.')
+    end
+    if( ~( isnumeric(TH) && ((TH - round(TH)) == 0) ) )
+        error('findNanIslands: TH must be an integer.')
+    end
+    
+    
     % make input as column
-    data=data(:);
+    data=data.glucose(:);
 
     %% locate nan sequences
 

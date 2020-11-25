@@ -9,6 +9,9 @@ function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
 %   - timeInHypoglycemia: percentage of time in hypoglycemia (i.e., 
 %   < 54 mg/dl).
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -16,6 +19,15 @@ function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('timeInSevereHypoglycemia: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('timeInSevereHypoglycemia: data must have a homogeneous time grid.')
+    end
+    
     
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     

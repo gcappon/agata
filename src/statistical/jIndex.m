@@ -8,6 +8,9 @@ function jIndex = jIndex(data)
 %Output:
 %   - jIndex: jIndex of the glucose concentration.
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -15,6 +18,15 @@ function jIndex = jIndex(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('jIndex: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('jIndex: data must have a homogeneous time grid.')
+    end
+    
     
     jIndex = 1e-3 * (meanGlucose(data) + stdGlucose(data)) ^ 2;
     

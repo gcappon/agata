@@ -9,6 +9,9 @@ function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
 %   - timeInSevereHyperglycemia: percentage of time in hyperglycemia (i.e., 
 %   > 250 mg/dl).
 %
+%Preconditions:
+%   - data must be a timetable having an homogeneous time grid.
+%
 % ---------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -16,6 +19,15 @@ function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
+    
+    %Check preconditions 
+    if(~istimetable(data))
+        error('timeInSevereHyperglycemia: data must be a timetable.');
+    end
+    if(var(seconds(diff(data.Time))) > 0)
+        error('timeInSevereHyperglycemia: data must have a homogeneous time grid.')
+    end
+    
     
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
