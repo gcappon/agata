@@ -1,3 +1,5 @@
 language: matlab
 matlab:
   - R2020b
+notifications:
+  slack: unipddeidiabe-qot8622:VQDpHauZVIHpns5ht270ZJyz
