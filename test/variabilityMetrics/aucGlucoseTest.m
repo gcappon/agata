@@ -1,4 +1,4 @@
-% Test units of the meanGlucose function
+% Test units of the aucGlucose function
 %
 % ---------------------------------------------------------------------
 %
@@ -8,7 +8,7 @@
 %
 % ---------------------------------------------------------------------
 
-addpath(fullfile('..','..','src','statistical'));
+addpath(fullfile('..','..','src','variabilityMetrics'));
 
 time = datetime(2000,1,1,0,0,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(50); % length = 11;
 data = timetable(zeros(length(time),1),'VariableNames', {'glucose'}, 'RowTimes', time);
@@ -21,9 +21,9 @@ data.glucose(9:10) = 260;
 data.glucose(11) = nan;
 
 %% Test 1: check NaN presence
-results = meanGlucose(data);
+results = aucGlucose(data);
 assert(~isnan(results));
 
 %% Test 2: check results calculation
-results = meanGlucose(data);
-assert(results == 138);
+results = aucGlucose(data);
+assert(results == 6900);

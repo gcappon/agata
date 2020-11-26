@@ -1,4 +1,4 @@
-% Test units of the jIndex function
+% Test units of the meanGlucose function
 %
 % ---------------------------------------------------------------------
 %
@@ -8,7 +8,7 @@
 %
 % ---------------------------------------------------------------------
 
-addpath(fullfile('..','..','src','statistical'));
+addpath(fullfile('..','..','src','variabilityMetrics'));
 
 time = datetime(2000,1,1,0,0,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(50); % length = 11;
 data = timetable(zeros(length(time),1),'VariableNames', {'glucose'}, 'RowTimes', time);
@@ -20,12 +20,10 @@ data.glucose(7:8) = 200;
 data.glucose(9:10) = 260;
 data.glucose(11) = nan;
 
-res = 1e-3 * (mean([40 50 50 80 120 120 200 200 260 260]) + std([40 50 50 80 120 120 200 200 260 260])) ^ 2;
-
 %% Test 1: check NaN presence
-results = jIndex(data);
+results = meanGlucose(data);
 assert(~isnan(results));
 
 %% Test 2: check results calculation
-results = jIndex(data);
-assert(results == res);
+results = meanGlucose(data);
+assert(results == 138);
