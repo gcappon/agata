@@ -1,15 +1,15 @@
 function bgri = bgri(data)
-%bgri function that computes the blood glucose risk index (BGRI) of the
+%adrr function that computes the blood glucose risk index (BGRI) of the
 %glucose concentration (ignores nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
-%   - bgri: the blood glucose risk index of the glucose concentration.
+%   - bgri: the blood glucose risk index.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
+%   - `data` must be a timetable having an homogeneous time grid.
 %
 % ---------------------------------------------------------------------
 %
@@ -26,8 +26,7 @@ function bgri = bgri(data)
     if(var(seconds(diff(data.Time))) > 0)
         error('bgri: data must have a homogeneous time grid.')
     end
-    
-    
+        
     bgri = lbgi(data) + hbgi(data);
 
 end
