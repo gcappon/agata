@@ -1,4 +1,4 @@
-function generateAGP(data,varargin) %name and mrn are optional
+function generateAGP(data,varargin)
 %generateAGP function that generates the ambulatory glucose profile (AGP) 
 %report of the given data. A report is generated every 14 days of
 %recordings starting from last 14 days.
@@ -47,6 +47,7 @@ function generateAGP(data,varargin) %name and mrn are optional
 
     name = params.Results.Name;
     mrn = params.Results.MRN;
+    printFigure = params.Results.PrintFigure;
 
     firstDayAll = data.Time(1);
     firstDayAll.Hour = 0;

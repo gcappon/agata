@@ -31,7 +31,7 @@ function [shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,TH)
     if(~istimetable(data))
         error('findNanIslands: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('findNanIslands: data must have a homogeneous time grid.')
     end
     if( ~( isnumeric(TH) && ((TH - round(TH)) == 0) ) )

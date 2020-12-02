@@ -1,13 +1,10 @@
 function dynamicRisk = dynamicRisk(data,varargin)
-%dynamicRisk function that compute the dynamic risk based on current
-%glucose concentration and its rate-of-change. An 'AmplificationFunction' is
-%used to amplify the effect of the rate-of-change. Possible functions are
-%'exp' and 'tanh'. Function parameters are 'MaximumAmplification',
-%'AmplificationRapidity' and 'MaximumDamping'. If not specified, their
-%default values are: 2.5, 2 and 0.6, respectively. The function treats 
-% nan values as missing values.
+%dynamicRisk Function that computes the dynamic risk based on current
+%glucose concentration and its rate-of-change. An `AmplificationFunction` 
+%is used to eventually amplify the effect of the rate-of-change. 
+%The function treats nan values as missing values.
 % 
-%Input:
+%Inputs:
 %  - data: a timetable with column 'Time' and 'glucose' containing the
 %  glucose data to analyze (in mg/dL)
 %  - AmplificationFunction (optional): function to use for amplyfing the
@@ -21,21 +18,20 @@ function dynamicRisk = dynamicRisk(data,varargin)
 %  'MaximumDamping',x (x must be a scalar>0. Default value: 0.6) 
 %
 %Output:
-%  - DynamicRisk: dynamic risk timeseries, with the same length as data.
+%  - dynamicRisk: dynamic risk timeseries, with the same length as data.
 %
 %Preconditions:
-%  - 'data' must be a timetable having an homogeneous time grid.
-%  - 'AmplificationFunction' must be a string between 'exp' and 'tanh'.
-%  - 'MaximumAmplification' must be a scalar > 1
-%  - 'AmplificationRapidity' must be a scalar > 0
-%  - 'MaximumDamping' must be a scalar > 0
+%  - 'data' must be a timetable having an homogeneous time grid;
+%  - 'AmplificationFunction' must be a 'exp' or 'tanh';
+%  - 'MaximumAmplification' must be a scalar > 1;
+%  - 'AmplificationRapidity' must be a scalar > 0;
+%  - 'MaximumDamping' must be a scalar > 0.
 % 
 % ------------------------------------------------------------------------
 % 
 % REFERENCE:
-%  - S. Guerra et al., "A Dynamic Risk Measure from Continuous Glucose
-%  Monitoring Data", Diabetes Technol. Ther., 2011. 
-%  doi: https://doi.org/10.1089/dia.2011.0006
+%  S. Guerra et al., "A Dynamic Risk Measure from Continuous Glucose Monitoring 
+%  Data", Diabetes Technology & Therapeutics, 2011, vol. 13, pp. 843-852. DOI: 10.1089/dia.2011.0006
 % 
 % ------------------------------------------------------------------------
 % 

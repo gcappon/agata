@@ -24,7 +24,7 @@ function timeInTightTarget = timeInTightTarget(data)
     if(~istimetable(data))
         error('timeInTightTarget: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('timeInTightTarget: data must have a homogeneous time grid.')
     end
     

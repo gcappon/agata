@@ -23,7 +23,7 @@ function medianGlucose = medianGlucose(data)
     if(~istimetable(data))
         error('medianGlucose: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('medianGlucose: data must have a homogeneous time grid.')
     end
     

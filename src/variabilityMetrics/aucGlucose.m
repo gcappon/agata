@@ -30,7 +30,7 @@ function aucGlucose = aucGlucose(data)
     if(~istimetable(data))
         error('aucGlucose: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('aucGlucose: data must have a homogeneous time grid.')
     end
         

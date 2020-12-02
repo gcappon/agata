@@ -23,7 +23,7 @@ function bgri = bgri(data)
     if(~istimetable(data))
         error('bgri: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('bgri: data must have a homogeneous time grid.')
     end
         

@@ -29,7 +29,7 @@ function cod = cod(data,dataHat)
     if(~istimetable(data))
         error('cod: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('cod: data must have a homogeneous time grid.')
     end
     if(~istimetable(data))

@@ -34,7 +34,7 @@ function aucGlucoseOverBasal = aucGlucoseOverBasal(data,basal)
     if(~istimetable(data))
         error('aucGlucoseOverBasal: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('aucGlucoseOverBasal: data must have a homogeneous time grid.')
     end
     

@@ -31,7 +31,7 @@ function gmi = gmi(data)
     if(~istimetable(data))
         error('gmi: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('gmi: data must have a homogeneous time grid.')
     end
     

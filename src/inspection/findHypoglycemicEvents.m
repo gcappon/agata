@@ -36,7 +36,7 @@ function hypoglycemicEvents = findHypoglycemicEvents(data)
     if(~istimetable(data))
         error('findHypoglycemicEvents: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('findHypoglycemicEvents: data must have a homogeneous time grid.')
     end
     

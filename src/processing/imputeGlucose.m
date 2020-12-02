@@ -32,7 +32,7 @@ function dataImputed = imputeGlucose(data, maxGap)
     if(~istimetable(data))
         error('dataImputed: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('dataImputed: data must have a homogeneous time grid.')
     end
     if( ~( isnumeric(maxGap) && ((maxGap - round(maxGap)) == 0) ) )

@@ -24,7 +24,7 @@ function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
     if(~istimetable(data))
         error('timeInSevereHyperglycemia: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('timeInSevereHyperglycemia: data must have a homogeneous time grid.')
     end
     

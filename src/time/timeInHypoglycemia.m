@@ -24,7 +24,7 @@ function timeInHypoglycemia = timeInHypoglycemia(data)
     if(~istimetable(data))
         error('timeInHypoglycemia: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('timeInHypoglycemia: data must have a homogeneous time grid.')
     end
     

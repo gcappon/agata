@@ -23,7 +23,7 @@ function rangeGlucose = rangeGlucose(data)
     if(~istimetable(data))
         error('rangeGlucose: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0)
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('rangeGlucose: data must have a homogeneous time grid.')
     end
     
