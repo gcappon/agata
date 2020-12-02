@@ -67,7 +67,7 @@ function plotGlucose(data)
         ax = gca;
         ax.XAxis.FontSize = 15;
         ax.YAxis.FontSize = 15;
-        
+        datetick('x','HHPM')
         xlabel('Time','FontWeight','bold','FontSize',20)
         ylabel('Glucose (mg/dl)','FontWeight','bold','FontSize',18)
         
