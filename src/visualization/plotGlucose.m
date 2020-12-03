@@ -1,12 +1,15 @@
-function plotGlucose(data)
+function plotGlucose(data,varargin)
 %plotGlucose function that visualizes the given data
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl);
+%   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
+%   to output the .pdf files associated to each AGP or not. 
 %
 %Preconditions:
 %   - `data` must be a timetable.
+%   - `PrintFigure` can be 0 or 1.
 %
 % ---------------------------------------------------------------------
 %
@@ -21,17 +24,19 @@ function plotGlucose(data)
 %
 % ---------------------------------------------------------------------
 
-        %Check preconditions 
-        if(~istimetable(data))
-            error('plotGlucose: data must be a timetable.');
-        end
+        %Input parser and check preconditions
+        defaultPrintFigure = 0;
+
+        params = inputParser;
+        params.CaseSensitive = false;
+        validTimetable = @(x) istimetable(x) && (sum(strcmp(fieldnames(data),'Time'))==1) && ...
+            (sum(strcmp(fieldnames(data),'glucose'))==1) && (length(unique(diff(data.Time)))==1);
+        addRequired(params,'data',validTimetable);
+        addParameter(params,'PrintFigure',defaultPrintFigure, @(x) x == 0 || x == 1);
+        parse(params,data,varargin{:});
+
+        printFigure = params.Results.PrintFigure;
         
-        if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
-            fprintf('plotGlucose: data has not an homogeneous time grid. Retiming...')
-            addpath(genpath(fullfile('..','processing')));
-            data = retimeGlucose(data,round(minutes(data.Time(2)-data.Time(1))));
-            fprintf('Done.\n')
-        end
         f = figure;
         
         hold on
@@ -76,4 +81,7 @@ function plotGlucose(data)
         grid on
         hold off
 
+        if(printFigure)
+            print(f, '-dpdf', ['glucosePlot' '.pdf'],'-fillpage')
+        end
 end
