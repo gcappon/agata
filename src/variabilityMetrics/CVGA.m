@@ -1,10 +1,10 @@
 function [profileAssessment,profileCoordinates, bestControlIndex, bestControlledCoordinates]=CVGA(glucoseProfiles)
 %CVGA function that performs the control variablity grid analysis (CVGA).
 %
-%Inputs:
+%Input:
 %   - glucoseProfiles: a cell array of timetables each with column `Time` and 
 %   `glucose` containing the glucose data to analyze (in mg/dl). 
-%Output:
+%Outputs:
 %   - profileAssessment: a vector of double containing, for each timetable 
 %   in `glucoseProfiles`, the euclidian distance of each point in the CVGA
 %   space from the CVGA origin;
@@ -19,7 +19,7 @@ function [profileAssessment,profileCoordinates, bestControlIndex, bestControlled
 %   the glucose profile with minimum `profileAssessment` value).+
 %
 %Preconditions:
-%   - glucoseProfiles must be a cell array containing timetables;
+%   - glucoseProfiles must be a timetable or a cell array containing timetables;
 %   - Each timetable in glucoseProfiles must have a column names `Time` and a
 %   column named `glucose`.
 %
@@ -44,6 +44,10 @@ function [profileAssessment,profileCoordinates, bestControlIndex, bestControlled
     params.CaseSensitive = false;
     addRequired(params,'glucoseProfiles',@(x) validGlucoseProfiles(x));
     parse(params,glucoseProfiles);
+    
+    if(istimetable(glucoseProfiles))
+        glucoseProfiles = {glucoseProfiles};
+    end
     
     if ~isempty(glucoseProfiles)
         
@@ -90,33 +94,45 @@ end
 
 function valid = validGlucoseProfiles(glucoseProfiles)
 
-    valid = iscell(glucoseProfiles);
+    valid = iscell(glucoseProfiles) || (istimetable(glucoseProfiles));
     
     if(~valid)
-        error('plotCVGA: glucoseProfiles must be a cell array.');
+        error('plotCVGA: glucoseProfiles must be a cell array or a timetable.');
     end
     
-    
-    for g = 1:length(glucoseProfiles)
-       
-        valid = valid && istimetable(glucoseProfiles{g});
+    if(iscell(glucoseProfiles))
+        for g = 1:length(glucoseProfiles)
+
+            valid = valid && istimetable(glucoseProfiles{g});
+
+            if(~valid)
+                error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must be a timetable.']);
+            end
+
+
+            valid = valid && any(strcmp(fieldnames(glucoseProfiles{g}),'glucose'));
+
+            if(~valid)
+                error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must contain a column named glucose.']);
+            end
+
+            valid = valid && any(strcmp(fieldnames(glucoseProfiles{g}),'Time'));
+
+            if(~valid)
+                error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must contain a column named Time.']);
+            end
+
+        end
+    else
         
-        if(~valid)
-            error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must be a timetable.']);
-        end
 
-        
-        valid = valid && any(strcmp(fieldnames(glucoseProfiles{g}),'glucose'));
+            if(~any(strcmp(fieldnames(glucoseProfiles),'glucose')))
+                error(['plotCVGA: glucoseProfiles must contain a column named glucose.']);
+            end
 
-        if(~valid)
-            error(['plotCVGA: glucoseProfile in position ' num2str(g) ' must contain a column named glucose.']);
-        end
-
-        valid = valid && any(strcmp(fieldnames(glucoseProfiles{g}),'Time'));
-
-        if(~valid)
-            error(['plotCVGA: glucoseProfile in position ' num2str(g) ' must contain a column named Time.']);
-        end
+            if(~any(strcmp(fieldnames(glucoseProfiles),'Time')))
+                error(['plotCVGA: glucoseProfiles must contain a column named Time.']);
+            end
         
     end
     

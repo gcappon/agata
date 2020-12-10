@@ -3,7 +3,7 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
 %single plot where each daily profile is overlapped to each other. This is
 %for comparison.
 %
-%Input:
+%Inputs:
 %   - data1: a timetable with column `Time` and `glucose` containing the 
 %   first set of glucose data to analyze (in mg/dl);
 %   - data2: a timetable with column `Time` and `glucose` containing the 

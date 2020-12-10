@@ -3,7 +3,7 @@ function generateAGP(data,varargin)
 %report of the given data. A report is generated every 14 days of
 %recordings starting from last 14 days.
 %
-%Input:
+%Inputs:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl);
 %   - Name: (optional, default: '') a vector of characters defining the name of the patient; 

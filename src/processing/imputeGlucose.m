@@ -47,7 +47,7 @@ function dataImputed = imputeGlucose(data, maxGap)
     
     %Impute data
     dataImputed = data;
-    dataImputed.glucose(shortNan) = interp1(data.Time(~isnan(data.glucose)),data.glucose(~isnan(data.glucose)),data.Time(shortNan));
+    dataImputed.glucose(shortNan) = interp1(data.Time(~isnan(data.glucose)),data.glucose(~isnan(data.glucose)),data.Time(shortNan),'linear','extrap');
 
 end
 
