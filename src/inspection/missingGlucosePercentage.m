@@ -13,6 +13,11 @@ function missingGlucosePercentage = missingGlucosePercentage(data)
 %
 % ---------------------------------------------------------------------
 %
+% REFERENCE:
+%   - None.
+%
+% ---------------------------------------------------------------------
+%
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
