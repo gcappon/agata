@@ -12,7 +12,7 @@ function dataRetimed = retimeGlucose(data, timestep)
 %   - dataRetimed: the retimed timetable.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
+%   - data must be a timetable;
 %   - data must contain a column named `Time` and another named `glucose`;
 %   - timestep must be an integer.
 %
@@ -33,16 +33,13 @@ function dataRetimed = retimeGlucose(data, timestep)
     if(~istimetable(data))
         error('retimeGlucose: data must be a timetable.');
     end
-    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
-        error('retimeGlucose: data must have a homogeneous time grid.')
-    end
     if(~any(strcmp(fieldnames(data),'Time')))
         error('retimeGlucose: data must have a column named `Time`.')
     end
     if(~any(strcmp(fieldnames(data),'glucose')))
         error('retimeGlucose: data must have a column named `glucose`.')
     end
-    if( ~( isnumeric(maxGap) && ((maxGap - round(maxGap)) == 0) ) )
+    if( ~( isnumeric(timestep) && ((timestep - round(timestep)) == 0) ) )
         error('retimeGlucose: timestep must be an integer.')
     end
     

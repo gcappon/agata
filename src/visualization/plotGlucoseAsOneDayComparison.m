@@ -195,24 +195,24 @@ end
 function valid = validData(data)
     %Input validator function handler 
     
-    valid = ~istimetable(data);
+    valid = istimetable(data);
     if(~valid)
-        error('plotGlucose: data must be a timetable.');
+        error('plotGlucoseAsOneDayComparison: data must be a timetable.');
     end
     
-    valid = var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time))))
+    valid = var(seconds(diff(data.Time))) == 0 && ~isnan(var(seconds(diff(data.Time))));
     if(~valid)
-        error('plotGlucose: data must have a homogeneous time grid.')
+        error('plotGlucoseAsOneDayComparison: data must have a homogeneous time grid.')
     end
     
-    valid = ~any(strcmp(fieldnames(data),'Time'))
+    valid = any(strcmp(fieldnames(data),'Time'));
     if(~valid)
-        error('plotGlucose: data must have a column named `Time`.')
+        error('plotGlucoseAsOneDayComparison: data must have a column named `Time`.')
     end
     
-    valid = ~any(strcmp(fieldnames(data),'glucose'))
+    valid = any(strcmp(fieldnames(data),'glucose'));
     if(~valid)
-        error('plotGlucose: data must have a column named `glucose`.')
+        error('plotGlucoseAsOneDayComparison: data must have a column named `glucose`.')
     end
     
 end
