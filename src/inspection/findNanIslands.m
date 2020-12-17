@@ -17,9 +17,15 @@ function [shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,TH)
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`;
 %   - TH must be an integer.
-%
-% ---------------------------------------------------------------------
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - None
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Lorenzo Meneghetti
 %
@@ -33,6 +39,12 @@ function [shortNan, longNan, nanStart, nanEnd] = findNanIslands(data,TH)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('findNanIslands: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('findNanIslands: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('findNanIslands: data must have a column named `glucose`.')
     end
     if( ~( isnumeric(TH) && ((TH - round(TH)) == 0) ) )
         error('findNanIslands: TH must be an integer.')

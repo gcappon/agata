@@ -15,9 +15,15 @@ function [dataVector, timeVector] = timetableToGlucoseTimeVectors(data)
 %   in the `Time` column;
 %
 %Preconditions:
-%   - `data` must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - None
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -32,7 +38,14 @@ function [dataVector, timeVector] = timetableToGlucoseTimeVectors(data)
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('timetableToGlucoseTimeVectors: data must have a homogeneous time grid.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('timetableToGlucoseTimeVectors: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('timetableToGlucoseTimeVectors: data must have a column named `glucose`.')
+    end
     
+    %Conversion
     dataVector = data.glucose;
     timeVector = data.Time;
     

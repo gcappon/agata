@@ -40,6 +40,7 @@ function dataTimetable = glucoseTimeVectorsToTimetable(glucose, time)
         error('glucoseTimeVectorsToTimetable: glucose and time must be of the same length.');
     end
     
+    %Conversion
     dataTimetable = timetable(glucose(:),'VariableNames', {'glucose'}, 'RowTimes', time);
     
 end

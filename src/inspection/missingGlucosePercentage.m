@@ -9,14 +9,15 @@ function missingGlucosePercentage = missingGlucosePercentage(data)
 %   - missingGlucosePercentage: percentage of missing glucsoe values.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
-%
-% REFERENCE:
-%   - None.
-%
-% ---------------------------------------------------------------------
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - None
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -31,8 +32,14 @@ function missingGlucosePercentage = missingGlucosePercentage(data)
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('missingGlucosePercentage: data must have a homogeneous time grid.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('missingGlucosePercentage: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('missingGlucosePercentage: data must have a column named `glucose`.')
+    end
     
-        
+    %Compute index
     missingGlucosePercentage = 100*sum(isnan(data.glucose))/height(data);
     
 end

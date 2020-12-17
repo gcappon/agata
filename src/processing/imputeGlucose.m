@@ -13,30 +13,37 @@ function dataImputed = imputeGlucose(data, maxGap)
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`;
 %   - maxGap must be an integer.
 %
-% ---------------------------------------------------------------------
-%
-% REFERENCE:
-%   - None.
-%
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - None
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
-
+    
     %Check preconditions 
     if(~istimetable(data))
-        error('dataImputed: data must be a timetable.');
+        error('imputeGlucose: data must be a timetable.');
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
-        error('dataImputed: data must have a homogeneous time grid.')
+        error('imputeGlucose: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('imputeGlucose: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('imputeGlucose: data must have a column named `glucose`.')
     end
     if( ~( isnumeric(maxGap) && ((maxGap - round(maxGap)) == 0) ) )
-        error('dataImputed: timestep must be an integer.')
+        error('imputeGlucose: maxGap must be an integer.')
     end
     
     %Get the sample time

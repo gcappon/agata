@@ -11,13 +11,19 @@ function mard = mard(data,dataHat)
 %   - mard: the computed mean absolute relative difference (%).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must contain a column named `Time` and another named `glucose`;
 %   - data and dataHat must start from the same timestamp;
 %   - data and dataHat must end with the same timestamp;
 %   - data and dataHat must have the same length.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - Gini, "Measurement of Inequality and Incomes", The Economic Journal, 
+%   vol. 31, 1921, pp. 124–126. DOI:10.2307/2223319.
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -47,10 +53,23 @@ function mard = mard(data,dataHat)
     if(height(data) ~= height(dataHat))
         error('mard: data and dataHat must have the same length.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('mard: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('mard: data must have a column named `glucose`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'Time')))
+        error('mard: dataHat must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'glucose')))
+        error('mard: dataHat must have a column named `glucose`.')
+    end
     
-    
+    %Get indices having no nans in both timetables
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
     
+    %Compute metric
     mard = 100 * mean(abs( data.glucose(idx) - dataHat.glucose(idx) ) ./ data.glucose(idx) );
     
 end

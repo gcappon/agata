@@ -12,13 +12,19 @@ function timeDelay = timeDelay(data,dataHat)
 %   - timeDelay: the computed delay (min).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must contain a column named `Time` and another named `glucose`;
 %   - data and dataHat must start from the same timestamp;
 %   - data and dataHat must end with the same timestamp;
 %   - data and dataHat must have the same length.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - Wikipedia on time delay using correlation. 
+%   https://en.wikipedia.org/wiki/Cross-correlation#Time_delay_analysis (Accessed: 2020-12-10).
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -48,10 +54,23 @@ function timeDelay = timeDelay(data,dataHat)
     if(height(data) ~= height(dataHat))
         error('timeDelay: data and dataHat must have the same length.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('timeDelay: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('timeDelay: data must have a column named `glucose`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'Time')))
+        error('timeDelay: dataHat must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'glucose')))
+        error('timeDelay: dataHat must have a column named `glucose`.')
+    end
     
-    
+    %Get indices having no nans in both timetables
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
     
+    %Compute metric
     timeDelay = finddelay( data.glucose(idx), dataHat.glucose(idx)) * minutes(data.Time(2)-data.Time(1));
     
 end

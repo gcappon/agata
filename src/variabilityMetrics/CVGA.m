@@ -16,7 +16,7 @@ function [profileAssessment,profileCoordinates, bestControlIndex, bestControlled
 %   - bestControlledCoordinates: A bidimensional vector containing in the 
 %   first column the CVGA coordinate in the x-axis and in the second column
 %   the CVGA coordinate in the y-axis of the best glucose profile (i.e., 
-%   the glucose profile with minimum `profileAssessment` value).+
+%   the glucose profile with minimum `profileAssessment` value).
 %
 %Preconditions:
 %   - glucoseProfiles must be a timetable or a cell array containing timetables;
@@ -39,43 +39,48 @@ function [profileAssessment,profileCoordinates, bestControlIndex, bestControlled
 %
 % ---------------------------------------------------------------------
     
-    %Input parser and check preconditions
+    %Use input parser to check preconditions
     params = inputParser;
     params.CaseSensitive = false;
     addRequired(params,'glucoseProfiles',@(x) validGlucoseProfiles(x));
     parse(params,glucoseProfiles);
     
+    %Convert glucoseProfiles to a cell array if it is a timetable
     if(istimetable(glucoseProfiles))
         glucoseProfiles = {glucoseProfiles};
     end
     
+    
     if ~isempty(glucoseProfiles)
         
+        %Preallocate arrays
         minBG = zeros(size(glucoseProfiles,1),1);
         maxBG = zeros(size(glucoseProfiles,1),1);
         profileCoordinates = zeros(size(glucoseProfiles,1),2);
         profileAssessment = zeros(size(glucoseProfiles,1),1);
         
-        % for all the experiments/BG profiles
+        %For all the experiments/BG profiles...
         for ind=1:length(glucoseProfiles)
             
-            %Compute Min BG and Max BG measured during the current experiment
+            %...compute Min BG and Max BG measured during the current
+            %experiment...
             minBG(ind) = nanmin(glucoseProfiles{ind}.glucose);
             maxBG(ind) = nanmax(glucoseProfiles{ind}.glucose);
 
-            %Transformation to generate CVGA coordinates
+            %...generate CVGA coordinates...
             [profileCoordinates(ind,1),profileCoordinates(ind,2)]=CVGACoordinates(maxBG(ind),minBG(ind));
 
-            %Assess the current experiment
+            %...and assess the current experiment
             profileAssessment(ind)=profileCoordinates(ind,1)^2+profileCoordinates(ind,2)^2; % (square) distance form the CVGA origin
             
         end
 
 
-        % Find the experiemnt that produced better control
+        %Find the experiemnt that produced better control
         [~, bestControlIndex]= nanmin(profileAssessment);  
         
         bestControlledCoordinates=[ profileCoordinates(bestControlIndex,1), profileCoordinates(bestControlIndex,2) ];
+        
     else
         bestControlIndex=NaN;
         bestControlledCoordinates=[NaN NaN];
@@ -93,11 +98,12 @@ function [X,Y]=CVGACoordinates(maxBG,minBG)
 end
 
 function valid = validGlucoseProfiles(glucoseProfiles)
-
+    %Input validator function handler 
+    
     valid = iscell(glucoseProfiles) || (istimetable(glucoseProfiles));
     
     if(~valid)
-        error('plotCVGA: glucoseProfiles must be a cell array or a timetable.');
+        error('CVGA: glucoseProfiles must be a cell array or a timetable.');
     end
     
     if(iscell(glucoseProfiles))
@@ -106,20 +112,20 @@ function valid = validGlucoseProfiles(glucoseProfiles)
             valid = valid && istimetable(glucoseProfiles{g});
 
             if(~valid)
-                error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must be a timetable.']);
+                error(['CVGA: glucoseProfiles in position ' num2str(g) ' must be a timetable.']);
             end
 
 
             valid = valid && any(strcmp(fieldnames(glucoseProfiles{g}),'glucose'));
 
             if(~valid)
-                error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must contain a column named glucose.']);
+                error(['CVGA: glucoseProfiles in position ' num2str(g) ' must contain a column named glucose.']);
             end
 
             valid = valid && any(strcmp(fieldnames(glucoseProfiles{g}),'Time'));
 
             if(~valid)
-                error(['plotCVGA: glucoseProfiles in position ' num2str(g) ' must contain a column named Time.']);
+                error(['CVGA: glucoseProfiles in position ' num2str(g) ' must contain a column named Time.']);
             end
 
         end
@@ -127,11 +133,11 @@ function valid = validGlucoseProfiles(glucoseProfiles)
         
 
             if(~any(strcmp(fieldnames(glucoseProfiles),'glucose')))
-                error(['plotCVGA: glucoseProfiles must contain a column named glucose.']);
+                error(['CVGA: glucoseProfiles must contain a column named glucose.']);
             end
 
             if(~any(strcmp(fieldnames(glucoseProfiles),'Time')))
-                error(['plotCVGA: glucoseProfiles must contain a column named Time.']);
+                error(['CVGA: glucoseProfiles must contain a column named Time.']);
             end
         
     end

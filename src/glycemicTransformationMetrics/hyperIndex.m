@@ -8,22 +8,23 @@ function hyperIndex = hyperIndex(data)
 %   - hyperIndex: the hyperglycemic index.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
 % ------------------------------------------------------------------------
 % 
-% REFERENCE:
+% Reference:
 %  - Rodbard et al., "Interpretation of continuous glucose monitoring
 %  data: glycemic variability and quality of glycemic control", Diabetes 
 %  Technology & Therapeutics, 2009, vol. 11, pp. S55-S67. DOI: 10.1089/dia.2008.0132.
-%
+% 
 % ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
     
     %Check preconditions 
     if(~istimetable(data))
@@ -31,6 +32,12 @@ function hyperIndex = hyperIndex(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('hyperIndex: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('hyperIndex: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('hyperIndex: data must have a column named `glucose`.')
     end
     
     

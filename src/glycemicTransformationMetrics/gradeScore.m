@@ -10,22 +10,23 @@ function gradeScore = gradeScore(data)
 %   equation score in the hyperglycemic range (GRADE) (%).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
 % ------------------------------------------------------------------------
 % 
-% REFERENCE:
+% Reference:
 %   - Hill et al., "A method for assessing quality of control from
 %   glucose profiles", Diabetic Medicine , 2007, vol. 24, pp. 753-758.
 %   DOI: 10.1111/j.1464-5491.2007.02119.x.
-%
+% 
 % ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
     
     %Check preconditions 
     if(~istimetable(data))
@@ -33,6 +34,12 @@ function gradeScore = gradeScore(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('gradeScore: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('gradeScore: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('gradeScore: data must have a column named `glucose`.')
     end
     
     
@@ -44,4 +51,3 @@ function gradeScore = gradeScore(data)
     gradeScore = mean(grade);
 
 end
-

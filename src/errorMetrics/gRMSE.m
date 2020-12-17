@@ -11,8 +11,8 @@ function gRMSE = gRMSE(data,dataHat)
 %   - gRMSE: the computed glucose root mean squared error (mg/dl).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must contain a column named `Time` and another named `glucose`;
 %   - data and dataHat must start from the same timestamp;
 %   - data and dataHat must end with the same timestamp;
 %   - data and dataHat must have the same length.
@@ -54,7 +54,20 @@ function gRMSE = gRMSE(data,dataHat)
     if(height(data) ~= height(dataHat))
         error('gRMSE: data and dataHat must have the same length.')
     end
-
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('gRMSE: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('gRMSE: data must have a column named `glucose`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'Time')))
+        error('gRMSE: dataHat must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'glucose')))
+        error('gRMSE: dataHat must have a column named `glucose`.')
+    end
+    
+    %Get indices having no nans in both timetables
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
     
     data = data.glucose(idx);
@@ -86,7 +99,8 @@ function gRMSE = gRMSE(data,dataHat)
 end
 
 function y=c2Sigmoid(xVector,a,d,type)
-
+    %Auxiliary function 
+    
     if max(size(a))==1
         a=a+0.*xVector;
     end

@@ -15,16 +15,17 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
 %       hyperglycemic event;
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
-%
-% REFERENCE:
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
 %   - Danne et al., "International consensus on use of continuous glucose
 %   monitoring", Diabetes Care, 2017, vol. 40, pp. 1631-1640. DOI: 
 %   10.2337/dc17-1600.
-%
-% ---------------------------------------------------------------------
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -38,6 +39,12 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('findHyperglycemicEvents: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('findHyperglycemicEvents: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('findHyperglycemicEvents: data must have a column named `glucose`.')
     end
     
     
@@ -88,7 +95,7 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
             count = count - 1;
             
         end
-                
+        
         if(count == 0 && flag == -1)
             hyperglycemicEvents.time(k) = tempStartTime;
             hyperglycemicEvents.duration(k) = minutes(data.Time(t-(nSamples-1)) - tempStartTime);
@@ -98,6 +105,7 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
 
     end
     
+    %If no events have been found...
     if(k == 1)
         hyperglycemicEvents.time = [];
     end

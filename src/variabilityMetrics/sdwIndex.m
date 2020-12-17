@@ -9,7 +9,8 @@ function sdwIndex = sdwIndex(data)
 %   - stdWIndex: the mean of within-day standard deviation (SDW) index.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
 %
 % ---------------------------------------------------------------------
 %
@@ -32,6 +33,12 @@ function sdwIndex = sdwIndex(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('sdwIndex: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('sdwIndex: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('sdwIndex: data must have a column named `glucose`.')
     end
     
     %Compute the number of days in a safe way (but long) way

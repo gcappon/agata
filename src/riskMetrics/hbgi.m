@@ -9,9 +9,16 @@ function hbgi = hbgi(data)
 %   - hbgi: the high blood glucose index of the glucose concentration.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - Kovatchev et al., "Symmetrization of the blood glucose measurement scale and
+%   its applications", Diabetes Care, 1997, vol. 20, pp. 1655-1658. DOI: 10.2337/diacare.20.11.1655.
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -25,6 +32,12 @@ function hbgi = hbgi(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('hbgi: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('hbgi: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('hbgi: data must have a column named `glucose`.')
     end
     
     
@@ -44,7 +57,7 @@ function hbgi = hbgi(data)
     rh = 10 * f.^2;
     rh(nonNanGlucose < th) = 0;
     
-    %HBGI computation
+    %Compute metric
     hbgi = mean(rh);
 
 end

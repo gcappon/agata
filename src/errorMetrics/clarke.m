@@ -15,13 +15,19 @@ function results = clarke(data,dataHat)
 %       - E: the percentage of time spent in Zone E.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must contain a column named `Time` and another named `glucose`;
 %   - data and dataHat must start from the same timestamp;
 %   - data and dataHat must end with the same timestamp;
 %   - data and dataHat must have the same length.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   -  Clarke et al., "Evaluating clinical accuracy of systems for self-monitoring 
+%   of blood glucose", Diabetes Care, 1987, vol. 10, pp. 622–628. DOI: 10.2337/diacare.10.5.622.
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -51,14 +57,29 @@ function results = clarke(data,dataHat)
     if(height(data) ~= height(dataHat))
         error('clarke: data and dataHat must have the same length.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('clarke: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('clarke: data must have a column named `glucose`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'Time')))
+        error('clarke: dataHat must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'glucose')))
+        error('clarke: dataHat must have a column named `glucose`.')
+    end
     
+    %Get indices having no nans in both timetables
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
+    
     y = data.glucose(idx);
     yp = dataHat.glucose(idx);
     
     n = length(y);
     total = zeros(5,1);                        
-
+    
+    %Assign points to zones
     for i=1:n
         if (yp(i) <= 70 && y(i) <= 70) || (yp(i) <= 1.2*y(i) && yp(i) >= 0.8*y(i))
             total(1) = total(1) + 1;            % Zone A
@@ -80,6 +101,7 @@ function results = clarke(data,dataHat)
     end                                         
     percentage = (total/n)*100;
 
+    %Compute metrics
     results.A = percentage(1);
     results.B = percentage(2);
     results.C = percentage(3);

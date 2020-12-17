@@ -15,7 +15,9 @@ function aucGlucoseOverBasal = aucGlucoseOverBasal(data,basal)
 %   over the basal value (mg/dl*min).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - basal must be a number.
 %
 % ---------------------------------------------------------------------
 %
@@ -37,13 +39,24 @@ function aucGlucoseOverBasal = aucGlucoseOverBasal(data,basal)
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('aucGlucoseOverBasal: data must have a homogeneous time grid.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('aucGlucoseOverBasal: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('aucGlucoseOverBasal: data must have a column named `glucose`.')
+    end
+    if(~isnumeric(basal))
+        error('aucGlucoseOverBasal: basal value must be a number.')
+    end
     
-    
+    %Get rid of nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
-    sampleTime = minutes(data.Time(2) - data.Time(1));
+    %Shift the trace    
     nonNanGlucose = nonNanGlucose - basal;
     
+    %Compute index
+    sampleTime = minutes(data.Time(2) - data.Time(1));
     aucGlucoseOverBasal = sum(nonNanGlucose*sampleTime);
     
 end

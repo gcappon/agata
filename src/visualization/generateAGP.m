@@ -12,7 +12,8 @@ function generateAGP(data,varargin)
 %   to output the .pdf files associated to each AGP or not. 
 %
 %Preconditions:
-%   - `data` must be a timetable having an homogeneous time grid.
+%   - data must be a timetable having an homogeneous time grid.
+%   - data must contain a column named `Time` and another named `glucose`.
 %
 % ---------------------------------------------------------------------
 %
@@ -37,11 +38,9 @@ function generateAGP(data,varargin)
 
     params = inputParser;
     params.CaseSensitive = false;
-    validTimetable = @(x) istimetable(x) && (sum(strcmp(fieldnames(data),'Time'))==1) && ...
-        (sum(strcmp(fieldnames(data),'glucose'))==1) && (length(unique(diff(data.Time)))==1);
-    addRequired(params,'data',validTimetable);
+    addRequired(params,'data',@(x) validData(x));
     addParameter(params,'Name',defaultName, @(x) ischar(x));
-    addParameter(params,'MRN',defaultName, @(x) ischar(x));
+    addParameter(params,'MRN',defaultMRN, @(x) ischar(x));
     addParameter(params,'PrintFigure',defaultPrintFigure, @(x) x == 0 || x == 1);
     parse(params,data,varargin{:});
 
@@ -544,3 +543,27 @@ function dataDaily = putOnTimegrid(dataDaily,dummyTime)
 
 end
 
+function valid = validData(data)
+    %Input validator function handler 
+    
+    valid = ~istimetable(data);
+    if(~valid)
+        error('generateAGP: data must be a timetable.');
+    end
+    
+    valid = var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time))))
+    if(~valid)
+        error('generateAGP: data must have a homogeneous time grid.')
+    end
+    
+    valid = ~any(strcmp(fieldnames(data),'Time'))
+    if(~valid)
+        error('generateAGP: data must have a column named `Time`.')
+    end
+    
+    valid = ~any(strcmp(fieldnames(data),'glucose'))
+    if(~valid)
+        error('generateAGP: data must have a column named `glucose`.')
+    end
+    
+end

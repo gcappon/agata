@@ -11,13 +11,18 @@ function cod = cod(data,dataHat)
 %   - cod: the computed coefficient of determination (%).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must be a timetable having an homogeneous time grid;
+%   - data and dataHat must contain a column named `Time` and another named `glucose`;
 %   - data and dataHat must start from the same timestamp;
 %   - data and dataHat must end with the same timestamp;
 %   - data and dataHat must have the same length.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - Wright, "Correlation and causation", Journal of Agricultural Research, vol. 20, 1921, pp. 557–585.
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -47,12 +52,26 @@ function cod = cod(data,dataHat)
     if(height(data) ~= height(dataHat))
         error('cod: data and dataHat must have the same length.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('cod: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('cod: data must have a column named `glucose`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'Time')))
+        error('cod: dataHat must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(dataHat),'glucose')))
+        error('cod: dataHat must have a column named `glucose`.')
+    end
     
-    
+    %Get indices having no nans in both timetables
     idx = find(~isnan(dataHat.glucose) & ~isnan(data.glucose));
     
+    %Compute residuals
     residuals = data.glucose(idx) - dataHat.glucose(idx);
     
+    %Compute metric
     cod = 100 * ( 1 - norm(residuals,2)^2 ./ norm( data.glucose(idx) - mean(data.glucose(idx)), 2)^2 );
     
 end

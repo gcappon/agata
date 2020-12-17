@@ -12,22 +12,37 @@ function dataRetimed = retimeGlucose(data, timestep)
 %   - dataRetimed: the retimed timetable.
 %
 %Preconditions:
-%   - data must be a timetable;
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`;
 %   - timestep must be an integer.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - None
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
 %
 % ---------------------------------------------------------------------
-
+    
     %Check preconditions 
     if(~istimetable(data))
         error('retimeGlucose: data must be a timetable.');
     end
-    if( ~( isnumeric(timestep) && ((timestep - round(timestep)) == 0) ) )
+    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
+        error('retimeGlucose: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('retimeGlucose: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('retimeGlucose: data must have a column named `glucose`.')
+    end
+    if( ~( isnumeric(maxGap) && ((maxGap - round(maxGap)) == 0) ) )
         error('retimeGlucose: timestep must be an integer.')
     end
     
@@ -57,7 +72,7 @@ function dataRetimed = retimeGlucose(data, timestep)
         
     end
     
-    %COmpute the average and remove column 'k'
+    %Compute the average and remove column 'k'
     dataRetimed.glucose = dataRetimed.glucose ./ dataRetimed.k;
     dataRetimed.k = [];
     

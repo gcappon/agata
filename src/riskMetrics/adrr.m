@@ -9,9 +9,16 @@ function adrr = adrr(data)
 %   - adrr: the average daily risk range of the glucose concentration.
 %
 %Preconditions:
-%   - `data` must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - Kovatchev et al., "Evaluation of a new measure of blood glucose variability in
+%   diabetes", Diabetes Care, 2006, vol. 29, pp. 2433-2438. DOI: 10.2337/dc06-1085.
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
@@ -25,6 +32,12 @@ function adrr = adrr(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('adrr: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('adrr: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('adrr: data must have a column named `glucose`.')
     end
     
     %Setup the formula parameters
@@ -78,6 +91,7 @@ function adrr = adrr(data)
         
     end
     
+    %Compute metric
     adrr = nanmean( maxHbgiDay + maxLbgiDay );
     
 end

@@ -35,7 +35,8 @@ function results = analyzeGlucoseProfile(data)
 %           `igc`, `mrIndex`}) of the metrics for each glucose profile.
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
 %
 % ---------------------------------------------------------------------
 %
@@ -56,6 +57,12 @@ function results = analyzeGlucoseProfile(data)
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('analyzeGlucoseProfile: data must have a homogeneous time grid.')
+    end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('analyzeGlucoseProfile: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('analyzeGlucoseProfile: data must have a column named `glucose`.')
     end
     
     

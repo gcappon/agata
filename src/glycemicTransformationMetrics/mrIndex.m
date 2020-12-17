@@ -8,18 +8,19 @@ function mrIndex = mrIndex(data,r)
 %   not provided, r = 100, is used as default.
 %Output:
 %   - mrIndex: the mr value.
-%
+%  
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
-%   - r must be an integer.
-%
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - TH must be an integer.
+% 
 % ------------------------------------------------------------------------
 % 
-% REFERENCE:
+% Reference:
 %  - Schlichtkrull et al., "The M-value, an index of blood-sugar control in 
 %  diabetics", Acta Medica Scandinavica, 1965, vol. 177, pp. 95-102. 
 %  DOI: 10.1111/j.0954-6820.1965.tb01810.x.
-%
+% 
 % ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
@@ -35,6 +36,12 @@ function mrIndex = mrIndex(data,r)
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('mrIndex: data must have a homogeneous time grid.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('mrIndex: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('mrIndex: data must have a column named `glucose`.')
+    end
     
     if(nargin == 1)
         r = 100;
@@ -47,6 +54,7 @@ function mrIndex = mrIndex(data,r)
     %Get rid of nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
+    %Compute metric
     transData = 1000 * abs(log10(nonNanGlucose/r)).^3;
     mrIndex = mean(transData);
 

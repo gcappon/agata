@@ -9,6 +9,7 @@ function plotGlucose(data,varargin)
 %
 %Preconditions:
 %   - `data` must be a timetable.
+%   - `data` must contain a column named `Time` and another named `glucose`.
 %   - `PrintFigure` can be 0 or 1.
 %
 % ---------------------------------------------------------------------
@@ -29,9 +30,7 @@ function plotGlucose(data,varargin)
 
         params = inputParser;
         params.CaseSensitive = false;
-        validTimetable = @(x) istimetable(x) && (sum(strcmp(fieldnames(data),'Time'))==1) && ...
-            (sum(strcmp(fieldnames(data),'glucose'))==1) && (length(unique(diff(data.Time)))==1);
-        addRequired(params,'data',validTimetable);
+        addRequired(params,'data',@(x) validData(x));
         addParameter(params,'PrintFigure',defaultPrintFigure, @(x) x == 0 || x == 1);
         parse(params,data,varargin{:});
 
@@ -84,4 +83,30 @@ function plotGlucose(data,varargin)
         if(printFigure)
             print(f, '-dpdf', ['glucosePlot' '.pdf'],'-fillpage')
         end
+        
+end
+
+function valid = validData(data)
+    %Input validator function handler 
+    
+    valid = ~istimetable(data);
+    if(~valid)
+        error('plotGlucose: data must be a timetable.');
+    end
+    
+    valid = var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time))))
+    if(~valid)
+        error('plotGlucose: data must have a homogeneous time grid.')
+    end
+    
+    valid = ~any(strcmp(fieldnames(data),'Time'))
+    if(~valid)
+        error('plotGlucose: data must have a column named `Time`.')
+    end
+    
+    valid = ~any(strcmp(fieldnames(data),'glucose'))
+    if(~valid)
+        error('plotGlucose: data must have a column named `glucose`.')
+    end
+    
 end

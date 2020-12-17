@@ -11,20 +11,21 @@ function aucGlucose = aucGlucose(data)
 %   - aucGlucose: area under the curve of glucose concentration (mg/dl*min).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
-%
-% REFERENCE:
-%   - None.
-%
-% ---------------------------------------------------------------------
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - Wikipedia on AUC: https://en.wikipedia.org/wiki/Integral (Accessed: 2020-12-10).
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
     
     %Check preconditions 
     if(~istimetable(data))
@@ -33,7 +34,14 @@ function aucGlucose = aucGlucose(data)
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('aucGlucose: data must have a homogeneous time grid.')
     end
-        
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('aucGlucose: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('aucGlucose: data must have a column named `glucose`.')
+    end
+    
+    %Compute metric
     aucGlucose = aucGlucoseOverBasal(data,0);
     
 end

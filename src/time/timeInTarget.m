@@ -10,15 +10,21 @@ function timeInTarget = timeInTarget(data)
 %   between 70 and 180 mg/dl).
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid.
-%
-% ---------------------------------------------------------------------
+%   - data must be a timetable having an homogeneous time grid;
+%   - data must contain a column named `Time` and another named `glucose`.
+% 
+% ------------------------------------------------------------------------
+% 
+% Reference:
+%   - None
+% 
+% ------------------------------------------------------------------------
 %
 % Copyright (C) 2020 Giacomo Cappon
 %
 % This file is part of AGATA.
 %
-% ---------------------------------------------------------------------
+% ------------------------------------------------------------------------
     
     %Check preconditions 
     if(~istimetable(data))
@@ -27,10 +33,17 @@ function timeInTarget = timeInTarget(data)
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
         error('timeInTarget: data must have a homogeneous time grid.')
     end
+    if(~any(strcmp(fieldnames(data),'Time')))
+        error('timeInTarget: data must have a column named `Time`.')
+    end
+    if(~any(strcmp(fieldnames(data),'glucose')))
+        error('timeInTarget: data must have a column named `glucose`.')
+    end
     
-    
+    %Remove nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
+    %Compute metric
     timeInTarget = 100*sum(nonNanGlucose >= 70 & nonNanGlucose <= 180)/length(nonNanGlucose);
     
 end

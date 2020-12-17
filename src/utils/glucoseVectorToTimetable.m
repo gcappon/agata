@@ -53,6 +53,7 @@ function dataTimetable = glucoseVectorToTimetable(data, sampleTime, startTime)
         error('glucoseVectorToTimetable: startTime must be a datetime.');
     end
     
+    %Conversion
     time = startTime:minutes(sampleTime):(startTime + minutes(length(data)*sampleTime - sampleTime));
     dataTimetable = timetable(data(:),'VariableNames', {'glucose'}, 'RowTimes', time);
     
