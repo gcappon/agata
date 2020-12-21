@@ -128,7 +128,8 @@ function results = analyzeGlucoseProfile(data)
         %Compute metric for glucose profile
         r = feval(eventFunc{e}, data);
         results.event.([eventMetrics{e} 'MeanDuration']) = mean(r.duration);
-        results.event.([eventMetrics{e} 'PerWeek']) = length(r.time)/7;
+        nDays = days(data.Time(end) - data.Time(1)); 
+        results.event.([eventMetrics{e} 'PerWeek']) = length(r.time)/nDays*7;
       
     end
     

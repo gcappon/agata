@@ -485,14 +485,16 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         for g1 = 1:length(arm1)
             r = feval(eventFunc{e}, arm1{g1});
             results.arm1.event.([eventMetrics{e} 'MeanDuration']).values(g1) = mean(r.duration);
-            results.arm1.event.([eventMetrics{e} 'PerWeek']).values(g1) = length(r.time)/7;
+            nDays = days(arm1{g1}.Time(end) - arm1{g1}.Time(1)); 
+            results.arm1.event.([eventMetrics{e} 'PerWeek']).values(g1) = length(r.time)/(nDays)*7;
         end
         
         %Compute metrics for arm2
         for g2 = 1:length(arm2)
             r = feval(eventFunc{e}, arm2{g2});
             results.arm2.event.([eventMetrics{e} 'MeanDuration']).values(g2) = mean(r.duration);
-            results.arm2.event.([eventMetrics{e} 'PerWeek']).values(g2) = length(r.time)/7;
+            nDays = days(arm2{g2}.Time(end) - arm2{g2}.Time(1)); 
+            results.arm2.event.([eventMetrics{e} 'PerWeek']).values(g2) = length(r.time)/(nDays)*7;
         end
         
         %Compute metrics stats

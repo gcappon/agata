@@ -274,7 +274,8 @@ function results = analyzeOneArm(arm)
         for g = 1:length(arm)
             r = feval(eventFunc{e}, arm{g});
             results.event.([eventMetrics{e} 'MeanDuration']).values(g) = mean(r.duration);
-            results.event.([eventMetrics{e} 'PerWeek']).values(g) = length(r.time)/7;
+            nDays = days(arm{g}.Time(end) - arm{g}.Time(1)); 
+            results.event.([eventMetrics{e} 'PerWeek']).values(g) = length(r.time)/(nDays)*7;
         end
 
         
