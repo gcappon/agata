@@ -57,7 +57,7 @@ function generateAGP(data,varargin)
     lastDayAll.Hour = 0;
     lastDayAll.Minute = 0;
     lastDayAll.Second = 0;
-    lastDayAll = lastDayAll + day(1);
+    lastDayAll = lastDayAll + days(1);
     
     nDays = days(lastDayAll-firstDayAll);
     
@@ -333,12 +333,12 @@ function generateAGP(data,varargin)
         lastDay.Hour = 0;
         lastDay.Minute = 0;
         lastDay.Second = 0;
-        lastDay = lastDay + day(1);
+        lastDay = lastDay + days(1);
 
         nDays = days(lastDay-firstDay);
 
 
-        dataDaily = data((data.Time >= firstDay) & data.Time < (firstDay + day(1)),:);
+        dataDaily = data((data.Time >= firstDay) & data.Time < (firstDay + days(1)),:);
         dummyTime = datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0):(data.Time(2)-data.Time(1)):datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0)+(minutes(1440)-(data.Time(2)-data.Time(1)));
         dummyData = timetable(randn(length(dummyTime),1),'VariableNames', {'glucose2'}, 'RowTimes', dummyTime);
 
@@ -353,8 +353,8 @@ function generateAGP(data,varargin)
         for d = 2:nDays
 
             %Get the day of data
-            dayData = data((data.Time >= firstDay + day(d-1)) & data.Time < (firstDay + day(d)),:);
-            dayData.Time = dayData.Time-day(d-1);
+            dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
+            dayData.Time = dayData.Time-days(d-1);
             dayData.Properties.VariableNames{1} = ['glucose2']; 
             %dayData = retime(dayData,'regular','mean','TimeStep', data.Time(2)-data.Time(1));
             dayData = putOnTimegrid(dayData,dummyTime);
@@ -438,10 +438,10 @@ function generateAGP(data,varargin)
         for d = 1:nDays
 
             %Get the day of data
-            dayData = data((data.Time >= firstDay + day(d-1)) & data.Time < (firstDay + day(d)),:);
+            dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
 
-            startTime = firstDay + day(d-1) + (data.Time(2)-data.Time(1))*3;
-            endTime = firstDay + day(d) - (data.Time(2)-data.Time(1))*3;
+            startTime = firstDay + days(d-1) + (data.Time(2)-data.Time(1))*3;
+            endTime = firstDay + days(d) - (data.Time(2)-data.Time(1))*3;
             ax2 = subplot( 'Position',[.03+(.13*mod(d-1,7)), .12-.1*(floor((d-1)/7)),.12,.09]);
             hold on
 

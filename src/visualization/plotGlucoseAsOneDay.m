@@ -53,12 +53,12 @@ function plotGlucoseAsOneDay(data,varargin)
     lastDay.Hour = 0;
     lastDay.Minute = 0;
     lastDay.Second = 0;
-    lastDay = lastDay + day(1);
+    lastDay = lastDay + days(1);
 
     nDays = days(lastDay-firstDay);
 
 
-    dataDaily = data((data.Time >= firstDay) & data.Time < (firstDay + day(1)),:);
+    dataDaily = data((data.Time >= firstDay) & data.Time < (firstDay + days(1)),:);
     dummyTime = datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0):(data.Time(2)-data.Time(1)):datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0)+(minutes(1440)-(data.Time(2)-data.Time(1)));
     dummyData = timetable(randn(length(dummyTime),1),'VariableNames', {'glucose2'}, 'RowTimes', dummyTime);
 
@@ -73,8 +73,8 @@ function plotGlucoseAsOneDay(data,varargin)
     for d = 2:nDays
 
         %Get the day of data
-        dayData = data((data.Time >= firstDay + day(d-1)) & data.Time < (firstDay + day(d)),:);
-        dayData.Time = dayData.Time-day(d-1);
+        dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
+        dayData.Time = dayData.Time-days(d-1);
         dayData.Properties.VariableNames{1} = ['glucose2']; 
         %dayData = retime(dayData,'regular','mean','TimeStep', data.Time(2)-data.Time(1));
         dayData = putOnTimegrid(dayData,dummyTime);

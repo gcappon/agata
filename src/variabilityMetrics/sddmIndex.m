@@ -51,7 +51,7 @@ function sddmIndex = sddmIndex(data)
     lastDay.Hour = 0;
     lastDay.Minute = 0;
     lastDay.Second = 0;
-    lastDay = lastDay + day(1);
+    lastDay = lastDay + days(1);
 
     nDays = days(lastDay-firstDay);
         
@@ -60,7 +60,7 @@ function sddmIndex = sddmIndex(data)
     for d = 1:nDays
 
         %Get the day of data
-        dayData = data((data.Time >= firstDay + day(d-1)) & data.Time < (firstDay + day(d)),:);
+        dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
 
         %Get daily mean and std
         meanWithin(d) = nanmean(dayData.glucose);

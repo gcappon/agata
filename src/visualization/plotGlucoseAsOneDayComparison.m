@@ -60,11 +60,11 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
     lastDay.Hour = 0;
     lastDay.Minute = 0;
     lastDay.Second = 0;
-    lastDay = lastDay + day(1);
+    lastDay = lastDay + days(1);
 
     nDays = days(lastDay-firstDay);
 
-    dataDaily = data1((data1.Time >= firstDay) & data1.Time < (firstDay + day(1)),:);
+    dataDaily = data1((data1.Time >= firstDay) & data1.Time < (firstDay + days(1)),:);
     dummyTime = datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0):(data1.Time(2)-data1.Time(1)):datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0)+(minutes(1440)-(data1.Time(2)-data1.Time(1)));
     dummyData = timetable(randn(length(dummyTime),1),'VariableNames', {'glucose2'}, 'RowTimes', dummyTime);
 
@@ -78,8 +78,8 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
     for d = 2:nDays
 
         %Get the day of data
-        dayData = data1((data1.Time >= firstDay + day(d-1)) & data1.Time < (firstDay + day(d)),:);
-        dayData.Time = dayData.Time-day(d-1);
+        dayData = data1((data1.Time >= firstDay + days(d-1)) & data1.Time < (firstDay + days(d)),:);
+        dayData.Time = dayData.Time-days(d-1);
         dayData.Properties.VariableNames{1} = ['glucose2']; 
         %dayData = retime(dayData,'regular','mean','TimeStep', data.Time(2)-data.Time(1));
         dayData = putOnTimegrid(dayData,dummyTime);
@@ -112,11 +112,11 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
     lastDay.Hour = 0;
     lastDay.Minute = 0;
     lastDay.Second = 0;
-    lastDay = lastDay + day(1);
+    lastDay = lastDay + days(1);
 
     nDays = days(lastDay-firstDay);
 
-    dataDaily = data2((data2.Time >= firstDay) & data2.Time < (firstDay + day(1)),:);
+    dataDaily = data2((data2.Time >= firstDay) & data2.Time < (firstDay + days(1)),:);
     dummyTime = datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0):(data2.Time(2)-data2.Time(1)):datetime(dataDaily.Time.Year(1),dataDaily.Time.Month(1),dataDaily.Time.Day(1),0,0,0)+(minutes(1440)-(data2.Time(2)-data2.Time(1)));
     dummyData = timetable(randn(length(dummyTime),1),'VariableNames', {'glucose2'}, 'RowTimes', dummyTime);
 
@@ -130,8 +130,8 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
     for d = 2:nDays
 
         %Get the day of data
-        dayData = data2((data2.Time >= firstDay + day(d-1)) & data2.Time < (firstDay + day(d)),:);
-        dayData.Time = dayData.Time-day(d-1);
+        dayData = data2((data2.Time >= firstDay + days(d-1)) & data2.Time < (firstDay + days(d)),:);
+        dayData.Time = dayData.Time-days(d-1);
         dayData.Properties.VariableNames{1} = ['glucose2']; 
         %dayData = retime(dayData,'regular','mean','TimeStep', data.Time(2)-data.Time(1));
         dayData = putOnTimegrid(dayData,dummyTime);

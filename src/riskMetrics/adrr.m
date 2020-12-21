@@ -56,7 +56,7 @@ function adrr = adrr(data)
     lastDay.Hour = 0;
     lastDay.Minute = 0;
     lastDay.Second = 0;
-    lastDay = lastDay + day(1);
+    lastDay = lastDay + days(1);
     
     %Calculate the number of days and preallocate the daily max lbgi and
     %hbgi
@@ -67,7 +67,7 @@ function adrr = adrr(data)
     for d = 1:nDays
         
         %Get the day of data
-        dayData = data((data.Time >= firstDay + day(d-1)) & data.Time < (firstDay + day(d)),:);
+        dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
         
         %Get rid of nans
         nonNanGlucose = dayData.glucose(~isnan(dayData.glucose));
