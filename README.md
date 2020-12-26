@@ -16,9 +16,9 @@ Installation of AGATA can be easily performed by including the AGATA folder in t
 
 2. Unzip the downloaded archive and move the `agata-X.Y.Z` folder to the desired location, for example `~/MATLAB/`;
 3. Open MATLAB®;
-4. To use the AGATA functions in the current MATLAB® session (or within a specific script), add `agata-X.Y.Z` folder and subfolders to the current MATLAB® *PATH* by executing in the command window (or at the top of the script)
+4. To use the AGATA functions in the current MATLAB® session (or within a specific script), add `agata-X.Y.Z` source folder and subfolders to the current MATLAB® *PATH* by executing in the command window (or at the top of the script)
 ```MATLAB
-addpath(genpath('~/MATLAB/agata-X.Y.Z'))
+addpath(genpath('~/MATLAB/agata-X.Y.Z/src'))
 ```
 5. Enjoy!
 
