@@ -137,8 +137,7 @@ function dataDaily = putOnTimegrid(dataDaily,dummyTime)
     
         d = abs(dataDaily.Time(t) - dummyTime);
         
-        idx = find(min(d
-end) == d,1,'first');
+        idx = find(min(d) == d,1,'first');
         
         dataDaily.Time(t) = dummyTime(idx);
     
