@@ -49,7 +49,8 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
     
     
     k = 1; %hyperglycemicEvent vector current index
-    nSamples = round(15/minutes(data.Time(2) - data.Time(1))); %number of consecutive samples required to define a valid event
+    sampleTime = minutes(data.Time(2) - data.Time(1));
+    nSamples = round(15/sampleTime); %number of consecutive samples required to define a valid event
     TH = 180; %set the hyperglycemic threshold 
     
     count = 0; %number of current found consecutive samples
@@ -105,10 +106,27 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
 
     end
     
-    %If no events have been found...
-    if(k == 1)
-        hyperglycemicEvents.time = [];
+    
+    %Manage the case in which the hyperglycemic event has been found (at
+    %least nSamples > TH) but the 'post hyperglycemic window' has not finshed
+    %yet.
+    if((count > 0 && flag == -1))
+        hyperglycemicEvents.time(k) = tempStartTime;
+        hyperglycemicEvents.duration(k) = minutes(data.Time(t-(nSamples-count-1)) - tempStartTime);
+        k = k +  1;
     end
+    if((count == 3 && flag == 1))
+        hyperglycemicEvents.time(k) = tempStartTime;
+        hyperglycemicEvents.duration(k) = minutes(data.Time(t) - tempStartTime) + sampleTime;
+        k = k +  1;
+    end
+    
+    %If no events have been found...
+    if(k == 1 )
+        hyperglycemicEvents.time = [];
+        hyperglycemicEvents.duration = [];
+    end
+    
     
 end
 
