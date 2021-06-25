@@ -49,8 +49,7 @@ function hypoglycemicEvents = findHypoglycemicEvents(data)
     
     
     k = 1; %hypoglycemicEvent vector current index
-    sampleTime = minutes(data.Time(2) - data.Time(1));
-    nSamples = round(15/sampleTime); %number of consecutive samples required to define a valid event
+    nSamples = round(15/minutes(data.Time(2) - data.Time(1))); %number of consecutive samples required to define a valid event
     TH = 70; %set the hypoglycemic threshold 
     
     count = 0; %number of current found consecutive samples
@@ -63,6 +62,7 @@ function hypoglycemicEvents = findHypoglycemicEvents(data)
               %currently not in hypo.
     
     for t = 1:height(data)
+        data.glucose(t)
         if( data.glucose(t) < TH )
             
             %If it is a new event, reset count and set the hypothetical
@@ -105,18 +105,9 @@ function hypoglycemicEvents = findHypoglycemicEvents(data)
 
     end
     
-    %Manage the case in which the hypoglycemic event has been found (at
-    %least nSamples < TH) but the 'post hypoglycemic window has not finshed
-    %yet.
-    if((count > 0 && flag == -1))
+    if((count > 0 && flag == -1) || (count == 3 && flag == 1))
         hypoglycemicEvents.time(k) = tempStartTime;
-        hypoglycemicEvents.duration(k) = minutes(data.Time(t-(nSamples-count-1)) - tempStartTime);
-        k = k +  1;
-    end
-    if((count == 3 && flag == 1))
-        hypoglycemicEvents.time(k) = tempStartTime;
-        hypoglycemicEvents.duration(k) = minutes(data.Time(t) - tempStartTime) + sampleTime;
-        k = k +  1;
+        hypoglycemicEvents.duration(k) = minutes(data.Time(t-(count-1)) - tempStartTime);
     end
     
     if(k == 1 )
