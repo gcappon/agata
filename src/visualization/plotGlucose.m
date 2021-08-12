@@ -71,7 +71,6 @@ function plotGlucose(data,varargin)
         ax = gca;
         ax.XAxis.FontSize = 15;
         ax.YAxis.FontSize = 15;
-        datetick('x','HHPM')
         xlabel('Time','FontWeight','bold','FontSize',20)
         ylabel('Glucose (mg/dl)','FontWeight','bold','FontSize',18)
         
@@ -92,11 +91,6 @@ function valid = validData(data)
     valid = istimetable(data);
     if(~valid)
         error('plotGlucose: data must be a timetable.');
-    end
-    
-    valid = var(seconds(diff(data.Time))) == 0 && ~isnan(var(seconds(diff(data.Time))));
-    if(~valid)
-        error('plotGlucose: data must have a homogeneous time grid.')
     end
     
     valid = any(strcmp(fieldnames(data),'Time'));

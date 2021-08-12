@@ -169,15 +169,17 @@ function mageMinusIndex = mageMinusIndex(data)
             if abs(sample2 - sample1) < stdWithin
                 iTurning(1) = [];
             end
+            
+            if(length(iTurning) > 1)
+                % Last sample processing;
+                sample1 = dayData(iTurning(end-1));
+                sample2 = dayData(iTurning(end));
 
-            % Last sample processing;
-            sample1 = dayData(iTurning(end-1));
-            sample2 = dayData(iTurning(end));
-
-            if abs(sample2 - sample1) < stdWithin
-                iTurning(end) = [];
+                if abs(sample2 - sample1) < stdWithin
+                    iTurning(end) = [];
+                end
             end
-
+            
             turning = dayData(iTurning);
             nTurning = length(iTurning);
 
