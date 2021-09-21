@@ -212,7 +212,7 @@ function mageMinusIndex = mageMinusIndex(data)
     
     %Compute index
     mageDayMinus(isnan(mageDayMinus)) = 0; % Correct for 'mean' behaviour
-    mageMinusIndex = mean(mageDayMinus);
+    mageMinusIndex = -mean(mageDayMinus);
     
 end
 
