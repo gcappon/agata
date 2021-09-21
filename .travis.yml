@@ -1,5 +1,5 @@
 language: matlab
 matlab:
-  - R2021a
+  - latest
 notifications:
   slack: unipddeidiabe-qot8622:VQDpHauZVIHpns5ht270ZJyz
