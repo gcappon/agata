@@ -21,4 +21,4 @@ assert(~isnan(results));
 
 %% Test 2: check results calculation
 results = mageIndex(data);
-assert(round(results*1000)/1000 == 162.509);
+assert(round(results*1000)/1000 == 162.5090);
