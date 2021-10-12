@@ -1,0 +1,130 @@
+function plotAggregatedGlucose(data,varargin)
+%plotAggregatedGlucose function that visualizes the given data with
+%superimposed aggregated glucose values.
+%
+%Input:
+%   - data: a timetable with column `Time` and `glucose` containing the 
+%   glucose data to analyze (in mg/dl);
+%   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
+%   to output the .pdf files associated to the plot or not. 
+%
+%Preconditions:
+%   - `data` must be a timetable.
+%   - `data` must contain a column named `Time` and another named `glucose`.
+%   - `PrintFigure` can be 0 or 1.
+%
+% ---------------------------------------------------------------------
+%
+% Reference:
+%   - Clarke et al., "Statistical Tools to Analyze Continuous Glucose
+%   Monitor Data", Diabetes Technol Ther, 2009,
+%   vol. 11, pp. S45-S54. DOI: 10.1089=dia.2008.0138.
+%
+% ---------------------------------------------------------------------
+%
+% Copyright (C) 2021 Giacomo Cappon
+%
+% This file is part of AGATA.
+%
+% ---------------------------------------------------------------------
+
+        %Input parser and check preconditions
+        defaultPrintFigure = 0;
+
+        params = inputParser;
+        params.CaseSensitive = false;
+        addRequired(params,'data',@(x) validData(x));
+        addParameter(params,'PrintFigure',defaultPrintFigure, @(x) x == 0 || x == 1);
+        parse(params,data,varargin{:});
+
+        printFigure = params.Results.PrintFigure;
+        
+        f = figure;
+        
+        hold on
+        
+        %Hyper yellow area 
+        %hyperTop = max([data.glucose 180*ones(height(data),1)]');
+        %hyperBot = 180*ones(height(data),1)';
+        %plt.areaHyper = fill([data.Time', fliplr(data.Time')],[hyperBot fliplr(hyperTop)],'g',...
+        %    'EdgeColor', 'none','FaceColor', [255,244,62]/255);
+
+        %Hypo red area 
+        %hypoBot = min([data.glucose 70*ones(height(data),1)]');
+        %hypoTop = 70*ones(height(data),1)';
+        %plt.areaHyper = fill([data.Time', fliplr(data.Time')],[hypoBot fliplr(hypoTop)],'g',...
+        %    'FaceColor',[243,32,50]/255,'EdgeColor', 'none');
+        
+        %Nan values
+        dataNan = data;
+        dataNan.glucose(isnan(data.glucose)) = 410;
+        dataNan.glucose(~isnan(data.glucose)) =nan;
+        plt.areaNan = area(dataNan.Time,dataNan.glucose,...
+            'FaceColor',[255, 0, 0]/255,'EdgeColor','none','FaceAlpha',0.15);
+        
+        %Target gray area
+        plt.area70180 = fill([data.Time(1) data.Time(end) data.Time(end) data.Time(1)],[70 70 180 180],'g',...
+            'FaceColor',[199, 200, 202]/255,'EdgeColor','none','FaceAlpha',0.5);
+        plt.line70 = plot([data.Time(1) data.Time(end)],[70 70],'--','linewidth',2,'Color',[77 189 109]/255);
+        plt.line180 = plot([data.Time(1) data.Time(end)],[180 180],'--','linewidth',2,'Color',[77 189 109]/255);
+        
+        %Glucose trace
+        plt.glucose = plot(data.Time,data.glucose,'k-o','linewidth',2);
+        
+        %Superimposed aggregated data
+        time = data.Time(1):hours(1):data.Time(end);
+        rng(1)
+        super = timetable(nan(length(time),1),nan(length(time),1),nan(length(time),1),'VariableNames', {'superHypo','superTarget','superHyper'}, 'RowTimes', time);
+        for t = 1:length(super.Time)-1
+            superData = data(data.Time>=super.Time(t) & data.Time<super.Time(t+1),:);
+            meanSuper = meanGlucose(superData);
+            if(meanSuper < 70)
+                super.superHypo(t) = 20;
+            else
+                if(meanSuper < 180)
+                    super.superTarget(t) = 120;
+                else
+                    super.superHyper(t) = 250;
+                end
+            end
+        end
+        plt.superHypo = scatter(super.Time,super.superHypo,100*ones(length(super.Time),1),'MarkerFaceColor',[255,0,0]/255);
+        plt.superTarget = scatter(super.Time,super.superTarget,100*ones(length(super.Time),1),'MarkerFaceColor',[50,205,50]/255);
+        plt.superHyper = scatter(super.Time,super.superHyper,100*ones(length(super.Time),1),'MarkerFaceColor',[255,215,0]/255);
+        
+        ax = gca;
+        ax.XAxis.FontSize = 15;
+        ax.YAxis.FontSize = 15;
+        xlabel('Time','FontWeight','bold','FontSize',20)
+        ylabel('Glucose (mg/dl)','FontWeight','bold','FontSize',18)
+        
+        xlim([data.Time(1) data.Time(end)])
+        ylim([0 410]);
+        grid on
+        hold off
+
+        if(printFigure)
+            print(f, '-dpdf', ['glucoseAggregatedPlot' '.pdf'],'-fillpage')
+        end
+        
+end
+
+function valid = validData(data)
+    %Input validator function handler 
+    
+    valid = istimetable(data);
+    if(~valid)
+        error('plotGlucose: data must be a timetable.');
+    end
+    
+    valid = any(strcmp(fieldnames(data),'Time'));
+    if(~valid)
+        error('plotGlucose: data must have a column named `Time`.')
+    end
+    
+    valid = any(strcmp(fieldnames(data),'glucose'));
+    if(~valid)
+        error('plotGlucose: data must have a column named `glucose`.')
+    end
+    
+end
