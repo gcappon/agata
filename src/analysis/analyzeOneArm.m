@@ -125,7 +125,7 @@ function results = analyzeOneArm(arm)
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose'};
+        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','stdGlucoseROC'};
     
     for v = variabilityMetrics
         
@@ -206,30 +206,31 @@ function results = analyzeOneArm(arm)
         
     end
     
-    %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInSevereHyperglycemia','timeInHypoglycemia','timeInSevereHypoglycemia','timeInTarget','timeInTightTarget'};
-    
-    for t = timeMetrics
+    %Glycemic transformation metrics
+    glycemicTransformationMetrics = {'gradeEuScore','gradeHyperScore','gradeHypoScore',...
+         'gradeScore','hyperIndex','hypoIndex','igc','mrIndex'};
+     
+    for gt = glycemicTransformationMetrics
         
         %Preallocate
-        results.time.(t{:}).values = zeros(length(arm),1);
+        results.glycemicTransformation.(gt{:}).values = zeros(length(arm),1);
         
         %Compute metrics for arm
         for g = 1:length(arm)
-            results.time.(t{:}).values(g) = feval(t{:}, arm{g});
+            results.glycemicTransformation.(gt{:}).values(g) = feval(gt{:}, arm{g});
         end
         
         %Compute metrics stats
-        results.time.(t{:}).mean = nanmean(results.time.(t{:}).values);
+        results.glycemicTransformation.(gt{:}).mean = nanmean(results.glycemicTransformation.(gt{:}).values);
         
-        results.time.(t{:}).std = nanstd(results.time.(t{:}).values);
+        results.glycemicTransformation.(gt{:}).std = nanstd(results.glycemicTransformation.(gt{:}).values);
         
-        results.time.(t{:}).median = nanmean(results.time.(t{:}).values);
+        results.glycemicTransformation.(gt{:}).median = nanmean(results.glycemicTransformation.(gt{:}).values);
         
-        results.time.(t{:}).prc5 = prctile(results.time.(t{:}).values,5);
-        results.time.(t{:}).prc25 = prctile(results.time.(t{:}).values,25);
-        results.time.(t{:}).prc75 = prctile(results.time.(t{:}).values,75);
-        results.time.(t{:}).prc95 = prctile(results.time.(t{:}).values,95);
+        results.glycemicTransformation.(gt{:}).prc5 = prctile(results.glycemicTransformation.(gt{:}).values,5);
+        results.glycemicTransformation.(gt{:}).prc25 = prctile(results.glycemicTransformation.(gt{:}).values,25);
+        results.glycemicTransformation.(gt{:}).prc75 = prctile(results.glycemicTransformation.(gt{:}).values,75);
+        results.glycemicTransformation.(gt{:}).prc95 = prctile(results.glycemicTransformation.(gt{:}).values,95);
         
     end
     
