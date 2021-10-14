@@ -35,7 +35,7 @@ function poincareGlucose = poincareGlucose(data)
 %   - Clarke et al., "Statistical Tools to Analyze Continuous Glucose
 %   Monitor Data", Diabetes Technol Ther, 2009,
 %   vol. 11, pp. S45-S54. DOI: 10.1089=dia.2008.0138.
-%   - Based on fit_ellispe function by Ohad Gal. 
+%   - Based on fit_ellipse function by Ohad Gal. 
 %   https://it.mathworks.com/matlabcentral/fileexchange/3215-fit_ellipse
 %
 % ---------------------------------------------------------------------
@@ -70,7 +70,6 @@ function poincareGlucose = poincareGlucose(data)
     data = data(~isnan(data.glucose),:);
     x = data.glucose(1:end-1);
     y = data.glucose(2:end);
-    
     
     % remove bias of the ellipse - to make matrix inversion more accurate. (will be added later on).
     mean_x = mean(x);

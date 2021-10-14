@@ -69,7 +69,7 @@ function results = analyzeGlucoseProfile(data)
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose'};
+        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','stdGlucoseROC'};
     
     for v = variabilityMetrics
         
@@ -99,15 +99,16 @@ function results = analyzeGlucoseProfile(data)
         
     end
     
-    %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInSevereHyperglycemia','timeInHypoglycemia','timeInSevereHypoglycemia','timeInTarget','timeInTightTarget'};
-    
-    for t = timeMetrics
-        
-        %Compute metric for glucose profile
-        results.time.(t{:}) = feval(t{:}, data);
-        
-    end
+     %Glycemic transformation metrics
+     glycemicTransformationMetrics = {'gradeEuScore','gradeHyperScore','gradeHypoScore',...
+         'gradeScore','hyperIndex','hypoIndex','igc','mrIndex'};
+     
+     for gt = glycemicTransformationMetrics
+         
+         %Compute metric for glucose profile
+         results.glycemicTransformation.(gt{:}) = feval(gt{:}, data);
+         
+     end
     
     %Data quality metrics
     dataQualityMetrics = {'missingGlucosePercentage'};
