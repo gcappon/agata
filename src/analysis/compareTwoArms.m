@@ -173,7 +173,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose'};
+        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','stdGlucoseROC'};
     
     for v = variabilityMetrics
         
