@@ -42,7 +42,7 @@ function mageIndex = mageIndex(data)
     end
     
     %Compute index
-    mageIndex = (magePlusIndex(data) + mageMinusIndex(data))/2;
+    mageIndex = nanmean([magePlusIndex(data) mageMinusIndex(data)]);
     
 end
 

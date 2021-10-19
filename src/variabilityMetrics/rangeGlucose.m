@@ -44,6 +44,9 @@ function rangeGlucose = rangeGlucose(data)
     
     %Compute metric
     rangeGlucose = max(nonNanGlucose) - min(nonNanGlucose);
+    if(isempty(rangeGlucose))
+        rangeGlucose = nan;
+    end
     
 end
 

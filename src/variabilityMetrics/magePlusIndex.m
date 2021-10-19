@@ -215,5 +215,10 @@ function magePlusIndex = magePlusIndex(data)
     mageDayPlus(isnan(mageDayPlus)) = 0; % Correct for 'mean' behaviour
     magePlusIndex = mean(mageDayPlus);
     
+    %Manage all nan data
+    if(all(isnan(data.glucose)))
+        magePlusIndex = nan;
+    end
+    
 end
 

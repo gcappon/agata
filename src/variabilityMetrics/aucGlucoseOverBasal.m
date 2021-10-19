@@ -57,7 +57,11 @@ function aucGlucoseOverBasal = aucGlucoseOverBasal(data,basal)
     
     %Compute index
     sampleTime = minutes(data.Time(2) - data.Time(1));
+    
     aucGlucoseOverBasal = sum(nonNanGlucose*sampleTime);
+    if(isempty(nonNanGlucose))
+        aucGlucoseOverBasal = nan;
+    end
     
 end
 

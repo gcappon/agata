@@ -216,5 +216,10 @@ function efIndex = efIndex(data)
     %Compute index
     efIndex = nansum(efDay)/nDays;
     
+    %Manage all nan data
+    if(all(isnan(data.glucose)))
+        efIndex = nan;
+    end
+    
 end
 
