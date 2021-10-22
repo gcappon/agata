@@ -142,7 +142,7 @@ function results = analyzeOneArm(arm)
         
         results.variability.(v{:}).std = nanstd(results.variability.(v{:}).values);
         
-        results.variability.(v{:}).median = nanmean(results.variability.(v{:}).values);
+        results.variability.(v{:}).median = nanmedian(results.variability.(v{:}).values);
         
         results.variability.(v{:}).prc5 = prctile(results.variability.(v{:}).values,5);
         results.variability.(v{:}).prc25 = prctile(results.variability.(v{:}).values,25);
@@ -169,7 +169,7 @@ function results = analyzeOneArm(arm)
         
         results.risk.(r{:}).std = nanstd(results.risk.(r{:}).values);
         
-        results.risk.(r{:}).median = nanmean(results.risk.(r{:}).values);
+        results.risk.(r{:}).median = nanmedian(results.risk.(r{:}).values);
         
         results.risk.(r{:}).prc5 = prctile(results.risk.(r{:}).values,5);
         results.risk.(r{:}).prc25 = prctile(results.risk.(r{:}).values,25);
@@ -197,7 +197,7 @@ function results = analyzeOneArm(arm)
         
         results.time.(t{:}).std = nanstd(results.time.(t{:}).values);
         
-        results.time.(t{:}).median = nanmean(results.time.(t{:}).values);
+        results.time.(t{:}).median = nanmedian(results.time.(t{:}).values);
         
         results.time.(t{:}).prc5 = prctile(results.time.(t{:}).values,5);
         results.time.(t{:}).prc25 = prctile(results.time.(t{:}).values,25);
@@ -225,7 +225,7 @@ function results = analyzeOneArm(arm)
         
         results.glycemicTransformation.(gt{:}).std = nanstd(results.glycemicTransformation.(gt{:}).values);
         
-        results.glycemicTransformation.(gt{:}).median = nanmean(results.glycemicTransformation.(gt{:}).values);
+        results.glycemicTransformation.(gt{:}).median = nanmedian(results.glycemicTransformation.(gt{:}).values);
         
         results.glycemicTransformation.(gt{:}).prc5 = prctile(results.glycemicTransformation.(gt{:}).values,5);
         results.glycemicTransformation.(gt{:}).prc25 = prctile(results.glycemicTransformation.(gt{:}).values,25);
@@ -252,7 +252,7 @@ function results = analyzeOneArm(arm)
         
         results.dataQuality.(d{:}).std = nanstd(results.dataQuality.(d{:}).values);
         
-        results.dataQuality.(d{:}).median = nanmean(results.dataQuality.(d{:}).values);
+        results.dataQuality.(d{:}).median = nanmedian(results.dataQuality.(d{:}).values);
         
         results.dataQuality.(d{:}).prc5 = prctile(results.dataQuality.(d{:}).values,5);
         results.dataQuality.(d{:}).prc25 = prctile(results.dataQuality.(d{:}).values,25);
@@ -287,8 +287,8 @@ function results = analyzeOneArm(arm)
         results.event.([eventMetrics{e} 'MeanDuration']).std = nanstd(results.event.([eventMetrics{e} 'MeanDuration']).values);
         results.event.([eventMetrics{e} 'PerWeek']).std = nanstd(results.event.([eventMetrics{e} 'PerWeek']).values);
         
-        results.event.([eventMetrics{e} 'MeanDuration']).median = nanmean(results.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.event.([eventMetrics{e} 'PerWeek']).median = nanmean(results.event.([eventMetrics{e} 'PerWeek']).values);
+        results.event.([eventMetrics{e} 'MeanDuration']).median = nanmedian(results.event.([eventMetrics{e} 'MeanDuration']).values);
+        results.event.([eventMetrics{e} 'PerWeek']).median = nanmedian(results.event.([eventMetrics{e} 'PerWeek']).values);
         
         results.event.([eventMetrics{e} 'MeanDuration']).prc5 = prctile(results.event.([eventMetrics{e} 'MeanDuration']).values,5);
         results.event.([eventMetrics{e} 'PerWeek']).prc5 = prctile(results.event.([eventMetrics{e} 'PerWeek']).values,5);

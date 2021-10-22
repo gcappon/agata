@@ -198,8 +198,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         results.arm1.variability.(v{:}).std = nanstd(results.arm1.variability.(v{:}).values);
         results.arm2.variability.(v{:}).std = nanstd(results.arm2.variability.(v{:}).values);
         
-        results.arm1.variability.(v{:}).median = nanmean(results.arm1.variability.(v{:}).values);
-        results.arm2.variability.(v{:}).median = nanmean(results.arm2.variability.(v{:}).values);
+        results.arm1.variability.(v{:}).median = nanmedian(results.arm1.variability.(v{:}).values);
+        results.arm2.variability.(v{:}).median = nanmedian(results.arm2.variability.(v{:}).values);
         
         results.arm1.variability.(v{:}).prc5 = prctile(results.arm1.variability.(v{:}).values,5);
         results.arm2.variability.(v{:}).prc5 = prctile(results.arm2.variability.(v{:}).values,5);
@@ -257,8 +257,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         results.arm1.risk.(r{:}).std = nanstd(results.arm1.risk.(r{:}).values);
         results.arm2.risk.(r{:}).std = nanstd(results.arm2.risk.(r{:}).values);
         
-        results.arm1.risk.(r{:}).median = nanmean(results.arm1.risk.(r{:}).values);
-        results.arm2.risk.(r{:}).median = nanmean(results.arm2.risk.(r{:}).values);
+        results.arm1.risk.(r{:}).median = nanmedian(results.arm1.risk.(r{:}).values);
+        results.arm2.risk.(r{:}).median = nanmedian(results.arm2.risk.(r{:}).values);
         
         results.arm1.risk.(r{:}).prc5 = prctile(results.arm1.risk.(r{:}).values,5);
         results.arm2.risk.(r{:}).prc5 = prctile(results.arm2.risk.(r{:}).values,5);
@@ -317,8 +317,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         results.arm1.time.(t{:}).std = nanstd(results.arm1.time.(t{:}).values);
         results.arm2.time.(t{:}).std = nanstd(results.arm2.time.(t{:}).values);
         
-        results.arm1.time.(t{:}).median = nanmean(results.arm1.time.(t{:}).values);
-        results.arm2.time.(t{:}).median = nanmean(results.arm2.time.(t{:}).values);
+        results.arm1.time.(t{:}).median = nanmedian(results.arm1.time.(t{:}).values);
+        results.arm2.time.(t{:}).median = nanmedian(results.arm2.time.(t{:}).values);
         
         results.arm1.time.(t{:}).prc5 = prctile(results.arm1.time.(t{:}).values,5);
         results.arm2.time.(t{:}).prc5 = prctile(results.arm2.time.(t{:}).values,5);
@@ -376,8 +376,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         results.arm1.time.(d{:}).std = nanstd(results.arm1.time.(d{:}).values);
         results.arm2.time.(d{:}).std = nanstd(results.arm2.time.(d{:}).values);
         
-        results.arm1.time.(d{:}).median = nanmean(results.arm1.time.(d{:}).values);
-        results.arm2.time.(d{:}).median = nanmean(results.arm2.time.(d{:}).values);
+        results.arm1.time.(d{:}).median = nanmedian(results.arm1.time.(d{:}).values);
+        results.arm2.time.(d{:}).median = nanmedian(results.arm2.time.(d{:}).values);
         
         results.arm1.time.(d{:}).prc5 = prctile(results.arm1.time.(d{:}).values,5);
         results.arm2.time.(d{:}).prc5 = prctile(results.arm2.time.(d{:}).values,5);
@@ -436,8 +436,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         results.arm1.glycemicTransformation.(gt{:}).std = nanstd(results.arm1.glycemicTransformation.(gt{:}).values);
         results.arm2.glycemicTransformation.(gt{:}).std = nanstd(results.arm2.glycemicTransformation.(gt{:}).values);
         
-        results.arm1.glycemicTransformation.(gt{:}).median = nanmean(results.arm1.glycemicTransformation.(gt{:}).values);
-        results.arm2.glycemicTransformation.(gt{:}).median = nanmean(results.arm2.glycemicTransformation.(gt{:}).values);
+        results.arm1.glycemicTransformation.(gt{:}).median = nanmedian(results.arm1.glycemicTransformation.(gt{:}).values);
+        results.arm2.glycemicTransformation.(gt{:}).median = nanmedian(results.arm2.glycemicTransformation.(gt{:}).values);
         
         results.arm1.glycemicTransformation.(gt{:}).prc5 = prctile(results.arm1.glycemicTransformation.(gt{:}).values,5);
         results.arm2.glycemicTransformation.(gt{:}).prc5 = prctile(results.arm2.glycemicTransformation.(gt{:}).values,5);
@@ -508,10 +508,10 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         results.arm1.event.([eventMetrics{e} 'PerWeek']).std = nanstd(results.arm1.event.([eventMetrics{e} 'PerWeek']).values);
         results.arm2.event.([eventMetrics{e} 'PerWeek']).std = nanstd(results.arm2.event.([eventMetrics{e} 'PerWeek']).values);
         
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).median = nanmean(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).median = nanmean(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).median = nanmean(results.arm1.event.([eventMetrics{e} 'PerWeek']).values);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).median = nanmean(results.arm2.event.([eventMetrics{e} 'PerWeek']).values);
+        results.arm1.event.([eventMetrics{e} 'MeanDuration']).median = nanmedian(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values);
+        results.arm2.event.([eventMetrics{e} 'MeanDuration']).median = nanmedian(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values);
+        results.arm1.event.([eventMetrics{e} 'PerWeek']).median = nanmedian(results.arm1.event.([eventMetrics{e} 'PerWeek']).values);
+        results.arm2.event.([eventMetrics{e} 'PerWeek']).median = nanmedian(results.arm2.event.([eventMetrics{e} 'PerWeek']).values);
         
         results.arm1.event.([eventMetrics{e} 'MeanDuration']).prc5 = prctile(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values,5);
         results.arm2.event.([eventMetrics{e} 'MeanDuration']).prc5 = prctile(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values,5);
