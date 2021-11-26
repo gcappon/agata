@@ -78,13 +78,15 @@ function plotAggregatedGlucose(data,varargin)
         for t = 1:length(super.Time)-1
             superData = data(data.Time>=super.Time(t) & data.Time<super.Time(t+1),:);
             meanSuper = meanGlucose(superData);
-            if(meanSuper < 70)
+            if(meanSuper <= 70)
                 super.superHypo(t) = 20;
             else
-                if(meanSuper < 180)
+                if(meanSuper <= 180)
                     super.superTarget(t) = 120;
                 else
-                    super.superHyper(t) = 250;
+                    if(meanSuper > 180)
+                        super.superHyper(t) = 250;
+                    end
                 end
             end
         end

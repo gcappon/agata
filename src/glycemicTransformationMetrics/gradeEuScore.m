@@ -42,6 +42,9 @@ function gradeEuScore = gradeEuScore(data)
         error('gradeEuScore: data must have a column named `glucose`.')
     end
     
+    %Remove values less than 20 (make no sense and they are surely outliers)
+    data.glucose(data.glucose < 20) = nan;
+    
     %Compute index
     gradeEuScore = 100 - (gradeHypoScore(data) + gradeHyperScore(data));
 

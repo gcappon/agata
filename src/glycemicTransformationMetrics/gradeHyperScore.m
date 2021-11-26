@@ -42,6 +42,8 @@ function gradeHyperScore = gradeHyperScore(data)
         error('gradeHyperScore: data must have a column named `glucose`.')
     end
     
+    %Remove values less than 20 (make no sense and they are surely outliers)
+    data.glucose(data.glucose < 20) = nan;
     
     %Get rid of nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));

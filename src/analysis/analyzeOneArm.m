@@ -35,7 +35,7 @@ function results = analyzeOneArm(arm)
 %            - `prc95`: the 95th percentile of `values`;   
 %        - `dataQualityMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           data quality metrics (i.e., {`missingGlucosePercentage`}) of 
+%           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) of 
 %           the metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
@@ -235,7 +235,7 @@ function results = analyzeOneArm(arm)
     end
     
     %Data quality metrics
-    dataQualityMetrics = {'missingGlucosePercentage'};
+    dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
     
     for d = dataQualityMetrics
         

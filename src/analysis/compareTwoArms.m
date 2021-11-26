@@ -42,7 +42,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `prc95`: the 95th percentile of `values`;   
 %        - `dataQualityMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           data quality metrics (i.e., {`missingGlucosePercentage`}) of 
+%           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) of 
 %           the metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
@@ -215,7 +215,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         res1 = results.arm1.variability.(v{:}).values;
         res2 = results.arm2.variability.(v{:}).values;
 
-        if(length(arm1) < 4 || length(arm2) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
             if(isPaired)
                 [stats.variability.(v{:}).h, stats.variability.(v{:}).p] = ttest(res1,res2,'Alpha',alpha);
             else
@@ -274,7 +274,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         res1 = results.arm1.risk.(r{:}).values;
         res2 = results.arm2.risk.(r{:}).values;
 
-        if(length(arm1) < 4 || length(arm2) < 4 ||  (~lillietest(res1) && ~lillietest(res2)))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  (~lillietest(res1) && ~lillietest(res2)))
             if(isPaired)
                 [stats.risk.(r{:}).h, stats.risk.(r{:}).p] = ttest(res1,res2,'Alpha',alpha);
             else
@@ -334,7 +334,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         res1 = results.arm1.time.(t{:}).values;
         res2 = results.arm2.time.(t{:}).values;
 
-        if(length(arm1) < 4 || length(arm2) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
             if(isPaired)
                 [stats.time.(t{:}).h, stats.time.(t{:}).p] = ttest(res1,res2,'Alpha',alpha);
             else
@@ -351,59 +351,59 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     end
     
     %Data quality metrics
-    dataQualityMetrics = {'missingGlucosePercentage'};
+    dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
     
     for d = dataQualityMetrics
         
         %Preallocate
-        results.arm1.time.(d{:}).values = zeros(length(arm1),1);
-        results.arm2.time.(d{:}).values = zeros(length(arm2),1);
+        results.arm1.dataQuality.(d{:}).values = zeros(length(arm1),1);
+        results.arm2.dataQuality.(d{:}).values = zeros(length(arm2),1);
         
         %Compute metrics for arm1
         for g1 = 1:length(arm1)
-            results.arm1.time.(d{:}).values(g1) = feval(d{:}, arm1{g1});
+            results.arm1.dataQuality.(d{:}).values(g1) = feval(d{:}, arm1{g1});
         end
         
         %Compute metrics for arm2
         for g2 = 1:length(arm2)
-            results.arm2.time.(d{:}).values(g2) = feval(d{:}, arm2{g2});
+            results.arm2.dataQuality.(d{:}).values(g2) = feval(d{:}, arm2{g2});
         end
         
         %Compute metrics stats
-        results.arm1.time.(d{:}).mean = nanmean(results.arm1.time.(d{:}).values);
-        results.arm2.time.(d{:}).mean = nanmean(results.arm2.time.(d{:}).values);
+        results.arm1.dataQuality.(d{:}).mean = nanmean(results.arm1.dataQuality.(d{:}).values);
+        results.arm2.dataQuality.(d{:}).mean = nanmean(results.arm2.dataQuality.(d{:}).values);
         
-        results.arm1.time.(d{:}).std = nanstd(results.arm1.time.(d{:}).values);
-        results.arm2.time.(d{:}).std = nanstd(results.arm2.time.(d{:}).values);
+        results.arm1.dataQuality.(d{:}).std = nanstd(results.arm1.dataQuality.(d{:}).values);
+        results.arm2.dataQuality.(d{:}).std = nanstd(results.arm2.dataQuality.(d{:}).values);
         
-        results.arm1.time.(d{:}).median = nanmedian(results.arm1.time.(d{:}).values);
-        results.arm2.time.(d{:}).median = nanmedian(results.arm2.time.(d{:}).values);
+        results.arm1.dataQuality.(d{:}).median = nanmedian(results.arm1.dataQuality.(d{:}).values);
+        results.arm2.dataQuality.(d{:}).median = nanmedian(results.arm2.dataQuality.(d{:}).values);
         
-        results.arm1.time.(d{:}).prc5 = prctile(results.arm1.time.(d{:}).values,5);
-        results.arm2.time.(d{:}).prc5 = prctile(results.arm2.time.(d{:}).values,5);
-        results.arm1.time.(d{:}).prc25 = prctile(results.arm1.time.(d{:}).values,25);
-        results.arm2.time.(d{:}).prc25 = prctile(results.arm2.time.(d{:}).values,25);
-        results.arm1.time.(d{:}).prc75 = prctile(results.arm1.time.(d{:}).values,75);
-        results.arm2.time.(d{:}).prc75 = prctile(results.arm2.time.(d{:}).values,75);
-        results.arm1.time.(d{:}).prc95 = prctile(results.arm1.time.(d{:}).values,95);
-        results.arm2.time.(d{:}).prc95 = prctile(results.arm2.time.(d{:}).values,95);
+        results.arm1.dataQuality.(d{:}).prc5 = prctile(results.arm1.dataQuality.(d{:}).values,5);
+        results.arm2.dataQuality.(d{:}).prc5 = prctile(results.arm2.dataQuality.(d{:}).values,5);
+        results.arm1.dataQuality.(d{:}).prc25 = prctile(results.arm1.dataQuality.(d{:}).values,25);
+        results.arm2.dataQuality.(d{:}).prc25 = prctile(results.arm2.dataQuality.(d{:}).values,25);
+        results.arm1.dataQuality.(d{:}).prc75 = prctile(results.arm1.dataQuality.(d{:}).values,75);
+        results.arm2.dataQuality.(d{:}).prc75 = prctile(results.arm2.dataQuality.(d{:}).values,75);
+        results.arm1.dataQuality.(d{:}).prc95 = prctile(results.arm1.dataQuality.(d{:}).values,95);
+        results.arm2.dataQuality.(d{:}).prc95 = prctile(results.arm2.dataQuality.(d{:}).values,95);
         
         
         %Perform statistical tests
-        res1 = results.arm1.time.(d{:}).values;
-        res2 = results.arm2.time.(d{:}).values;
+        res1 = results.arm1.dataQuality.(d{:}).values;
+        res2 = results.arm2.dataQuality.(d{:}).values;
 
-        if(length(arm1) < 4 || length(arm2) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
             if(isPaired)
-                [stats.time.(d{:}).h, stats.time.(d{:}).p] = ttest(res1,res2,'Alpha',alpha);
+                [stats.dataQuality.(d{:}).h, stats.dataQuality.(d{:}).p] = ttest(res1,res2,'Alpha',alpha);
             else
-                [stats.time.(d{:}).h, stats.time.(d{:}).p] = ttest2(res1,res2,'Alpha',alpha);
+                [stats.dataQuality.(d{:}).h, stats.dataQuality.(d{:}).p] = ttest2(res1,res2,'Alpha',alpha);
             end
         else
             if(isPaired)
-                [stats.time.(d{:}).p, stats.time.(d{:}).h] = signrank(res1,res2,'Alpha',alpha);
+                [stats.dataQuality.(d{:}).p, stats.dataQuality.(d{:}).h] = signrank(res1,res2,'Alpha',alpha);
             else
-                [stats.time.(d{:}).p, stats.time.(d{:}).h] = ranksum(res1,res2,'Alpha',alpha);
+                [stats.dataQuality.(d{:}).p, stats.dataQuality.(d{:}).h] = ranksum(res1,res2,'Alpha',alpha);
             end
         end
         
@@ -453,7 +453,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         res1 = results.arm1.glycemicTransformation.(gt{:}).values;
         res2 = results.arm2.glycemicTransformation.(gt{:}).values;
 
-        if(length(arm1) < 4 || length(arm2) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
             if(isPaired)
                 [stats.glycemicTransformation.(gt{:}).h, stats.glycemicTransformation.(gt{:}).p] = ttest(res1,res2,'Alpha',alpha);
             else
@@ -538,7 +538,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         res1 = results.arm1.event.([eventMetrics{e} 'MeanDuration']).values;
         res2 = results.arm2.event.([eventMetrics{e} 'MeanDuration']).values;
         
-        if(length(arm1) < 4 || length(arm2) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
             if(isPaired)
                 [stats.event.([eventMetrics{e} 'MeanDuration']).h, stats.event.([eventMetrics{e} 'MeanDuration']).p] = ttest(res1,res2,'Alpha',alpha);
             else
@@ -556,7 +556,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         res1 = results.arm1.event.([eventMetrics{e} 'PerWeek']).values;
         res2 = results.arm2.event.([eventMetrics{e} 'PerWeek']).values;
         
-        if(length(arm1) < 4 || length(arm2) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
             if(isPaired)
                 [stats.event.([eventMetrics{e} 'PerWeek']).h, stats.event.([eventMetrics{e} 'PerWeek']).p] = ttest(res1,res2,'Alpha',alpha);
             else

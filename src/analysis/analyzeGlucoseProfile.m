@@ -18,7 +18,7 @@ function results = analyzeGlucoseProfile(data)
 %           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`}) of the 
 %           metrics for each glucose profile;
 %        - `dataQualityMetrics`: a structure with fields containing the values of the computed 
-%           data quality metrics (i.e., {`missingGlucosePercentage`}) of 
+%           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) of 
 %           the metrics for each glucose profile;
 %        - `timeMetrics`: a structure with fields containing the values of the computed 
 %           time related metrics (i.e., {`timeInHyperglycemia`, 
@@ -111,7 +111,7 @@ function results = analyzeGlucoseProfile(data)
      end
     
     %Data quality metrics
-    dataQualityMetrics = {'missingGlucosePercentage'};
+    dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
     
     for d = dataQualityMetrics
         
