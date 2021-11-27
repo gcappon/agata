@@ -10,6 +10,7 @@
 
 addpath(fullfile('..','..','src','variabilityMetrics'));
 addpath(fullfile('..','..','src','processing'));
+addpath(fullfile('..','..','src','inspection'));
 
 time = datetime(2000,1,1,0,10,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(4000); % length = 11;
 rng(1)
