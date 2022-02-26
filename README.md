@@ -1,5 +1,7 @@
 # AGATA
 
+<img src="https://i.postimg.cc/G3YXvWWh/agata-logo.png" width="250" height="250">
+
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://github.com/gcappon/agata/COPYING)
 [![GitHub commit](https://img.shields.io/github/last-commit/gcappon/agata)](https://github.com/gcappon/agata/commits/master)
 [![Build Status](https://travis-ci.com/gcappon/agata.svg?branch=master)](https://travis-ci.com/gcappon/agata)
