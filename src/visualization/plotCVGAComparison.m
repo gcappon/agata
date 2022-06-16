@@ -1,9 +1,12 @@
 function plotCVGAComparison(glucoseProfilesArm1,glucoseProfilesArm2,varargin)
-%plotCVGA function that plots the control variablity grid analysis (CVGA).
+%plotCVGAComparison function that plots and visually compares the control 
+%variablity grid analysis (CVGA) of two arms.
 %
 %Input:
-%   - glucoseProfiles: a cell array of timetables each with column `Time` and 
-%   `glucose` containing the glucose data to analyze (in mg/dl). 
+%   - glucoseProfilesArm1: a cell array of timetables each with column `Time` and 
+%   `glucose` containing the glucose data to analyze (in mg/dl) of arm 1. 
+%   - glucoseProfilesArm2: a cell array of timetables each with column `Time` and 
+%   `glucose` containing the glucose data to analyze (in mg/dl) of arm 2. 
 %   - PlotZoneNames (optional, default: 1): a numerical flag defining whether to 
 %   plot the zone names in the CVGA plot or not. Can be 0 or 1.
 %   - HighlightBestControl (optional, default: 1): a numerical flag defining whether to 
@@ -12,7 +15,8 @@ function plotCVGAComparison(glucoseProfilesArm1,glucoseProfilesArm2,varargin)
 %   the CVGA plot.
 %
 %Preconditions:
-%   - glucoseProfiles must be a cell array containing timetables;
+%   - glucoseProfilesArm1 must be a cell array containing timetables;
+%   - glucoseProfilesArm2 must be a cell array containing timetables;
 %   - Each timetable in glucoseProfiles must have a column names `Time` and a
 %   column named `glucose`.
 %

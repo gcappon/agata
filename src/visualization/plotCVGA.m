@@ -10,6 +10,8 @@ function plotCVGA(glucoseProfiles,varargin)
 %   highlight the best controlled profile in the CVGA plot or not. Can be 0 or 1.
 %   - FontSize (optional, default: 16): a scalar defining the font size of
 %   the CVGA plot.
+%   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
+%   to output the .pdf files associated to the generated CVGA. 
 %
 %Preconditions:
 %   - glucoseProfiles must be a cell array containing timetables;
@@ -36,6 +38,8 @@ function plotCVGA(glucoseProfiles,varargin)
     defaultPlotZoneNames = 1;
     defaultHighlightBestControl = 1;
     defaultFontSize = 16;
+    defaultPrintFigure = 0;
+    
 
     params = inputParser;
     params.CaseSensitive = false;
@@ -46,12 +50,14 @@ function plotCVGA(glucoseProfiles,varargin)
     addParameter(params,'PlotZoneNames',defaultPlotZoneNames,@(x) x == 1 || x == 0);
     addOptional(params,'HighlightBestControl',defaultHighlightBestControl,@(x) x == 1 || x == 0);
     addOptional(params,'FontSize',defaultFontSize,validScalar);
+    addParameter(params,'PrintFigure',defaultPrintFigure, @(x) x == 0 || x == 1);
 
     parse(params,glucoseProfiles,varargin{:});
     
     plotZoneNames=params.Results.PlotZoneNames;
     highlightBestControl=params.Results.HighlightBestControl;
     fontSize=params.Results.FontSize;
+    printFigure = params.Results.PrintFigure;
     
     %Add CVGA function to path
     addpath(genpath(fullfile('..','variabilityMetrics')));
@@ -112,6 +118,11 @@ function plotCVGA(glucoseProfiles,varargin)
     axis equal;
     axis([0 60 0 60]);
     box on
+    
+    if(printFigure)
+            print(f, '-dpdf', ['CVGA.pdf'],'-fillpage')
+    end
+        
     
 end
 

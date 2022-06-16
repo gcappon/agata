@@ -110,4 +110,5 @@ List of functions that can be used to visualize glucose data:
    - `plotGlucoseAsOneDayComparison`: function that generates a plot of two glucose profiles in a single plot where each daily glucose profile is overlapped to each other;
    - `generateAGP`: function that generates the ambulatory glucose profile (AGP) reports of the given data. A report is generated every 14 days of recordings starting backwards from last 14 days;
    - `plotCVGA`: function that plots the control variablity grid analysis (CVGA).
+   - `plotGRI`: function that plots the GRI grid.
 
