@@ -24,7 +24,7 @@ function results = analyzeOneArm(arm)
 %            - `prc95`: the 95th percentile of `values`;   
 %        - `riskMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`}) of the 
+%           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`,`gri`}) of the 
 %           metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
@@ -152,7 +152,7 @@ function results = analyzeOneArm(arm)
     end
     
     %Risk metrics
-    riskMetrics = {'adrr','bgri','hbgi','lbgi'};
+    riskMetrics = {'adrr','bgri','hbgi','lbgi','gri'};
     
     for r = riskMetrics
         

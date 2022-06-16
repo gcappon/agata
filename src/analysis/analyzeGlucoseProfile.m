@@ -15,7 +15,7 @@ function results = analyzeGlucoseProfile(data)
 %           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`}) of the 
 %           metrics for each glucose profile; 
 %        - `riskMetrics`: a structure with fields containing the values of the computed 
-%           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`}) of the 
+%           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`, `gri`}) of the 
 %           metrics for each glucose profile;
 %        - `dataQualityMetrics`: a structure with fields containing the values of the computed 
 %           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) of 
@@ -79,7 +79,7 @@ function results = analyzeGlucoseProfile(data)
     end
     
     %Risk metrics
-    riskMetrics = {'adrr','bgri','hbgi','lbgi'};
+    riskMetrics = {'adrr','bgri','hbgi','lbgi','gri'};
     
     for r = riskMetrics
         
