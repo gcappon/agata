@@ -61,6 +61,7 @@ List of functions that can be used to compute risk glucose metrics:
    - `dynamicRisk`: function that computes the dynamic risk based on current
     glucose concentration and its rate-of-change;
    - `adrr`: function that computes the average daily risk range (ADRR) of the glucose concentration.
+   - `gri` : function that computes the Glycemic Risk Index (GRI) proposed Klonoff et al. 
 
 ## Glycemic transformation
 

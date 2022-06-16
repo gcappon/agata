@@ -106,3 +106,21 @@ Function that computes the average daily risk range (ADRR) of the glucose concen
 ### Reference
    - Kovatchev et al., "Evaluation of a new measure of blood glucose variability in
    diabetes", Diabetes Care, 2006, vol. 29, pp. 2433-2438. DOI: 10.2337/dc06-1085.
+
+## gri
+```MATLAB
+function gri = gri(data)
+```
+Function that computes the Glycemic Risk Index (GRI) proposed Klonoff et al. (ignoring nan values). GRI seems to be rounded by the authors however it is not explicitly stated. Therefore, GRI is not rounded here.
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output 
+   - **adrr: double** <br>
+   The average daily risk range (ADRR) of the glucose concentration (unitless).
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - Klonoff et al., "A Glycemia Risk Index (GRI) of hypoglycemia and hyperglycemia for continuous glucose monitoring validated by clinician ratings", Journal of Diabetes Science and Technology, 2022, pp. 1-17. DOI: 10.1177/19322968221085273.
