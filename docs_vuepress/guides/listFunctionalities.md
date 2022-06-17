@@ -17,7 +17,7 @@ List of functions that can be used to get an overall report/analysis of glucose 
 ## Time 
 
 List of functions that can be used to compute time related glucose metrics:
-   - `timeInHypoglycemia`: function that computes the percentage of time spent in hypoglycemia;
+   - `timeInHypoglycemia`: function that computes the percentage of time spent in hypoglycemia.
    - `timeInHyperglycemia`: function that computes the percentage of time spent in hyperglycemia;
    - `timeInTarget`: function that computes the percentage of time spent in the target range;
    - `timeInSevereHypoglycemia`: function that computes the percentage of time spent in severe hypoglycemia;
