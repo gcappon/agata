@@ -125,7 +125,7 @@ function results = analyzeOneArm(arm)
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','stdGlucoseROC'};
+        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd','poincareGlucose', 'stdGlucoseROC'};
     
     for v = variabilityMetrics
         

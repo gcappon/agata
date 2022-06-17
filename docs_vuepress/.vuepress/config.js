@@ -63,6 +63,7 @@ module.exports = {
           title: 'AGATA Reference',
           collapsable: false,
           children: [
+            'gui',
             'analysis',
             'time',
             'variabilityMetrics',

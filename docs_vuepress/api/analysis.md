@@ -12,8 +12,8 @@ Function that computes the glycemic outcomes of a glucose profile.
 ### Output
    - **results: structure** <br>
    A structure with fields containing the computed metrics and stats in the glucose profile, i.e.:
-       - `variabilityMetrics`: a structure with fields containing the values of the computed variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`}) of the metrics for each glucose profile;
-       - `riskMetrics`: a structure with fields containing the values of the computed risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`}) of the metrics for each glucose profile; 
+       - `variabilityMetrics`: a structure with fields containing the values of the computed variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`,`poincareGlucose`, `stdGlucoseROC`}) of the metrics for each glucose profile;
+       - `riskMetrics`: a structure with fields containing the values of the computed risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`, `gri`}) of the metrics for each glucose profile; 
        - `dataQualityMetrics`: a structure with fields containing the values of the computed data quality metrics (i.e., {`missingGlucosePercentage`}) of the metrics for each glucose profile;
        - `timeMetrics`: a structure with fields containing the values of the computed time related metrics (i.e., {`timeInHyperglycemia`, `timeInSevereHyperglycemia`, `timeInHypoglycemia`, `timeInSevereHypoglycemia`, `timeInTarget`, `timeInTightTarget`}) of the metrics for each glucose profile;
        - `glycemicTransformationMetrics`: a structure with fields containing the values of the computed glycemic transformed metrics (i.e., {`gradeScore`, `gradeEuScore`, `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, `igc`, `mrIndex`}) of the metrics for each glucose profile; 
@@ -41,7 +41,7 @@ Function that computes the glycemic outcomes of one arm.
    - **results: structure** <br>
    A structure with fields containing the computed metrics and stats in the arm, i.e.:
        - `variabilityMetrics`: a structure with fields:
-           - `values`: a vector containing the values of the computed variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`}) of the metrics for each glucose profile;
+           - `values`: a vector containing the values of the computed variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`,`poincareGlucose`, `stdGlucoseROC`}) of the metrics for each glucose profile;
            - `mean`: the mean of `values`;
            - `median`: the median of `values`;
            - `std`: the standard deviation of `values`;
@@ -50,7 +50,7 @@ Function that computes the glycemic outcomes of one arm.
            - `prc75`: the 75th percentile of `values`;
            - `prc95`: the 95th percentile of `values`;   
        - `riskMetrics`: a structure with fields:
-           - `values`: a vector containing the values of the computed risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`}) of the metrics for each glucose profile;
+           - `values`: a vector containing the values of the computed risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`, `gri`}) of the metrics for each glucose profile;
            - `mean`: the mean of `values`;
            - `median`: the median of `values`;
            - `std`: the standard deviation of `values`;
@@ -125,7 +125,7 @@ Function that compares the glycemic outcomes of two arms.
    - **results: structure** <br>
    A structure with field `arm1` and `arm2`, that are two structures with field containing the computed metrics in the two arms, i.e.:
        - `variabilityMetrics`: a structure with fields:
-           - `values`: a vector containing the values of the computed variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`}) of the metrics for each glucose profile;
+           - `values`: a vector containing the values of the computed variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`,`poincareGlucose`, `stdGlucoseROC`}) of the metrics for each glucose profile;
            - `mean`: the mean of `values`;
            - `median`: the median of `values`;
            - `std`: the standard deviation of `values`;
@@ -134,7 +134,7 @@ Function that compares the glycemic outcomes of two arms.
            - `prc75`: the 75th percentile of `values`;
            - `prc95`: the 95th percentile of `values`;   
        - `riskMetrics`: a structure with fields:
-           - `values`: a vector containing the values of the computed risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`}) of the metrics for each glucose profile;
+           - `values`: a vector containing the values of the computed risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`, `gri`}) of the metrics for each glucose profile;
            - `mean`: the mean of `values`;
            - `median`: the median of `values`;
            - `std`: the standard deviation of `values`;

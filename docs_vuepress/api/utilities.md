@@ -30,7 +30,7 @@ dataVector = timetableToGlucoseVector(data)
 Function that converts a timetable with column `Time` and `glucose` containing the glucose data, in a double vector containing the glucose data in the `glucose` column. 
 
 ## Input
-   - **data: vector of double (required)** <br>
+   - **data: timetable (required)** <br>
    A timetable with column `Time` and `glucose` containing the glucose data (in mg/dl). 
 ### Output
    - **dataVector: vector of double** <br>
@@ -70,7 +70,7 @@ function [dataVector, timeVector] = timetableToGlucoseTimeVectors(data)
 Function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data, in two vectors: one containing the timestamp data in the `Time` column and the other containing the glucose data in the `glucose` column. 
 
 ### Input
-   - **data: vector of double (required)** <br>
+   - **data: timetable (required)** <br>
    A timetable with column `Time` and `glucose` containing the glucose data (in mg/dl). 
 ### Outputs
    - **dataVector: vector of double** <br>
@@ -81,5 +81,92 @@ Function that converts a timetable with column `Time` and `glucose` containing t
 ### Preconditions
    - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - None
+
+## toMGDL
+```MATLAB
+function data = toMGDL(data)
+```
+Function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data in mmol/L to mg/dL. 
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data (in mmol/l). 
+### Outputs
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data (in mg/dl). 
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - None
+
+## toMMOLL
+```MATLAB
+function data = toMMOLL(data)
+```
+Function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data in mg/dL to mmol/l. 
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data (in mg/dl). 
+### Outputs
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data (in mmol/l). 
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - None
+
+## readFreestyleLibreData
+```MATLAB
+function data = readFreestyleLibreData(file)
+```
+Function that reads data from a .xlsx file downloaded from the Freestyle Libre CGM system and converts it in a timetable compatible with AGATA. 
+
+### Input
+   - **file: vector of character (required)** <br>
+   A vector of characters containing the relative path to the .xslx file to be converted in a timetable compatible with AGATA. 
+### Outputs
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data to analyze (in mg/dl). 
+### Preconditions
+   - `file` must be a vector of characters.
+### Reference
+   - None
+
+## readEversenseData
+```MATLAB
+function data = readEversenseData(file)
+```
+Function that reads data from a .xlsx file downloaded from the Eversense CGM system and converts it in a timetable compatible with AGATA. 
+
+### Input
+   - **file: vector of character (required)** <br>
+   A vector of characters containing the relative path to the .xslx file to be converted in a timetable compatible with AGATA. 
+### Outputs
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data to analyze (in mg/dl). 
+### Preconditions
+   - `file` must be a vector of characters.
+### Reference
+   - None
+
+## readDexcomData
+```MATLAB
+function data = readDexcomData(file)
+```
+Function that reads data from a .xlsx file downloaded from the Dexcom CGM system and converts it in a timetable compatible with AGATA. 
+
+### Input
+   - **file: vector of character (required)** <br>
+   A vector of characters containing the relative path to the .xslx file to be converted in a timetable compatible with AGATA. 
+### Outputs
+   - **data: timetable (required)** <br>
+   A timetable with column `Time` and `glucose` containing the glucose data to analyze (in mg/dl). 
+### Preconditions
+   - `file` must be a vector of characters.
 ### Reference
    - None

@@ -1,5 +1,5 @@
 function plotGlucoseArmAsOneDay(arm,varargin)
-%plotGlucoseAsOneDay function that generates a plot of an arm in a
+%plotGlucoseArmAsOneDay function that generates a plot of an arm in a
 %single plot where each daily profile is overlapped to each other.
 %
 %Input:
@@ -8,11 +8,12 @@ function plotGlucoseArmAsOneDay(arm,varargin)
 %   column `Time` and a column `glucose` containg the glucose recordings
 %   (in mg/dl);
 %   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
-%   to output the .pdf files associated to each AGP or not. 
+%   to output the .pdf files associated to the figure or not. 
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`;
+%   - arm must be a cell array containing timetables;
+%   - Each timetable in arm must have a column names `Time` and a
+%   column named `glucose`.
 %   - PrintFigure can be 0 or 1.
 %
 % ---------------------------------------------------------------------

@@ -2,16 +2,14 @@ function poincareGlucose = poincareGlucose(data)
 %poincareGlucose fits an ellipse corresponding to the Poincare' plot of the
 %(x,y) = (glucose(t-1),glucose(t)) graph. To do so, it uses the least square method. 
 %If an ellipse was not detected (but a parabola or hyperbola), then an 
-%empty structure is returned   
+%empty structure is returned.
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
-%   glucose data to analyze (in mg/dl);
-%   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
-%   to output the .pdf files associated to each AGP or not. 
+%   glucose data to analyze (in mg/dl).
 %
 %Output:
-%   - results: a structure with fields containing the parameter of the fitted
+%   - poincareGlucose: a structure with fields containing the parameter of the fitted
 %   Poincare' ellipse, i.e.:
 %        - `a`: sub axis (radius) of the X axis of the non-tilt ellipse;
 %        - `b`: sub axis (radius) of the Y axis of the non-tilt ellipse;
@@ -27,7 +25,6 @@ function poincareGlucose = poincareGlucose(data)
 %Preconditions:
 %   - `data` must be a timetable.
 %   - `data` must contain a column named `Time` and another named `glucose`.
-%   - `PrintFigure` can be 0 or 1.
 %
 % ---------------------------------------------------------------------
 %
@@ -40,7 +37,7 @@ function poincareGlucose = poincareGlucose(data)
 %
 % ---------------------------------------------------------------------
 %
-% Copyright (C) 2021 Giacomo Cappon
+% Copyright (C) 2021 Ohad Gal
 %
 % This file is part of AGATA.
 %

@@ -6,7 +6,7 @@ function plotGlucoseAsOneDay(data,varargin)
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl);
 %   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
-%   to output the .pdf files associated to each AGP or not. 
+%   to output the .pdf files associated to the figure or not. 
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;

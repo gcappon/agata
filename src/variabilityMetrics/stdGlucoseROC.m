@@ -6,7 +6,7 @@ function stdGlucoseROC = stdGlucoseROC(data)
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
-%   - stdGlucoseROC: the mean amplitude of glycemic excursion (MAGE) index
+%   - stdGlucoseROC: the standard deviation of the glucose ROC.
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;

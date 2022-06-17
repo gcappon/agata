@@ -1,5 +1,5 @@
 function plotGlucoseROC(data,varargin)
-%plotGlucoseROC function that visualizes the glucose ROC of the given data
+%plotGlucoseROC function that visualizes the glucose ROC of the given data.
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 

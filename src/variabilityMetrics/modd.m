@@ -1,11 +1,11 @@
 function modd = modd(data)
-%modd function that computes the mean of dailty difference (MODD) index.
+%modd function that computes the mean of daily difference (MODD) index.
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
-%   - modd: the mean of dailty difference (MODD) index.
+%   - modd: the mean of daily difference (MODD) index.
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;

@@ -1,4 +1,4 @@
-function plotPoincareGlucose(data1, data2, varargin)
+function plotPoincareGlucoseComparison(data1, data2, varargin)
 %plotPoincareGlucose generates and compares the Poincare' plots of the
 %(x,y) = (glucose(t-1),glucose(t)) graphs of two CGM profiles. 
 %

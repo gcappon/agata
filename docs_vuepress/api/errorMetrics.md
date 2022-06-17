@@ -46,29 +46,6 @@ Function that computes the coefficient of determination (COD) between two glucos
 ### Reference
    - Wright, "Correlation and causation", Journal of Agricultural Research, vol. 20, 1921, pp. 557–585.
 
-## mad
-```MATLAB
-function mad = mad(data,dataHat)
-```
-Function that computes the mean absolute difference (MAD) between two glucose traces (ignores nan values).
-
-### Inputs 
-   - **data: timetable (required)** <br>
-   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl);
-   - **dataHat: timetable (required)** <br>
-   A timetable with columns `Time` and `glucose` containing the inferred glucose data (mg/dl) to comapre with `data`.
-### Output 
-   - **mad: double** <br>
-   The mean absolute difference (MAD) (mg/dl).
-### Preconditions
-   - `data` and `dataHat` must be a timetable having an homogeneous time grid;
-   - `data` and `dataHat` must contain a column named `Time` and another named `glucose`;
-   - `data` and `dataHat` must start from the same timestamp;
-   - `data` and `dataHat` must end with the same timestamp;
-   - `data` and `dataHat` must have the same length.
-### Reference 
-   - Gini, "Measurement of Inequality and Incomes", The Economic Journal, vol. 31, 1921, pp. 124–126. DOI:10.2307/2223319.
-
 ## mard
 ```MATLAB
 function mard = mard(data,dataHat)

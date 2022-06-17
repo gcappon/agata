@@ -316,3 +316,104 @@ Function that performs the control variablity grid analysis (CVGA).
 
 ### Reference
   - Magni et al., "Evaluating the efficacy of closed-loop glucose regulation via control-variability grid analysis", Journal of Diabetes Science and Technology, 2008, vol. 2, pp. 630-635. DOI: 10.1177/193229680800200414.
+
+## conga
+```MATLAB
+function conga = conga(data)
+```
+Function that computes the Continuous Overall Net Glycemic Action (CONGA) index.
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **conga: double** <br>
+   Continuous Overall Net Glycemic Action (CONGA) index.
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - McDonnell et al., "A novel approach to continuous glucose analysis utilizing glycemic variation. Diabetes Technol Ther, 2005, vol. 7, pp. 253–263. DOI: 10.1089/dia.2005.7.253.
+
+## modd
+```MATLAB
+function modd = modd(data)
+```
+Function that computes the mean of daily difference (MODD) index.
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **modd: double** <br>
+   Mean of daily difference (MODD) index.
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - Molnar et al., "Day-to-day variation of continuously monitored glycaemia: a further measure of diabetic instability", Diabetologia, 1972, vol. 8, pp. 342–348. DOI: 10.1007/BF01218495.
+
+## poincareGlucose
+```MATLAB
+function poincareGlucose = poincareGlucose(data)
+```
+Function that fits an ellipse corresponding to the Poincare' plot of the ```(x,y) = (glucose(t-1),glucose(t))``` graph. To do so, it uses the least square method. If an ellipse was not detected (but a parabola or hyperbola), then an empty structure is returned.
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **poincareGlucose: structure** <br>
+   A structure with fields containing the parameter of the fitted Poincare' ellipse, i.e.:
+      - `a`: sub axis (radius) of the X axis of the non-tilt ellipse;
+      - `b`: sub axis (radius) of the Y axis of the non-tilt ellipse;
+      - `phi`: sub axis (radius) of the X axis of the non-tilt ellipse;
+      - `X0`: center at the X axis of the non-tilt ellipse;
+      - `Y0`: center at the Y axis of the non-tilt ellipse;
+      - `X0_in`: center at the X axis of the tilted ellipse;
+      - `Y0_in`: center at the Y axis of the tilted ellipse;
+      - `long_axis`: size of the long axis of the ellipse;
+      - `short_axis`: size of the short axis of the ellipse;
+      - `status`: status of detection of an ellipse;     
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - Clarke et al., "Statistical Tools to Analyze Continuous Glucose Monitor Data", Diabetes Technol Ther, 2009, vol. 11, pp. S45-S54. DOI: 10.1089=dia.2008.0138.
+   - Based on fit_ellipse function by Ohad Gal. https://it.mathworks.com/matlabcentral/fileexchange/3215-fit_ellipse
+
+## glucoseROC
+```MATLAB
+function glucoseROC = glucoseROC(data)
+```
+Function that computes the glucose rate-of-change (ROC) trace. As defined in the given reference, ROC at time t is defined as the difference between the glucose at time t and t-15 minutes divided by 15 (ignores nan values). By definition, the first two samples are always nan.
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **glucoseROC: timetable** <br>
+   A timetable with column `Time` and `glucoseROC` containing the glucose ROC (in mg/dl/min).  
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - Clarke et al., "Statistical Tools to Analyze Continuous Glucose Monitor Data", Diabetes Technol Ther, 2009, vol. 11, pp. S45-S54. DOI: 10.1089=dia.2008.0138.
+
+## stdGlucoseROC
+```MATLAB
+function stdGlucoseROC = stdGlucoseROC(data)
+```
+Function that computes the standard deviation of the glucose ROC (ignores nan values).
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **stdGlucoseROC: double** <br>
+   Standard deviation of the glucose ROC. 
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - Clarke et al., "Statistical Tools to Analyze Continuous Glucose Monitor Data", Diabetes Technol Ther, 2009, vol. 11, pp. S45-S54. DOI: 10.1089=dia.2008.0138.

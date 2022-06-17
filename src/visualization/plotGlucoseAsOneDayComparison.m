@@ -9,7 +9,7 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
 %   - data2: a timetable with column `Time` and `glucose` containing the 
 %   second set of glucose data to analyze (in mg/dl);
 %   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
-%   to output the .pdf files associated to each AGP or not. 
+%   to output the .pdf files associated to the figure or not. 
 %
 %Preconditions:
 %   - data1 and data2 must be a timetable having an homogeneous time grid;

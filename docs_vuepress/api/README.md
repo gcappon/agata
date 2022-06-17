@@ -1,5 +1,7 @@
 # AGATA API Reference
 
+#### [GUI API](./gui.md)
+---
 #### [Analysis API](./analysis.md)
 ---
 #### [Time API](./time.md)

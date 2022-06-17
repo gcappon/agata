@@ -114,4 +114,22 @@ Function that computes the percentage of missing values in the given glucose tra
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference 
    - None
+
+## numberDaysOfObservation
+```MATLAB
+function numberDaysOfObservation = numberDaysOfObservation(data)
+```
+Function that computes the number of days of observation of the given glucose trace.
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **numberDaysOfObservation: double** <br>
+   Number of days of observation.
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference 
+   - None
    

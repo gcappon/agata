@@ -4,10 +4,10 @@ function data = readEversenseData(file)
 %AGATA.
 %
 %Inputs:
-%   - filename: a vector of characters containing the relative path to the
+%   - file: a vector of characters containing the relative path to the
 %   .xslx file to be converted in a timetable compatible with AGATA. 
 %Output:
-%   - dataTimetable: a timetable with column `Time` and `glucose` containing the 
+%   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %
 %Preconditions:

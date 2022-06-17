@@ -17,7 +17,9 @@ function plotGRIComparison(glucoseProfilesArm1, glucoseProfilesArm2,varargin)
 %Preconditions:
 %   - glucoseProfilesArm1 must be a cell array containing timetables;
 %   - glucoseProfilesArm2 must be a cell array containing timetables;
-%   - Each timetable in glucoseProfiles must have a column names `Time` and a
+%   - Each timetable in glucoseProfilesArm1 must have a column names `Time` and a
+%   column named `glucose`.
+%   - Each timetable in glucoseProfilesArm2 must have a column names `Time` and a
 %   column named `glucose`.
 %
 % ------------------------------------------------------------------------

@@ -1,23 +1,24 @@
 function plotGlucoseArmAsOneDayComparison(arm1,arm2,varargin)
-%plotGlucoseAsOneDay function that  generates a plot of two arms in a
+%plotGlucoseArmAsOneDayComparison function that  generates a plot of two arms in a
 %single plot where each arm's daily profile is overlapped to each other. This is
 %for comparison.
 %
 %Input:
 %    - arm1: a cell array of timetables containing the glucose data of the 
-%   arm. Each timetable corresponds to a patient and contains a 
+%   first arm. Each timetable corresponds to a patient and contains a 
 %   column `Time` and a column `glucose` containg the glucose recordings
 %   (in mg/dl);
 %    - arm2: a cell array of timetables containing the glucose data of the 
-%   arm. Each timetable corresponds to a patient and contains a 
+%   second arm. Each timetable corresponds to a patient and contains a 
 %   column `Time` and a column `glucose` containg the glucose recordings
 %   (in mg/dl);
 %   - PrintFigure: (optional, default: 0) a numeric flag defining whether 
-%   to output the .pdf files associated to each AGP or not. 
+%   to output the .pdf files associated to the figure or not. 
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`;
+%   - arm1 and arm2 must be a cell array containing timetables;
+%   - Each timetable in arm1 and arm2 must have a column names `Time` and a
+%   column named `glucose`.
 %   - PrintFigure can be 0 or 1.
 %
 % ---------------------------------------------------------------------

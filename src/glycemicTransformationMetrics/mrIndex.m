@@ -12,7 +12,7 @@ function mrIndex = mrIndex(data,r)
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
 %   - data must contain a column named `Time` and another named `glucose`;
-%   - TH must be an integer.
+%   - r must be an integer.
 % 
 % ------------------------------------------------------------------------
 % 

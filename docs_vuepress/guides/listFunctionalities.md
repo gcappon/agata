@@ -4,6 +4,11 @@ This is a list of functionalities of AGATA ordered by topic.
 
 ## Analysis
 
+Command to launch the AGATA GUI:
+   - `agata`.
+
+## Analysis
+
 List of functions that can be used to get an overall report/analysis of glucose profile/s:
    - `analyzeGlucoseProfile`: function that computes the glycemic outcomes of a glucose profile;
    - `analyzeOneArm`: function that computes the glycemic outcomes of one arm;
@@ -39,14 +44,18 @@ List of functions that can be used to compute variability related glucose metric
    - `magePlusIndex`: function that computes the mean amplitude of positive glycemic excursion (MAGE+) index;
    - `mageMinusIndex`: function that computes the mean amplitude of negative glycemic excursion (MAGE-) index;
    - `efIndex`: function that computes the excursion frequency (EF) index, i.e., the number of excursion > 75;
-   - `CVGA`: function that performs the control variablity grid analysis (CVGA).
+   - `CVGA`: function that performs the control variablity grid analysis (CVGA);
+   - `conga`: function that computes the Continuous Overall Net Glycemic Action (CONGA) index;
+   - `modd`: function that computes the mean of daily difference (MODD) index;
+   - `poincareGlucose`: function that fits an ellipse corresponding to the Poincare' plot of the ```(x,y) = (glucose(t-1),glucose(t))``` graph;
+   - `glucoseROC`: function that computes the glucose rate-of-change (ROC) trace. As defined in the given reference, ROC at time t is defined as the difference between the glucose at time t and t-15 minutes divided by 15 (ignores nan values). By definition, the first two samples are always nan;
+   - `stdGlucoseROC`: function that computes the standard deviation of the glucose ROC (ignores nan values).
 
 ## Error metrics
 
 List of functions that can be used to compute some error metric between two glucose profiles:
    - `rmse`: function that computes the root mean squared error (RMSE) between two glucose traces;
    - `cod`: function that computes the coefficient of determination (COD) between two glucose traces;
-   - `mad`: function that computes the mean absolute difference (MAD) between two glucose traces;
    - `mard`: function that computes the mean absolute relative difference (MARD) between two glucose traces;
    - `clarke`: function that performs Clarke Error Grid Analysis (CEGA);
    - `timeDelay`: function that computes the time delay between two glucose traces. The time delay is computed as the time shift necessary to maximize the correlation between the two traces;
@@ -60,7 +69,7 @@ List of functions that can be used to compute risk glucose metrics:
    - `bgri`: function that computes the blood glucose risk index (BRGI) of the glucose concentration;
    - `dynamicRisk`: function that computes the dynamic risk based on current
     glucose concentration and its rate-of-change;
-   - `adrr`: function that computes the average daily risk range (ADRR) of the glucose concentration.
+   - `adrr`: function that computes the average daily risk range (ADRR) of the glucose concentration;
    - `gri` : function that computes the Glycemic Risk Index (GRI) proposed Klonoff et al. 
 
 ## Glycemic transformation
@@ -92,7 +101,8 @@ List of functions that can be used to find particular events in a given glucose 
    - `findHyperglycemicEvents`: function that finds the hyperglycemic events in a 
    given glucose trace;
    - `findProlongedHypoglycemicEvents`: function that finds the prolonged hypoglycemic events in a given glucose trace;
-   - `missingGlucosePercentage`: function that computes the percentage of missing values in the given glucose trace.
+   - `missingGlucosePercentage`: function that computes the percentage of missing values in the given glucose trace;
+   - `numberDaysOfObservation(data)` : function that computes the number of days of observation of the given glucose trace.
 
 ## Utilities 
 
@@ -100,7 +110,12 @@ List of function utilities that can be used to facilitate the use of AGATA:
    - `glucoseVectorToTimetable`: function that converts a vector containing glucose samples sampled on an homogeneous timegrid with fixed timestep in a timetable;
    - `timetableToGlucoseVector`: function that converts a timetable with column `Time` and `glucose` containing the glucose data, in a double vector containing the glucose data in the `glucose` column;
    - `glucoseTimeVectorsToTimetable`: function that converts the two given vectors containing the glucose samples and the corresponding timestamps, respectively, in a timetable;
-   - `timetableToGlucoseTimeVectors`: function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data, in two vectors: one containing the timestamp data in the `Time` column and the other containing the glucose data in the `glucose` column.
+   - `timetableToGlucoseTimeVectors`: function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data, in two vectors: one containing the timestamp data in the `Time` column and the other containing the glucose data in the `glucose` column;
+   - `toMGDL`: function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data in mmol/l to mg/dl;
+   - `toMMOLL`: function that converts a timetable with column `Time` and `glucose` containing the timestamps and the respective glucose data in mg/dL to mmol/;
+   - `readFreestyleLibreData`: function that reads data from a .xlsx file downloaded from the Freestyle Libre CGM system and converts it in a timetable compatible with AGATA;
+   - `readEversenseData`: function that reads data from a .xlsx file downloaded from the Eversense CGM system and converts it in a timetable compatible with AGATA;
+   - `readDexcomData`: function that reads data from a .xlsx file downloaded from the Dexcom CGM system and converts it in a timetable compatible with AGATA.
 
 ## Visualization
 
@@ -108,7 +123,19 @@ List of functions that can be used to visualize glucose data:
    - `plotGlucose`: function that visualizes the given glucose profile;
    - `plotGlucoseAsOneDay`: function that generates a plot of data in a single plot where each daily glucose profile is overlapped to each other;
    - `plotGlucoseAsOneDayComparison`: function that generates a plot of two glucose profiles in a single plot where each daily glucose profile is overlapped to each other;
+   - `plotGlucoseArmAsOneDay`: function that generates a plot of an arm in a single plot where each daily profile is overlapped to each other;
+   - `plotGlucoseArmAsOneDayComparison`: function that generates a plot of two arms in a single plot where each arm's daily profile is overlapped to each other. This is for comparison;
    - `generateAGP`: function that generates the ambulatory glucose profile (AGP) reports of the given data. A report is generated every 14 days of recordings starting backwards from last 14 days;
-   - `plotCVGA`: function that plots the control variablity grid analysis (CVGA).
-   - `plotGRI`: function that plots the GRI grid.
+   - `plotCVGA`: function that plots the control variablity grid analysis (CVGA);
+   - `plotCVGAComparison`: function that plots and visually compares the control variablity grid analysis (CVGA) of two arms;
+   - `plotGRI`: function that plots the GRI grid;
+   - `plotGRIComparison`: function that plots and visually compares the GRI grid of two arms;
+   - `plotGlucoseROC`: function that visualizes the glucose ROC of the given data;
+   - `histGlucoseROC`: function that visualizes the histogram of the glucose ROC of the given data;
+   - `plotAggregatedGlucose`: function that visualizes the given data with superimposed aggregated glucose values;
+   - `plotPoincareGlucose`: function that generates the Poincare' plot of the ```(x,y) = (glucose(t-1),glucose(t))``` graph;
+   - `plotPoincareGlucoseComparison`: function that generates and compares the Poincare' plot of the ```(x,y) = (glucose(t-1),glucose(t))``` graphs of two CGM profiles;
+   - `plotClarkeErrorGrid`: function that plots the Clarke Error Grid.
+
+
 
