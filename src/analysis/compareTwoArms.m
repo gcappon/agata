@@ -20,7 +20,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, 
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
-%           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`}) of the 
+%           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) of the 
 %           metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
@@ -173,7 +173,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd','poincareGlucose', 'stdGlucoseROC'};
+        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
     
     for v = variabilityMetrics
         

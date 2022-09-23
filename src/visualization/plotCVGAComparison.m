@@ -115,17 +115,17 @@ function plotCVGAComparison(glucoseProfilesArm1,glucoseProfilesArm2,varargin)
     end
     %Plot each profile
     if ~isempty(glucoseProfilesArm2)
-        plot(profileCoordinates2(:,1),profileCoordinates2(:,2),'.b','MarkerSize',18)
+        plot(profileCoordinates2(:,1),profileCoordinates2(:,2),'d','MarkerSize',8,'Color',[0.3 0.3 0.3],'MarkerFaceColor',[0.3 0.3 0.3])
     end
 
     %Highlight best profile if requested
     if ~isempty(glucoseProfilesArm1)&& highlightBestControl
-        plot(bestControlledCoordinates1(1),bestControlledCoordinates1(2),'or','MarkerSize',18)
+        plot(bestControlledCoordinates1(1),bestControlledCoordinates1(2),'ok','MarkerSize',18)
     end
     
     %Highlight best profile if requested
     if ~isempty(glucoseProfilesArm2)&& highlightBestControl
-        plot(bestControlledCoordinates2(1),bestControlledCoordinates2(2),'or','MarkerSize',18)
+        plot(bestControlledCoordinates2(1),bestControlledCoordinates2(2),'dk','MarkerSize',18)
     end
 
     xlabel('Minimum BG','Fontsize',fontSize,'FontWeight','bold')

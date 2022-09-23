@@ -12,7 +12,7 @@ function results = analyzeGlucoseProfile(data)
 %           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, 
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
-%           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`,`poincareGlucose`, `stdGlucoseROC`}) of the 
+%           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) of the 
 %           metrics for each glucose profile; 
 %        - `riskMetrics`: a structure with fields containing the values of the computed 
 %           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`, `gri`}) of the 
@@ -69,7 +69,7 @@ function results = analyzeGlucoseProfile(data)
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd','poincareGlucose', 'stdGlucoseROC'};
+        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
     
     for v = variabilityMetrics
         
