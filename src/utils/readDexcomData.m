@@ -53,7 +53,18 @@ function data = readDexcomData(file)
             
             %...read the EGV.
             time(count+1) = datetime(raw{r,2},'InputFormat','yyyy-MM-dd''T''HH:mm:ss');
-            glucose(count+1) = raw{r,8};
+            if(iscell(raw{r,8}))
+                d = cell2mat(raw{r,8});
+            else
+                d = raw{r,8};
+            end
+            if(ischar(d) || isstring(d))
+                d = str2num(d);
+            end
+            if(isempty(d))
+                d = nan;
+            end
+            glucose(count+1) = d;
             count = count + 1;
             
         end 
