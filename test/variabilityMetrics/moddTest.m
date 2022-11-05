@@ -23,4 +23,4 @@ assert(~isnan(results));
 
 %% Test 2: check results calculation
 results = modd(data);
-assert(round(results*1000)/1000 == 78.367);
+assert(round(results*1000)/1000 == 82.206);

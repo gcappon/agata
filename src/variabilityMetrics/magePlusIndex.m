@@ -63,8 +63,8 @@ function magePlusIndex = magePlusIndex(data)
         %Get the day of data
         dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
         
-        %Get rid of nans
-        dayData = dayData.glucose(~isnan(dayData.glucose));
+        %Get glucose values (might be nan)
+        dayData = dayData.glucose;
         stdWithin = nanstd(dayData);
         n = length(dayData);
         

@@ -40,10 +40,6 @@ function modd = modd(data)
         error('modd: data must have a column named `glucose`.')
     end
     
-    %Interpolate all trace
-    ts = minutes(data.Time(2)-data.Time(1));
-    data = imputeGlucose(data,height(data)*ts);
-    
     %Build vectors
     yesterday = minutes(1440);
     
@@ -64,7 +60,7 @@ function modd = modd(data)
     end
 
     if ~isempty(Dm)
-        modd = mean(Dm);
+        modd = nanmean(Dm);
     else
         modd = nan;
     end

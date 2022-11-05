@@ -46,17 +46,12 @@ function conga = conga(data)
     %refers to)
     CONGAOrd = 4;
     
-    %Interpolate all trace
-    ts = minutes(data.Time(2)-data.Time(1));
-    data = imputeGlucose(data,height(data)*ts);
-    
     %Build vectors
     delay = minutes(CONGAOrd * 60);
     
     n = height(data);
     
     Dc = [];
-    Dm = [];
 
     for i = 2:n
 
@@ -71,7 +66,7 @@ function conga = conga(data)
     end
 
     if ~isempty(Dc)
-        conga = std(Dc);
+        conga = nanstd(Dc);
     else
         conga = nan;
     end

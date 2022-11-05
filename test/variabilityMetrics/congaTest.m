@@ -23,4 +23,4 @@ assert(~isnan(results));
 
 %% Test 2: check results calculation
 results = conga(data);
-assert(round(results*1000)/1000 == 97.402);
+assert(round(results*1000)/1000 == 101.954);

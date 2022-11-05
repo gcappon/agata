@@ -66,8 +66,8 @@ function efIndex = efIndex(data)
         %Get the day of data
         dayData = data((data.Time >= firstDay + days(d-1)) & data.Time < (firstDay + days(d)),:);
         
-        %Get rid of nans
-        dayData = dayData.glucose(~isnan(dayData.glucose));
+        %Get glucose values
+        dayData = dayData.glucose;
         stdWithin = nanstd(dayData);
         n = length(dayData);
         
@@ -201,7 +201,7 @@ function efIndex = efIndex(data)
             iTurning = iTurning(~toBeDeleted);
             turning = dayData(iTurning);
             
-            %Step 5. Compute daily MAGE+
+            %Step 5. Compute daily EF
             excursions = diff(turning);
             efDay(d) = sum(abs(excursions) > efTH);
     
