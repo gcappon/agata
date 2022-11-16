@@ -55,7 +55,12 @@ assert(results.duration(4) == 35);
 assert(length(results.time) == length(results.duration));
 assert(length(results.time) == 4);
 
-%% Test 5: check results (without events)
+%% Test 5: check results (with custom threshold)
+results = findHypoglycemicEvents(data, 'th', 45);
+assert(isempty(results.time));
+assert(isempty(results.duration))
+
+%% Test 6: check results (without events)
 data.glucose(:) = 120;
 results = findHypoglycemicEvents(data);
 assert(isempty(results.time));
