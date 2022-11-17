@@ -1,4 +1,4 @@
-function hyperglycemicEvents = findHyperglycemicEvents(data)
+function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
 %findHyperglycemicEvents function that finds the hyperglycemic events in a 
 %given glucose trace. The definition of hyperglycemic event can be found 
 %in Danne et al.
@@ -6,6 +6,8 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl).
+%   - th: an integer with the selected hypoglycemia threshold (in mg/dl)
+%   the default value is 180 mg/dl.
 %Output:
 %   - hyperglycemicEvents: a structure containing the information on the
 %   hyperglycemic events found by the function with fields:
@@ -47,11 +49,18 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
         error('findHyperglycemicEvents: data must have a column named `glucose`.')
     end
     
+    defaultThreshold = 180;
+    params = inputParser;
+    params.CaseSensitive = false;
+    addOptional(params,'th',defaultThreshold,@(x) x > 30 && x < 1000);
+    parse(params,varargin{:});
+
+    th = params.Results.th;
+    
     
     k = 1; %hyperglycemicEvent vector current index
     sampleTime = minutes(data.Time(2) - data.Time(1));
     nSamples = round(15/sampleTime); %number of consecutive samples required to define a valid event
-    TH = 180; %set the hyperglycemic threshold 
     
     count = 0; %number of current found consecutive samples
     tempStartTime = []; %preallocate the hyper event starting time;
@@ -64,7 +73,7 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
     
     for t = 1:height(data)
         
-        if( data.glucose(t) > TH )
+        if( data.glucose(t) > th )
             
             %If it is a new event, reset count and set the hypothetical
             %starting time to the current timestamp
@@ -108,7 +117,7 @@ function hyperglycemicEvents = findHyperglycemicEvents(data)
     
     
     %Manage the case in which the hyperglycemic event has been found (at
-    %least nSamples > TH) but the 'post hyperglycemic window' has not finshed
+    %least nSamples > th) but the 'post hyperglycemic window' has not finshed
     %yet.
     if((count > 0 && flag == -1))
         hyperglycemicEvents.time(k) = tempStartTime;
