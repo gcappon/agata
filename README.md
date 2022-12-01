@@ -6,7 +6,7 @@
 [![GitHub commit](https://img.shields.io/github/last-commit/gcappon/agata)](https://github.com/gcappon/agata/commits/master)
 [![Build Status](https://travis-ci.com/gcappon/agata.svg?branch=master)](https://travis-ci.com/gcappon/agata)
 
-AGATA (Automated Glucose dATa Analysis) is a MATLAB® toolbox to analyse glucose data.
+AGATA (Automated Glucose dATa Analysis) is a toolbox to analyse glucose data.
 
 ## Getting started
 
@@ -23,6 +23,14 @@ Installation of AGATA can be easily performed by including the AGATA folder in t
 addpath(genpath('~/MATLAB/agata-X.Y.Z/src'))
 ```
 5. Enjoy!
+
+As an alternative, AGATA functionalities can be accessed via a dedicated graphical user interface (GUI) which can be installed as a standalone application. This solution is particularly convenient since it does not require users to have a valid MATLAB® licence to run AGATA.
+
+To install AGATA's standalone version:
+
+1. Download the latest AGATA release (e.g. `X.Y.Z`) from Github --> [here](https://github.com/gcappon/agata/releases);
+2. Run the installer that you can find in the `standalone` folder. Be careful to run the right installer depending on the target operating system. 
+3. Enjoy!
 
 ### Step 2: Test AGATA
 
