@@ -54,7 +54,7 @@ function data = readFreestyleLibreData(file)
             time(count+1) = datetime(datestr(raw{r,4}))+minutes(hour.Minute)+hours(hour.Hour);
             
             %Get the glucose value
-            glucose(count+1) = str2double(cell2mat(raw{r,7}));
+            glucose(count+1) = raw{r,7};
             
             count = count +1;
             catch exception
