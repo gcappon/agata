@@ -7,7 +7,7 @@ function timeInHyperglycemia = timeInHyperglycemia(data)
 %   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInHyperglycemia: percentage of time in hyperglycemia (i.e., 
-%   > 180 mg/dl).
+%   181-250 mg/dl).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -16,7 +16,10 @@ function timeInHyperglycemia = timeInHyperglycemia(data)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - None
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %
@@ -44,7 +47,7 @@ function timeInHyperglycemia = timeInHyperglycemia(data)
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
     %Compute metric
-    timeInHyperglycemia = 100*sum(nonNanGlucose > 180)/length(nonNanGlucose);
+    timeInHyperglycemia = 100*sum(nonNanGlucose > 180 & nonNanGlucose <= 250)/length(nonNanGlucose);
     
 end
 

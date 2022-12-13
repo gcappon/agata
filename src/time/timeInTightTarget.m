@@ -7,7 +7,7 @@ function timeInTightTarget = timeInTightTarget(data)
 %   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInTightTarget: percentage of time in hypoglycemia (i.e., 
-%   between 90 and 140 mg/dl).
+%   between 70 and 140 mg/dl).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -16,7 +16,10 @@ function timeInTightTarget = timeInTightTarget(data)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - None
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %
@@ -44,7 +47,7 @@ function timeInTightTarget = timeInTightTarget(data)
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
     %Compute metric
-    timeInTightTarget = 100*sum(nonNanGlucose >= 90 & nonNanGlucose <= 140)/length(nonNanGlucose);
+    timeInTightTarget = 100*sum(nonNanGlucose >= 70 & nonNanGlucose <= 140)/length(nonNanGlucose);
     
 end
 

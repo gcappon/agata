@@ -51,7 +51,7 @@ function prolongedHypoglycemicEvents = findProlongedHypoglycemicEvents(data)
     k = 1; %prolongedHypoglycemicEvents vector current index
     nSamplesIn = round(120/minutes(data.Time(2) - data.Time(1))); %number of consecutive samples required to define a valid event
     nSamplesOut = round(15/minutes(data.Time(2) - data.Time(1))); %number of consecutive samples required to end a valid event
-    TH = 54; %set the prolonged hypoglycemic threshold 
+    TH = 70; %set the prolonged hypoglycemic threshold 
     
     count = 0; %number of current found consecutive samples
     tempStartTime = []; %preallocate the prolonged hypo event starting time;

@@ -1,12 +1,12 @@
 function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
 %timeInSevereHypoglycemia function that computes the time spent in severe 
-%hypoglycemia (ignoring nan values).
+%hypoglycemia (Level 2) (ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
-%   - timeInHypoglycemia: percentage of time in hypoglycemia (i.e., 
+%   - timeInSevereHypoglycemia: percentage of time in severe hypoglycemia (i.e., 
 %   < 54 mg/dl).
 %
 %Preconditions:
@@ -16,7 +16,10 @@ function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - None
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %

@@ -88,9 +88,9 @@ function plotGRIComparison(glucoseProfilesArm1, glucoseProfilesArm2,varargin)
     for gp = 1:length(glucoseProfilesArm1)
         
         vlow = timeInSevereHypoglycemia(glucoseProfilesArm1{gp}); % VLow (<54 mg/dL; <3.0 mmol/L)
-        low = timeInHypoglycemia(glucoseProfilesArm1{gp}) - vlow; % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
+        low = timeInHypoglycemia(glucoseProfilesArm1{gp}); % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
         vhigh = timeInSevereHyperglycemia(glucoseProfilesArm1{gp}); % VHigh (>250 mg/dL; > 13.9 mmol/L)
-        high = timeInHyperglycemia(glucoseProfilesArm1{gp}) - vhigh; % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
+        high = timeInHyperglycemia(glucoseProfilesArm1{gp}); % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
         hypoComponentsArm1(gp) = vlow + (0.8*low);
         hyperComponentsArm1(gp) = vhigh + (0.5*high);
         grisArm1(gp) = (3.0 * vlow) + (2.4 * low) + (1.6 * vhigh) + (0.8 * high);
@@ -104,9 +104,9 @@ function plotGRIComparison(glucoseProfilesArm1, glucoseProfilesArm2,varargin)
     for gp = 1:length(glucoseProfilesArm2)
         
         vlow = timeInSevereHypoglycemia(glucoseProfilesArm2{gp}); % VLow (<54 mg/dL; <3.0 mmol/L)
-        low = timeInHypoglycemia(glucoseProfilesArm2{gp}) - vlow; % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
+        low = timeInHypoglycemia(glucoseProfilesArm2{gp}); % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
         vhigh = timeInSevereHyperglycemia(glucoseProfilesArm2{gp}); % VHigh (>250 mg/dL; > 13.9 mmol/L)
-        high = timeInHyperglycemia(glucoseProfilesArm2{gp}) - vhigh; % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
+        high = timeInHyperglycemia(glucoseProfilesArm2{gp}); % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
         hypoComponentsArm2(gp) = vlow + (0.8*low);
         hyperComponentsArm2(gp) = vhigh + (0.5*high);
         grisArm2(gp) = (3.0 * vlow) + (2.4 * low) + (1.6 * vhigh) + (0.8 * high);

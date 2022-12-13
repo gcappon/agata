@@ -1,13 +1,13 @@
 function timeInHypoglycemia = timeInHypoglycemia(data)
 %timeInHypoglycemia function that computes the time spent in hypoglycemia
-%(ignoring nan values).
+%(Level 1) (ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
 %   - timeInHypoglycemia: percentage of time in hypoglycemia (i.e., 
-%   <70 mg/dl).
+%   54-70 mg/dl).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -16,7 +16,10 @@ function timeInHypoglycemia = timeInHypoglycemia(data)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - None
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %
@@ -44,7 +47,7 @@ function timeInHypoglycemia = timeInHypoglycemia(data)
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
     %Compute metric
-    timeInHypoglycemia = 100*sum(nonNanGlucose < 70)/length(nonNanGlucose);
+    timeInHypoglycemia = 100*sum(nonNanGlucose >= 54 & nonNanGlucose < 70)/length(nonNanGlucose);
     
 end
 

@@ -26,4 +26,4 @@ assert(~isnan(results));
 
 %% Test 2: check percentages calculation
 results = timeInTightTarget(data);
-assert(results == 20);
+assert(results == 30);

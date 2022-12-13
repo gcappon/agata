@@ -214,9 +214,9 @@ function generateAGP(data,varargin)
 
         %Colored boxes
         timeSevereHypo = timeInSevereHypoglycemia(data)/100;
-        timeHypo = (timeInHypoglycemia(data)-timeInSevereHypoglycemia(data))/100;
+        timeHypo = timeInHypoglycemia(data)/100;
         timeSevereHyper = timeInSevereHyperglycemia(data)/100;
-        timeHyper = (timeInHyperglycemia(data)-timeInSevereHyperglycemia(data))/100;
+        timeHyper = timeInHyperglycemia(data)/100;
         timeTarget = timeInTarget(data)/100;
         agp.section.timeInRanges.colorBox.severeHyper = annotation('rectangle','Units','points','Position',[345 510 40 140],...
             'Color',[255,137,55]/255,'FaceColor',[255,137,55]/255);

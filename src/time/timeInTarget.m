@@ -16,7 +16,10 @@ function timeInTarget = timeInTarget(data)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - None
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %
