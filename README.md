@@ -13,7 +13,7 @@ AGATA (Automated Glucose dATa Analysis) is a toolbox to analyse glucose data.
 If you are using AGATA in your research, please cite it:  
 ```
 Cappon G, Sparacino G, Facchinetti A. AGATA: A toolbox for automated glucose data analysis.  
-J Diabetes Sci Technol. 2022. (epub online ahead of print)
+J Diabetes Sci Technol. 2022. DOI: [https://doi.org/10.1177/19322968221147570](https://doi.org/10.1177/19322968221147570)
 ```
 
 ## Getting started
