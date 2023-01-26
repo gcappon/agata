@@ -1,7 +1,8 @@
 function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
 %findHyperglycemicEvents function that finds the hyperglycemic events in a 
 %given glucose trace. The definition of hyperglycemic event can be found 
-%in Danne et al.
+%in Battellino et al. (event begins: at least consecutive 15 minutes > 180 mg/dl, 
+%event ends: at least 15 consecutive minutes < 180 mg/dl)
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
@@ -11,10 +12,14 @@ function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
 %Output:
 %   - hyperglycemicEvents: a structure containing the information on the
 %   hyperglycemic events found by the function with fields:
-%       - time: a vector containing the starting timestamps of each found 
+%       - timeStart: a vector containing the starting timestamps of each found 
 %       hyperglycemic event;
-%       - duration: a vector containing the duration of each found 
+%       - timeEnd: a vector containing the ending timestamps of each found 
 %       hyperglycemic event;
+%       - duration: a vector containing the duration (in min) of each found 
+%       hyperglycemic event;
+%       - meanDuration: metric, the average duration of the events;
+%       - numberPerWeek: metric, the number of events per week.
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -23,9 +28,10 @@ function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - Danne et al., "International consensus on use of continuous glucose
-%   monitoring", Diabetes Care, 2017, vol. 40, pp. 1631-1640. DOI: 
-%   10.2337/dc17-1600.
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %
@@ -136,6 +142,12 @@ function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
         hyperglycemicEvents.duration = [];
     end
     
+    hyperglycemicEvents.timeStart = hyperglycemicEvents.time;
+    hyperglycemicEvents = rmfield(hyperglycemicEvents,"time");
+    hyperglycemicEvents.timeEnd = hyperglycemicEvents.timeStart + minutes(hyperglycemicEvents.duration);
+    hyperglycemicEvents.meanDuration = mean(hyperglycemicEvents.duration);
+    nDays = days(data.Time(end) - data.Time(1)); 
+    hyperglycemicEvents.eventsPerWeek = length(hyperglycemicEvents.timeStart)/nDays*7;
     
 end
 

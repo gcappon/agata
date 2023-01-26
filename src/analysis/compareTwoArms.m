@@ -54,8 +54,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %        - `timeMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
 %           time related metrics (i.e., {`timeInHyperglycemia`, 
-%           `timeInSevereHyperglycemia`, `timeInHypoglycemia`, 
-%           `timeInSevereHypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
+%           `timeInL1Hyperglycemia`, `timeInL2Hyperglycemia`, `timeInHypoglycemia`, 
+%           `timeInL1Hypoglycemia`, `timeInL2Hypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
 %           of the metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
@@ -78,9 +78,8 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `prc95`: the 95th percentile of `values`; 
 %        - `eventMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           event related metrics (i.e., {`gradeScore`, `gradeEuScore`, 
-%           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
-%           `igc`, `mrIndex`}) of the metrics for each glucose profile;
+%           event related metrics (i.e., {`hypoglycemicEvents`, `hyperglycemicEvents`, 
+%           `extendedHypoglycemicEvents`}) of the metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;
@@ -170,46 +169,16 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         error(['compareTwoArms: You are trying to perform a paired test but the number of glucose profiles in the two arms is different.']);
     end
     
+    
+    results.arm1 = analyzeOneArm(arm1);
+    results.arm2 = analyzeOneArm(arm2);
+    
     %Variability metrics
     variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
         'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
     
     for v = variabilityMetrics
-        
-        %Preallocate
-        results.arm1.variability.(v{:}).values = zeros(length(arm1),1);
-        results.arm2.variability.(v{:}).values = zeros(length(arm2),1);
-        
-        %Compute metrics for arm1
-        for g1 = 1:length(arm1)
-            results.arm1.variability.(v{:}).values(g1) = feval(v{:}, arm1{g1});
-        end
-        
-        %Compute metrics for arm2
-        for g2 = 1:length(arm2)
-            results.arm2.variability.(v{:}).values(g2) = feval(v{:}, arm2{g2});
-        end
-        
-        %Compute metrics stats
-        results.arm1.variability.(v{:}).mean = nanmean(results.arm1.variability.(v{:}).values);
-        results.arm2.variability.(v{:}).mean = nanmean(results.arm2.variability.(v{:}).values);
-        
-        results.arm1.variability.(v{:}).std = nanstd(results.arm1.variability.(v{:}).values);
-        results.arm2.variability.(v{:}).std = nanstd(results.arm2.variability.(v{:}).values);
-        
-        results.arm1.variability.(v{:}).median = nanmedian(results.arm1.variability.(v{:}).values);
-        results.arm2.variability.(v{:}).median = nanmedian(results.arm2.variability.(v{:}).values);
-        
-        results.arm1.variability.(v{:}).prc5 = prctile(results.arm1.variability.(v{:}).values,5);
-        results.arm2.variability.(v{:}).prc5 = prctile(results.arm2.variability.(v{:}).values,5);
-        results.arm1.variability.(v{:}).prc25 = prctile(results.arm1.variability.(v{:}).values,25);
-        results.arm2.variability.(v{:}).prc25 = prctile(results.arm2.variability.(v{:}).values,25);
-        results.arm1.variability.(v{:}).prc75 = prctile(results.arm1.variability.(v{:}).values,75);
-        results.arm2.variability.(v{:}).prc75 = prctile(results.arm2.variability.(v{:}).values,75);
-        results.arm1.variability.(v{:}).prc95 = prctile(results.arm1.variability.(v{:}).values,95);
-        results.arm2.variability.(v{:}).prc95 = prctile(results.arm2.variability.(v{:}).values,95);
-    
         
         %Perform statistical tests
         res1 = results.arm1.variability.(v{:}).values;
@@ -236,40 +205,6 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     
     for r = riskMetrics
         
-        %Preallocate
-        results.arm1.risk.(r{:}).values = zeros(length(arm1),1);
-        results.arm2.risk.(r{:}).values = zeros(length(arm2),1);
-        
-        %Compute metrics for arm1
-        for g1 = 1:length(arm1)
-            results.arm1.risk.(r{:}).values(g1) = feval(r{:}, arm1{g1});
-        end
-        
-        %Compute metrics for arm2
-        for g2 = 1:length(arm2)
-            results.arm2.risk.(r{:}).values(g2) = feval(r{:}, arm2{g2});
-        end
-        
-        %Compute metrics stats
-        results.arm1.risk.(r{:}).mean = nanmean(results.arm1.risk.(r{:}).values);
-        results.arm2.risk.(r{:}).mean = nanmean(results.arm2.risk.(r{:}).values);
-        
-        results.arm1.risk.(r{:}).std = nanstd(results.arm1.risk.(r{:}).values);
-        results.arm2.risk.(r{:}).std = nanstd(results.arm2.risk.(r{:}).values);
-        
-        results.arm1.risk.(r{:}).median = nanmedian(results.arm1.risk.(r{:}).values);
-        results.arm2.risk.(r{:}).median = nanmedian(results.arm2.risk.(r{:}).values);
-        
-        results.arm1.risk.(r{:}).prc5 = prctile(results.arm1.risk.(r{:}).values,5);
-        results.arm2.risk.(r{:}).prc5 = prctile(results.arm2.risk.(r{:}).values,5);
-        results.arm1.risk.(r{:}).prc25 = prctile(results.arm1.risk.(r{:}).values,25);
-        results.arm2.risk.(r{:}).prc25 = prctile(results.arm2.risk.(r{:}).values,25);
-        results.arm1.risk.(r{:}).prc75 = prctile(results.arm1.risk.(r{:}).values,75);
-        results.arm2.risk.(r{:}).prc75 = prctile(results.arm2.risk.(r{:}).values,75);
-        results.arm1.risk.(r{:}).prc95 = prctile(results.arm1.risk.(r{:}).values,95);
-        results.arm2.risk.(r{:}).prc95 = prctile(results.arm2.risk.(r{:}).values,95);
-        
-        
         %Perform statistical tests
         res1 = results.arm1.risk.(r{:}).values;
         res2 = results.arm2.risk.(r{:}).values;
@@ -292,43 +227,12 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     
     
     %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInSevereHyperglycemia','timeInHypoglycemia','timeInSevereHypoglycemia','timeInTarget','timeInTightTarget'};
+    timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+        'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+        'timeInTarget','timeInTightTarget'};
     
-    for t = timeMetrics
-        
-        %Preallocate
-        results.arm1.time.(t{:}).values = zeros(length(arm1),1);
-        results.arm2.time.(t{:}).values = zeros(length(arm2),1);
-        
-        %Compute metrics for arm1
-        for g1 = 1:length(arm1)
-            results.arm1.time.(t{:}).values(g1) = feval(t{:}, arm1{g1});
-        end
-        
-        %Compute metrics for arm2
-        for g2 = 1:length(arm2)
-            results.arm2.time.(t{:}).values(g2) = feval(t{:}, arm2{g2});
-        end
-        
-        %Compute metrics stats
-        results.arm1.time.(t{:}).mean = nanmean(results.arm1.time.(t{:}).values);
-        results.arm2.time.(t{:}).mean = nanmean(results.arm2.time.(t{:}).values);
-        
-        results.arm1.time.(t{:}).std = nanstd(results.arm1.time.(t{:}).values);
-        results.arm2.time.(t{:}).std = nanstd(results.arm2.time.(t{:}).values);
-        
-        results.arm1.time.(t{:}).median = nanmedian(results.arm1.time.(t{:}).values);
-        results.arm2.time.(t{:}).median = nanmedian(results.arm2.time.(t{:}).values);
-        
-        results.arm1.time.(t{:}).prc5 = prctile(results.arm1.time.(t{:}).values,5);
-        results.arm2.time.(t{:}).prc5 = prctile(results.arm2.time.(t{:}).values,5);
-        results.arm1.time.(t{:}).prc25 = prctile(results.arm1.time.(t{:}).values,25);
-        results.arm2.time.(t{:}).prc25 = prctile(results.arm2.time.(t{:}).values,25);
-        results.arm1.time.(t{:}).prc75 = prctile(results.arm1.time.(t{:}).values,75);
-        results.arm2.time.(t{:}).prc75 = prctile(results.arm2.time.(t{:}).values,75);
-        results.arm1.time.(t{:}).prc95 = prctile(results.arm1.time.(t{:}).values,95);
-        results.arm2.time.(t{:}).prc95 = prctile(results.arm2.time.(t{:}).values,95);
-        
+    
+    for t = timeMetrics 
         
         %Perform statistical tests
         res1 = results.arm1.time.(t{:}).values;
@@ -353,41 +257,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     %Data quality metrics
     dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
     
-    for d = dataQualityMetrics
-        
-        %Preallocate
-        results.arm1.dataQuality.(d{:}).values = zeros(length(arm1),1);
-        results.arm2.dataQuality.(d{:}).values = zeros(length(arm2),1);
-        
-        %Compute metrics for arm1
-        for g1 = 1:length(arm1)
-            results.arm1.dataQuality.(d{:}).values(g1) = feval(d{:}, arm1{g1});
-        end
-        
-        %Compute metrics for arm2
-        for g2 = 1:length(arm2)
-            results.arm2.dataQuality.(d{:}).values(g2) = feval(d{:}, arm2{g2});
-        end
-        
-        %Compute metrics stats
-        results.arm1.dataQuality.(d{:}).mean = nanmean(results.arm1.dataQuality.(d{:}).values);
-        results.arm2.dataQuality.(d{:}).mean = nanmean(results.arm2.dataQuality.(d{:}).values);
-        
-        results.arm1.dataQuality.(d{:}).std = nanstd(results.arm1.dataQuality.(d{:}).values);
-        results.arm2.dataQuality.(d{:}).std = nanstd(results.arm2.dataQuality.(d{:}).values);
-        
-        results.arm1.dataQuality.(d{:}).median = nanmedian(results.arm1.dataQuality.(d{:}).values);
-        results.arm2.dataQuality.(d{:}).median = nanmedian(results.arm2.dataQuality.(d{:}).values);
-        
-        results.arm1.dataQuality.(d{:}).prc5 = prctile(results.arm1.dataQuality.(d{:}).values,5);
-        results.arm2.dataQuality.(d{:}).prc5 = prctile(results.arm2.dataQuality.(d{:}).values,5);
-        results.arm1.dataQuality.(d{:}).prc25 = prctile(results.arm1.dataQuality.(d{:}).values,25);
-        results.arm2.dataQuality.(d{:}).prc25 = prctile(results.arm2.dataQuality.(d{:}).values,25);
-        results.arm1.dataQuality.(d{:}).prc75 = prctile(results.arm1.dataQuality.(d{:}).values,75);
-        results.arm2.dataQuality.(d{:}).prc75 = prctile(results.arm2.dataQuality.(d{:}).values,75);
-        results.arm1.dataQuality.(d{:}).prc95 = prctile(results.arm1.dataQuality.(d{:}).values,95);
-        results.arm2.dataQuality.(d{:}).prc95 = prctile(results.arm2.dataQuality.(d{:}).values,95);
-        
+    for d = dataQualityMetrics  
         
         %Perform statistical tests
         res1 = results.arm1.dataQuality.(d{:}).values;
@@ -415,40 +285,6 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     
     for gt = glycemicTransformationMetrics
         
-        %Preallocate
-        results.arm1.glycemicTransformation.(gt{:}).values = zeros(length(arm1),1);
-        results.arm2.glycemicTransformation.(gt{:}).values = zeros(length(arm2),1);
-        
-        %Compute metrics for arm1
-        for g1 = 1:length(arm1)
-            results.arm1.glycemicTransformation.(gt{:}).values(g1) = feval(gt{:}, arm1{g1});
-        end
-        
-        %Compute metrics for arm2
-        for g2 = 1:length(arm2)
-            results.arm2.glycemicTransformation.(gt{:}).values(g2) = feval(gt{:}, arm2{g2});
-        end
-        
-        %Compute metrics stats
-        results.arm1.glycemicTransformation.(gt{:}).mean = nanmean(results.arm1.glycemicTransformation.(gt{:}).values);
-        results.arm2.glycemicTransformation.(gt{:}).mean = nanmean(results.arm2.glycemicTransformation.(gt{:}).values);
-        
-        results.arm1.glycemicTransformation.(gt{:}).std = nanstd(results.arm1.glycemicTransformation.(gt{:}).values);
-        results.arm2.glycemicTransformation.(gt{:}).std = nanstd(results.arm2.glycemicTransformation.(gt{:}).values);
-        
-        results.arm1.glycemicTransformation.(gt{:}).median = nanmedian(results.arm1.glycemicTransformation.(gt{:}).values);
-        results.arm2.glycemicTransformation.(gt{:}).median = nanmedian(results.arm2.glycemicTransformation.(gt{:}).values);
-        
-        results.arm1.glycemicTransformation.(gt{:}).prc5 = prctile(results.arm1.glycemicTransformation.(gt{:}).values,5);
-        results.arm2.glycemicTransformation.(gt{:}).prc5 = prctile(results.arm2.glycemicTransformation.(gt{:}).values,5);
-        results.arm1.glycemicTransformation.(gt{:}).prc25 = prctile(results.arm1.glycemicTransformation.(gt{:}).values,25);
-        results.arm2.glycemicTransformation.(gt{:}).prc25 = prctile(results.arm2.glycemicTransformation.(gt{:}).values,25);
-        results.arm1.glycemicTransformation.(gt{:}).prc75 = prctile(results.arm1.glycemicTransformation.(gt{:}).values,75);
-        results.arm2.glycemicTransformation.(gt{:}).prc75 = prctile(results.arm2.glycemicTransformation.(gt{:}).values,75);
-        results.arm1.glycemicTransformation.(gt{:}).prc95 = prctile(results.arm1.glycemicTransformation.(gt{:}).values,95);
-        results.arm2.glycemicTransformation.(gt{:}).prc95 = prctile(results.arm2.glycemicTransformation.(gt{:}).values,95);
-        
-        
         %Perform statistical tests
         res1 = results.arm1.glycemicTransformation.(gt{:}).values;
         res2 = results.arm2.glycemicTransformation.(gt{:}).values;
@@ -471,105 +307,253 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     
     
     %Event metrics
-    eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','prolongedHypoglycemicEvents'};
-    eventFunc = {'findHyperglycemicEvents','findHypoglycemicEvents','findProlongedHypoglycemicEvents'};
-    for e = 1:length(eventMetrics)
-        
-        %Preallocate
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).values = zeros(length(arm1),1);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).values = zeros(length(arm1),1);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).values = zeros(length(arm2),1);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).values = zeros(length(arm2),1);
-        
-        %Compute metrics for arm1
-        for g1 = 1:length(arm1)
-            r = feval(eventFunc{e}, arm1{g1});
-            results.arm1.event.([eventMetrics{e} 'MeanDuration']).values(g1) = mean(r.duration);
-            nDays = days(arm1{g1}.Time(end) - arm1{g1}.Time(1)); 
-            results.arm1.event.([eventMetrics{e} 'PerWeek']).values(g1) = length(r.time)/(nDays)*7;
-        end
-        
-        %Compute metrics for arm2
-        for g2 = 1:length(arm2)
-            r = feval(eventFunc{e}, arm2{g2});
-            results.arm2.event.([eventMetrics{e} 'MeanDuration']).values(g2) = mean(r.duration);
-            nDays = days(arm2{g2}.Time(end) - arm2{g2}.Time(1)); 
-            results.arm2.event.([eventMetrics{e} 'PerWeek']).values(g2) = length(r.time)/(nDays)*7;
-        end
-        
-        %Compute metrics stats
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).mean = nanmean(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).mean = nanmean(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).mean = nanmean(results.arm1.event.([eventMetrics{e} 'PerWeek']).values);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).mean = nanmean(results.arm2.event.([eventMetrics{e} 'PerWeek']).values);
-        
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).std = nanstd(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).std = nanstd(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).std = nanstd(results.arm1.event.([eventMetrics{e} 'PerWeek']).values);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).std = nanstd(results.arm2.event.([eventMetrics{e} 'PerWeek']).values);
-        
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).median = nanmedian(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).median = nanmedian(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).median = nanmedian(results.arm1.event.([eventMetrics{e} 'PerWeek']).values);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).median = nanmedian(results.arm2.event.([eventMetrics{e} 'PerWeek']).values);
-        
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).prc5 = prctile(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values,5);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).prc5 = prctile(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values,5);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).prc5 = prctile(results.arm1.event.([eventMetrics{e} 'PerWeek']).values,5);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).prc5 = prctile(results.arm2.event.([eventMetrics{e} 'PerWeek']).values,5);
-        
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).prc25 = prctile(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values,25);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).prc25 = prctile(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values,25);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).prc25 = prctile(results.arm1.event.([eventMetrics{e} 'PerWeek']).values,25);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).prc25 = prctile(results.arm2.event.([eventMetrics{e} 'PerWeek']).values,25);
-        
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).prc75 = prctile(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values,75);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).prc75 = prctile(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values,75);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).prc75 = prctile(results.arm1.event.([eventMetrics{e} 'PerWeek']).values,75);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).prc75 = prctile(results.arm2.event.([eventMetrics{e} 'PerWeek']).values,75);
-        
-        results.arm1.event.([eventMetrics{e} 'MeanDuration']).prc95 = prctile(results.arm1.event.([eventMetrics{e} 'MeanDuration']).values,95);
-        results.arm2.event.([eventMetrics{e} 'MeanDuration']).prc95 = prctile(results.arm2.event.([eventMetrics{e} 'MeanDuration']).values,95);
-        results.arm1.event.([eventMetrics{e} 'PerWeek']).prc95 = prctile(results.arm1.event.([eventMetrics{e} 'PerWeek']).values,95);
-        results.arm2.event.([eventMetrics{e} 'PerWeek']).prc95 = prctile(results.arm2.event.([eventMetrics{e} 'PerWeek']).values,95);
-        
-        
-        %Perform statistical tests
-        res1 = results.arm1.event.([eventMetrics{e} 'MeanDuration']).values;
-        res2 = results.arm2.event.([eventMetrics{e} 'MeanDuration']).values;
-        
-        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
-            if(isPaired)
-                [stats.event.([eventMetrics{e} 'MeanDuration']).h, stats.event.([eventMetrics{e} 'MeanDuration']).p] = ttest(res1,res2,'Alpha',alpha);
-            else
-                [stats.event.([eventMetrics{e} 'MeanDuration']).h, stats.event.([eventMetrics{e} 'MeanDuration']).p] = ttest2(res1,res2,'Alpha',alpha);
-            end
+
+    %Perform statistical tests
+    %Hypo - Mean duration
+    res1 = results.arm1.event.hypoglycemicEvents.hypo.meanDuration.values;
+    res2 = results.arm2.event.hypoglycemicEvents.hypo.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.hypo.meanDuration.h, stats.event.hypoglycemicEvents.hypo.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
         else
-            if(isPaired)
-                [stats.event.([eventMetrics{e} 'MeanDuration']).p, stats.event.([eventMetrics{e} 'MeanDuration']).h] = signrank(res1,res2,'Alpha',alpha);
-            else
-                [stats.event.([eventMetrics{e} 'MeanDuration']).p, stats.event.([eventMetrics{e} 'MeanDuration']).h] = ranksum(res1,res2,'Alpha',alpha);
-            end
+            [stats.event.hypoglycemicEvents.hypo.meanDuration.h, stats.event.hypoglycemicEvents.hypo.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
         end
-        
-        %Perform statistical tests
-        res1 = results.arm1.event.([eventMetrics{e} 'PerWeek']).values;
-        res2 = results.arm2.event.([eventMetrics{e} 'PerWeek']).values;
-        
-        if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
-            if(isPaired)
-                [stats.event.([eventMetrics{e} 'PerWeek']).h, stats.event.([eventMetrics{e} 'PerWeek']).p] = ttest(res1,res2,'Alpha',alpha);
-            else
-                [stats.event.([eventMetrics{e} 'PerWeek']).h, stats.event.([eventMetrics{e} 'PerWeek']).p] = ttest2(res1,res2,'Alpha',alpha);
-            end
+    else
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.hypo.meanDuration.p, stats.event.hypoglycemicEvents.hypo.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
         else
-            if(isPaired)
-                [stats.event.([eventMetrics{e} 'PerWeek']).p, stats.event.([eventMetrics{e} 'PerWeek']).h] = signrank(res1,res2,'Alpha',alpha);
-            else
-                [stats.event.([eventMetrics{e} 'PerWeek']).p, stats.event.([eventMetrics{e} 'PerWeek']).h] = ranksum(res1,res2,'Alpha',alpha);
-            end
+            [stats.event.hypoglycemicEvents.hypo.meanDuration.p, stats.event.hypoglycemicEvents.hypo.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
         end
     end
+       
+    res1 = results.arm1.event.hypoglycemicEvents.l1.meanDuration.values;
+    res2 = results.arm2.event.hypoglycemicEvents.l1.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l1.meanDuration.h, stats.event.hypoglycemicEvents.l1.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l1.meanDuration.h, stats.event.hypoglycemicEvents.l1.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l1.meanDuration.p, stats.event.hypoglycemicEvents.l1.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l1.meanDuration.p, stats.event.hypoglycemicEvents.l1.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    res1 = results.arm1.event.hypoglycemicEvents.l2.meanDuration.values;
+    res2 = results.arm2.event.hypoglycemicEvents.l2.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l2.meanDuration.h, stats.event.hypoglycemicEvents.l2.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l2.meanDuration.h, stats.event.hypoglycemicEvents.l2.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l2.meanDuration.p, stats.event.hypoglycemicEvents.l2.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l2.meanDuration.p, stats.event.hypoglycemicEvents.l2.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    %Hyper - Mean Duration
+    res1 = results.arm1.event.hyperglycemicEvents.hyper.meanDuration.values;
+    res2 = results.arm2.event.hyperglycemicEvents.hyper.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.hyper.meanDuration.h, stats.event.hyperglycemicEvents.hyper.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.hyper.meanDuration.h, stats.event.hyperglycemicEvents.hyper.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.hyper.meanDuration.p, stats.event.hyperglycemicEvents.hyper.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.hyper.meanDuration.p, stats.event.hyperglycemicEvents.hyper.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+       
+    res1 = results.arm1.event.hyperglycemicEvents.l1.meanDuration.values;
+    res2 = results.arm2.event.hyperglycemicEvents.l1.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l1.meanDuration.h, stats.event.hyperglycemicEvents.l1.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l1.meanDuration.h, stats.event.hyperglycemicEvents.l1.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l1.meanDuration.p, stats.event.hyperglycemicEvents.l1.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l1.meanDuration.p, stats.event.hyperglycemicEvents.l1.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    res1 = results.arm1.event.hyperglycemicEvents.l2.meanDuration.values;
+    res2 = results.arm2.event.hyperglycemicEvents.l2.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l2.meanDuration.h, stats.event.hyperglycemicEvents.l2.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l2.meanDuration.h, stats.event.hyperglycemicEvents.l2.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l2.meanDuration.p, stats.event.hyperglycemicEvents.l2.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l2.meanDuration.p, stats.event.hyperglycemicEvents.l2.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    %Extended Hypo - Mean duration
+    res1 = results.arm1.event.extendedHypoglycemicEvents.meanDuration.values;
+    res2 = results.arm2.event.extendedHypoglycemicEvents.meanDuration.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.extendedHypoglycemicEvents.meanDuration.h, stats.event.extendedHypoglycemicEvents.meanDuration.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.extendedHypoglycemicEvents.meanDuration.h, stats.event.extendedHypoglycemicEvents.meanDuration.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.extendedHypoglycemicEvents.meanDuration.p, stats.event.extendedHypoglycemicEvents.meanDuration.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.extendedHypoglycemicEvents.meanDuration.p, stats.event.extendedHypoglycemicEvents.meanDuration.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+      
+        %Hypo - Events Per Week
+    res1 = results.arm1.event.hypoglycemicEvents.hypo.eventsPerWeek.values;
+    res2 = results.arm2.event.hypoglycemicEvents.hypo.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.hypo.eventsPerWeek.h, stats.event.hypoglycemicEvents.hypo.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.hypo.eventsPerWeek.h, stats.event.hypoglycemicEvents.hypo.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.hypo.eventsPerWeek.p, stats.event.hypoglycemicEvents.hypo.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.hypo.eventsPerWeek.p, stats.event.hypoglycemicEvents.hypo.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+       
+    res1 = results.arm1.event.hypoglycemicEvents.l1.eventsPerWeek.values;
+    res2 = results.arm2.event.hypoglycemicEvents.l1.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l1.eventsPerWeek.h, stats.event.hypoglycemicEvents.l1.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l1.eventsPerWeek.h, stats.event.hypoglycemicEvents.l1.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l1.eventsPerWeek.p, stats.event.hypoglycemicEvents.l1.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l1.eventsPerWeek.p, stats.event.hypoglycemicEvents.l1.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    res1 = results.arm1.event.hypoglycemicEvents.l2.eventsPerWeek.values;
+    res2 = results.arm2.event.hypoglycemicEvents.l2.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l2.eventsPerWeek.h, stats.event.hypoglycemicEvents.l2.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l2.eventsPerWeek.h, stats.event.hypoglycemicEvents.l2.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hypoglycemicEvents.l2.eventsPerWeek.p, stats.event.hypoglycemicEvents.l2.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hypoglycemicEvents.l2.eventsPerWeek.p, stats.event.hypoglycemicEvents.l2.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    %Hyper - Events Per Week
+    res1 = results.arm1.event.hyperglycemicEvents.hyper.eventsPerWeek.values;
+    res2 = results.arm2.event.hyperglycemicEvents.hyper.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.hyper.eventsPerWeek.h, stats.event.hyperglycemicEvents.hyper.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.hyper.eventsPerWeek.h, stats.event.hyperglycemicEvents.hyper.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.hyper.eventsPerWeek.p, stats.event.hyperglycemicEvents.hyper.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.hyper.eventsPerWeek.p, stats.event.hyperglycemicEvents.hyper.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+       
+    res1 = results.arm1.event.hyperglycemicEvents.l1.eventsPerWeek.values;
+    res2 = results.arm2.event.hyperglycemicEvents.l1.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l1.eventsPerWeek.h, stats.event.hyperglycemicEvents.l1.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l1.eventsPerWeek.h, stats.event.hyperglycemicEvents.l1.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l1.eventsPerWeek.p, stats.event.hyperglycemicEvents.l1.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l1.eventsPerWeek.p, stats.event.hyperglycemicEvents.l1.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    res1 = results.arm1.event.hyperglycemicEvents.l2.eventsPerWeek.values;
+    res2 = results.arm2.event.hyperglycemicEvents.l2.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l2.eventsPerWeek.h, stats.event.hyperglycemicEvents.l2.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l2.eventsPerWeek.h, stats.event.hyperglycemicEvents.l2.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.hyperglycemicEvents.l2.eventsPerWeek.p, stats.event.hyperglycemicEvents.l2.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.hyperglycemicEvents.l2.eventsPerWeek.p, stats.event.hyperglycemicEvents.l2.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+    %Extended Hypo - Events Per Week
+    res1 = results.arm1.event.extendedHypoglycemicEvents.eventsPerWeek.values;
+    res2 = results.arm2.event.extendedHypoglycemicEvents.eventsPerWeek.values;
+
+    if(sum(~isnan(res1)) < 4 || sum(~isnan(res2)) < 4 ||  ~lillietest(res1) && ~lillietest(res2))
+        if(isPaired)
+            [stats.event.extendedHypoglycemicEvents.eventsPerWeek.h, stats.event.extendedHypoglycemicEvents.eventsPerWeek.p] = ttest(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.extendedHypoglycemicEvents.eventsPerWeek.h, stats.event.extendedHypoglycemicEvents.eventsPerWeek.p] = ttest2(res1,res2,'Alpha',alpha);
+        end
+    else
+        if(isPaired)
+            [stats.event.extendedHypoglycemicEvents.eventsPerWeek.p, stats.event.extendedHypoglycemicEvents.eventsPerWeek.h] = signrank(res1,res2,'Alpha',alpha);
+        else
+            [stats.event.extendedHypoglycemicEvents.eventsPerWeek.p, stats.event.extendedHypoglycemicEvents.eventsPerWeek.h] = ranksum(res1,res2,'Alpha',alpha);
+        end
+    end
+    
+        
     
 end
 

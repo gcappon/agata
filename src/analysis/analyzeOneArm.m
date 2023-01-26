@@ -47,8 +47,8 @@ function results = analyzeOneArm(arm)
 %        - `timeMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
 %           time related metrics (i.e., {`timeInHyperglycemia`, 
-%           `timeInSevereHyperglycemia`, `timeInHypoglycemia`, 
-%           `timeInSevereHypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
+%           `timeInL1Hyperglycemia`, `timeInL2Hyperglycemia`, `timeInHypoglycemia`, 
+%           `timeInL1Hypoglycemia`, `timeInL2Hypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
 %           of the metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
@@ -71,9 +71,8 @@ function results = analyzeOneArm(arm)
 %            - `prc95`: the 95th percentile of `values`; 
 %        - `eventMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           event related metrics (i.e., {`gradeScore`, `gradeEuScore`, 
-%           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
-%           `igc`, `mrIndex`}) of the metrics for each glucose profile;
+%           event related metrics (i.e., {`hypoglycemicEvents`, `hyperglycemicEvents`, 
+%           `extendedHypoglycemicEvents`}) of the metrics for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;
@@ -180,7 +179,9 @@ function results = analyzeOneArm(arm)
     
     
     %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInSevereHyperglycemia','timeInHypoglycemia','timeInSevereHypoglycemia','timeInTarget','timeInTightTarget'};
+    timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+        'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+        'timeInTarget','timeInTightTarget'};
     
     for t = timeMetrics
         
@@ -263,46 +264,191 @@ function results = analyzeOneArm(arm)
     
     
     %Event metrics
-    eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','prolongedHypoglycemicEvents'};
-    eventFunc = {'findHyperglycemicEvents','findHypoglycemicEvents','findProlongedHypoglycemicEvents'};
+    eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','extendedHypoglycemicEvents'};
+    eventFunc = {'findHyperglycemicEventsByLevel','findHypoglycemicEventsByLevel','findExtendedHypoglycemicEvents'};
+    
+    
     for e = 1:length(eventMetrics)
-        
-        %Preallocate
-        results.event.([eventMetrics{e} 'MeanDuration']).values = zeros(length(arm),1);
-        results.event.([eventMetrics{e} 'PerWeek']).values = zeros(length(arm),1);
-        
-        %Compute metrics for arm
-        for g = 1:length(arm)
-            r = feval(eventFunc{e}, arm{g});
-            results.event.([eventMetrics{e} 'MeanDuration']).values(g) = mean(r.duration);
-            nDays = days(arm{g}.Time(end) - arm{g}.Time(1)); 
-            results.event.([eventMetrics{e} 'PerWeek']).values(g) = length(r.time)/(nDays)*7;
-        end
 
+        for g = 1:length(arm)
         
-        %Compute metrics stats
-        results.event.([eventMetrics{e} 'MeanDuration']).mean = nanmean(results.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.event.([eventMetrics{e} 'PerWeek']).mean = nanmean(results.event.([eventMetrics{e} 'PerWeek']).values);
-        
-        results.event.([eventMetrics{e} 'MeanDuration']).std = nanstd(results.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.event.([eventMetrics{e} 'PerWeek']).std = nanstd(results.event.([eventMetrics{e} 'PerWeek']).values);
-        
-        results.event.([eventMetrics{e} 'MeanDuration']).median = nanmedian(results.event.([eventMetrics{e} 'MeanDuration']).values);
-        results.event.([eventMetrics{e} 'PerWeek']).median = nanmedian(results.event.([eventMetrics{e} 'PerWeek']).values);
-        
-        results.event.([eventMetrics{e} 'MeanDuration']).prc5 = prctile(results.event.([eventMetrics{e} 'MeanDuration']).values,5);
-        results.event.([eventMetrics{e} 'PerWeek']).prc5 = prctile(results.event.([eventMetrics{e} 'PerWeek']).values,5);
-        
-        results.event.([eventMetrics{e} 'MeanDuration']).prc25 = prctile(results.event.([eventMetrics{e} 'MeanDuration']).values,25);
-        results.event.([eventMetrics{e} 'PerWeek']).prc25 = prctile(results.event.([eventMetrics{e} 'PerWeek']).values,25);
-        
-        results.event.([eventMetrics{e} 'MeanDuration']).prc75 = prctile(results.event.([eventMetrics{e} 'MeanDuration']).values,75);
-        results.event.([eventMetrics{e} 'PerWeek']).prc75 = prctile(results.event.([eventMetrics{e} 'PerWeek']).values,75);
-        
-        results.event.([eventMetrics{e} 'MeanDuration']).prc95 = prctile(results.event.([eventMetrics{e} 'MeanDuration']).values,95);
-        results.event.([eventMetrics{e} 'PerWeek']).prc95 = prctile(results.event.([eventMetrics{e} 'PerWeek']).values,95);
-      
+            %Compute metric for glucose profile
+            event.(eventMetrics{e}).values{g} = feval(eventFunc{e}, arm{g});
+
+        end
     end
     
+    
+    mDHyper = zeros(length(arm),1);
+    mDHypo = zeros(length(arm),1);
+    mDHyperL1 = zeros(length(arm),1);
+    mDHypoL1 = zeros(length(arm),1);
+    mDHyperL2 = zeros(length(arm),1);
+    mDHypoL2 = zeros(length(arm),1);
+    mDExtendedHypo = zeros(length(arm),1);
+    
+    pwHyper = zeros(length(arm),1);
+    pwHypo = zeros(length(arm),1);
+    pwHyperL1 = zeros(length(arm),1);
+    pwHypoL1 = zeros(length(arm),1);
+    pwHyperL2 = zeros(length(arm),1);
+    pwHypoL2 = zeros(length(arm),1);
+    pwExtendedHypo = zeros(length(arm),1);
+    for g = 1:length(arm)
+        
+        mDHyper(g) = event.hyperglycemicEvents.values{g}.hyper.meanDuration;
+        mDHypo(g) = event.hypoglycemicEvents.values{g}.hypo.meanDuration;
+        mDHyperL1(g) = event.hyperglycemicEvents.values{g}.l1.meanDuration;
+        mDHypoL1(g) = event.hypoglycemicEvents.values{g}.l1.meanDuration;
+        mDHyperL2(g) = event.hyperglycemicEvents.values{g}.l2.meanDuration;
+        mDHypoL2(g) = event.hypoglycemicEvents.values{g}.l2.meanDuration;
+        mDExtendedHypo(g) = event.extendedHypoglycemicEvents.values{g}.meanDuration;
+        
+        pwHyper(g) = event.hyperglycemicEvents.values{g}.hyper.eventsPerWeek;
+        pwHypo(g) = event.hypoglycemicEvents.values{g}.hypo.eventsPerWeek;
+        pwHyperL1(g) = event.hyperglycemicEvents.values{g}.l1.eventsPerWeek;
+        pwHypoL1(g) = event.hypoglycemicEvents.values{g}.l1.eventsPerWeek;
+        pwHyperL2(g) = event.hyperglycemicEvents.values{g}.l2.eventsPerWeek;
+        pwHypoL2(g) = event.hypoglycemicEvents.values{g}.l2.eventsPerWeek;
+        pwExtendedHypo(g) = event.extendedHypoglycemicEvents.values{g}.eventsPerWeek;
+        
+    end
+    
+    %Values
+    results.event.hyperglycemicEvents.hyper.meanDuration.values = mDHyper;
+    results.event.hypoglycemicEvents.hypo.meanDuration.values = mDHypo;
+    results.event.hyperglycemicEvents.l1.meanDuration.values = mDHyperL1;
+    results.event.hypoglycemicEvents.l1.meanDuration.values = mDHypoL1;
+    results.event.hyperglycemicEvents.l2.meanDuration.values = mDHyperL2;
+    results.event.hypoglycemicEvents.l2.meanDuration.values = mDHypoL2;
+    results.event.extendedHypoglycemicEvents.meanDuration.values = mDExtendedHypo;
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.values = pwHyper;
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.values = pwHypo;
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.values = pwHyperL1;
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.values = pwHypoL1;
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.values = pwHyperL2;
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.values = pwHypoL2;
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.values = pwExtendedHypo;
+    
+    %Mean
+    results.event.hyperglycemicEvents.hyper.meanDuration.mean = nanmean(mDHyper);
+    results.event.hypoglycemicEvents.hypo.meanDuration.mean = nanmean(mDHypo);
+    results.event.hyperglycemicEvents.l1.meanDuration.mean = nanmean(mDHyperL1);
+    results.event.hypoglycemicEvents.l1.meanDuration.mean = nanmean(mDHypoL1);
+    results.event.hyperglycemicEvents.l2.meanDuration.mean = nanmean(mDHyperL2);
+    results.event.hypoglycemicEvents.l2.meanDuration.mean = nanmean(mDHypoL2);
+    results.event.extendedHypoglycemicEvents.meanDuration.mean = nanmean(mDExtendedHypo);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.mean = nanmean(pwHyper);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.mean = nanmean(pwHypo);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.mean = nanmean(pwHyperL1);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.mean = nanmean(pwHypoL1);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.mean = nanmean(pwHyperL2);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.mean = nanmean(pwHypoL2);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.mean = nanmean(pwExtendedHypo);
+    
+    %Median
+    results.event.hyperglycemicEvents.hyper.meanDuration.median = nanmedian(mDHyper);
+    results.event.hypoglycemicEvents.hypo.meanDuration.median = nanmedian(mDHypo);
+    results.event.hyperglycemicEvents.l1.meanDuration.median = nanmedian(mDHyperL1);
+    results.event.hypoglycemicEvents.l1.meanDuration.median = nanmedian(mDHypoL1);
+    results.event.hyperglycemicEvents.l2.meanDuration.median = nanmedian(mDHyperL2);
+    results.event.hypoglycemicEvents.l2.meanDuration.median = nanmedian(mDHypoL2);
+    results.event.extendedHypoglycemicEvents.meanDuration.median = nanmedian(mDExtendedHypo);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.median = nanmedian(pwHyper);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.median = nanmedian(pwHypo);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.median = nanmedian(pwHyperL1);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.median = nanmedian(pwHypoL1);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.median = nanmedian(pwHyperL2);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.median = nanmedian(pwHypoL2);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.median = nanmedian(pwExtendedHypo);
+
+    %Std
+    results.event.hyperglycemicEvents.hyper.meanDuration.std = nanstd(mDHyper);
+    results.event.hypoglycemicEvents.hypo.meanDuration.std = nanstd(mDHypo);
+    results.event.hyperglycemicEvents.l1.meanDuration.std = nanstd(mDHyperL1);
+    results.event.hypoglycemicEvents.l1.meanDuration.std = nanstd(mDHypoL1);
+    results.event.hyperglycemicEvents.l2.meanDuration.std = nanstd(mDHyperL2);
+    results.event.hypoglycemicEvents.l2.meanDuration.std = nanstd(mDHypoL2);
+    results.event.extendedHypoglycemicEvents.meanDuration.std = nanstd(mDExtendedHypo);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.std = nanstd(pwHyper);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.std = nanstd(pwHypo);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.std = nanstd(pwHyperL1);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.std = nanstd(pwHypoL1);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.std = nanstd(pwHyperL2);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.std = nanstd(pwHypoL2);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.std = nanstd(pwExtendedHypo);
+    
+    %Prc5
+    results.event.hyperglycemicEvents.hyper.meanDuration.prc5 = prctile(mDHyper,5);
+    results.event.hypoglycemicEvents.hypo.meanDuration.prc5 = prctile(mDHypo,5);
+    results.event.hyperglycemicEvents.l1.meanDuration.prc5 = prctile(mDHyperL1,5);
+    results.event.hypoglycemicEvents.l1.meanDuration.prc5 = prctile(mDHypoL1,5);
+    results.event.hyperglycemicEvents.l2.meanDuration.prc5 = prctile(mDHyperL2,5);
+    results.event.hypoglycemicEvents.l2.meanDuration.prc5 = prctile(mDHypoL2,5);
+    results.event.extendedHypoglycemicEvents.meanDuration.prc5 = prctile(mDExtendedHypo,5);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.prc5 = prctile(pwHyper,5);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.prc5 = prctile(pwHypo,5);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.prc5 = prctile(pwHyperL1,5);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.prc5 = prctile(pwHypoL1,5);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.prc5 = prctile(pwHyperL2,5);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.prc5 = prctile(pwHypoL2,5);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.prc5 = prctile(pwExtendedHypo,5);
+    
+    %Prc25
+    results.event.hyperglycemicEvents.hyper.meanDuration.prc25 = prctile(mDHyper,25);
+    results.event.hypoglycemicEvents.hypo.meanDuration.prc25 = prctile(mDHypo,25);
+    results.event.hyperglycemicEvents.l1.meanDuration.prc25 = prctile(mDHyperL1,25);
+    results.event.hypoglycemicEvents.l1.meanDuration.prc25 = prctile(mDHypoL1,25);
+    results.event.hyperglycemicEvents.l2.meanDuration.prc25 = prctile(mDHyperL2,25);
+    results.event.hypoglycemicEvents.l2.meanDuration.prc25 = prctile(mDHypoL2,25);
+    results.event.extendedHypoglycemicEvents.meanDuration.prc25 = prctile(mDExtendedHypo,25);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.prc25 = prctile(pwHyper,25);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.prc25 = prctile(pwHypo,25);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.prc25 = prctile(pwHyperL1,25);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.prc25 = prctile(pwHypoL1,25);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.prc25 = prctile(pwHyperL2,25);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.prc25 = prctile(pwHypoL2,25);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.prc25 = prctile(pwExtendedHypo,25);
+    
+    %Prc75
+    results.event.hyperglycemicEvents.hyper.meanDuration.prc75 = prctile(mDHyper,75);
+    results.event.hypoglycemicEvents.hypo.meanDuration.prc75 = prctile(mDHypo,75);
+    results.event.hyperglycemicEvents.l1.meanDuration.prc75 = prctile(mDHyperL1,75);
+    results.event.hypoglycemicEvents.l1.meanDuration.prc75 = prctile(mDHypoL1,75);
+    results.event.hyperglycemicEvents.l2.meanDuration.prc75 = prctile(mDHyperL2,75);
+    results.event.hypoglycemicEvents.l2.meanDuration.prc75 = prctile(mDHypoL2,75);
+    results.event.extendedHypoglycemicEvents.meanDuration.prc75 = prctile(mDExtendedHypo,75);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.prc75 = prctile(pwHyper,75);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.prc75 = prctile(pwHypo,75);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.prc75 = prctile(pwHyperL1,75);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.prc75 = prctile(pwHypoL1,75);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.prc75 = prctile(pwHyperL2,75);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.prc75 = prctile(pwHypoL2,75);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.prc75 = prctile(pwExtendedHypo,75);
+    
+    %Prc95
+    results.event.hyperglycemicEvents.hyper.meanDuration.prc95 = prctile(mDHyper,95);
+    results.event.hypoglycemicEvents.hypo.meanDuration.prc95 = prctile(mDHypo,95);
+    results.event.hyperglycemicEvents.l1.meanDuration.prc95 = prctile(mDHyperL1,95);
+    results.event.hypoglycemicEvents.l1.meanDuration.prc95 = prctile(mDHypoL1,95);
+    results.event.hyperglycemicEvents.l2.meanDuration.prc95 = prctile(mDHyperL2,95);
+    results.event.hypoglycemicEvents.l2.meanDuration.prc95 = prctile(mDHypoL2,95);
+    results.event.extendedHypoglycemicEvents.meanDuration.prc95 = prctile(mDExtendedHypo,95);
+    
+    results.event.hyperglycemicEvents.hyper.eventsPerWeek.prc95 = prctile(pwHyper,95);
+    results.event.hypoglycemicEvents.hypo.eventsPerWeek.prc95 = prctile(pwHypo,95);
+    results.event.hyperglycemicEvents.l1.eventsPerWeek.prc95 = prctile(pwHyperL1,95);
+    results.event.hypoglycemicEvents.l1.eventsPerWeek.prc95 = prctile(pwHypoL1,95);
+    results.event.hyperglycemicEvents.l2.eventsPerWeek.prc95 = prctile(pwHyperL2,95);
+    results.event.hypoglycemicEvents.l2.eventsPerWeek.prc95 = prctile(pwHypoL2,95);
+    results.event.extendedHypoglycemicEvents.eventsPerWeek.prc95 = prctile(pwExtendedHypo,95);
+
 end
 

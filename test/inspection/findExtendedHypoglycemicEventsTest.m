@@ -1,4 +1,4 @@
-% Test units of the findHypoglycemicEvents function
+% Test units of the findExtendedHypoglycemicEvents function
 %
 % ---------------------------------------------------------------------
 %
@@ -22,14 +22,11 @@ data.glucose(76:78) = 50;
 data.glucose(80:82) = 50;
 data.glucose(81) = nan;
 
-%Hypoglycemic events generated:
-%   - 2000-01-01 @ 00:45 - duration 00:20 (normal hypoglycemic event)
+%Extended hypoglycemic events generated:
 %   - 2000-01-01 @ 02:45 - duration 02:30 (extended hypoglycemic event)
-%   - 2000-01-01 @ 05:45 - duration 00:15 (normal hypoglycemic event)
-%   - 2000-01-01 @ 06:15 - duration 00:35 (normal hypoglycemic event)
 
 %% Test 1: check results structure field presence and length
-results = findHypoglycemicEvents(data);
+results = findExtendedHypoglycemicEvents(data);
 assert(isfield(results,'timeStart'));
 assert(isfield(results,'timeEnd'));
 assert(isfield(results,'duration'));
@@ -37,59 +34,40 @@ assert(isfield(results,'meanDuration'));
 assert(isfield(results,'eventsPerWeek'));
 
 %% Test 2: check results structure field length
-results = findHypoglycemicEvents(data);
+results = findExtendedHypoglycemicEvents(data);
 assert(length(results.timeStart) == length(results.duration));
 assert(length(results.timeEnd) == length(results.duration));
 assert(length(results.meanDuration) == 1);
 assert(length(results.eventsPerWeek) == 1);
 
 %% Test 3: check nan presence
-results = findHypoglycemicEvents(data);
+results = findExtendedHypoglycemicEvents(data);
 assert(~any(isnan(results.duration)));
 assert(~any(isnat(results.timeStart)));
-assert(~any(isnat(results.timeEnd)));
 assert(~isnan(results.meanDuration));
 assert(~isnan(results.eventsPerWeek));
 
 %% Test 4: check results (with events)
-results = findHypoglycemicEvents(data);
-assert(results.timeStart(1) == datetime(2000,1,1,0,45,0));
-assert(results.timeEnd(1) == datetime(2000,1,1,0,45,0)+minutes(20));
-assert(results.duration(1) == 20);
-assert(results.timeStart(2) == datetime(2000,1,1,2,45,0));
-assert(results.timeEnd(2) == datetime(2000,1,1,2,45,0)+minutes(150));
-assert(results.duration(2) == 150);
-assert(results.timeStart(3) == datetime(2000,1,1,5,45,0));
-assert(results.timeEnd(3) == datetime(2000,1,1,5,45,0)+minutes(15));
-assert(results.duration(3) == 15);
-assert(results.timeStart(4) == datetime(2000,1,1,6,15,0));
-assert(results.timeEnd(4) == datetime(2000,1,1,6,15,0)+minutes(35));
-assert(results.duration(4) == 35);
+results = findExtendedHypoglycemicEvents(data);
+assert(results.timeStart(1) == datetime(2000,1,1,2,45,0));
+assert(results.timeEnd(1) == datetime(2000,1,1,2,45,0)+minutes(150));
+assert(results.duration(1) == 150);
 assert(length(results.timeStart) == length(results.duration));
+assert(length(results.timeStart) == 1);
 assert(length(results.timeEnd) == length(results.duration));
-assert(length(results.timeStart) == 4);
+assert(length(results.timeEnd) == 1);
 
-assert(results.meanDuration == 55);
-assert(results.eventsPerWeek == 96);
+assert(results.meanDuration == 150);
+assert(results.eventsPerWeek == 24);
 
-%% Test 5: check results (with custom threshold)
-results = findHypoglycemicEvents(data, 'th', 45);
-assert(isempty(results.timeStart));
-assert(isempty(results.timeEnd));
-assert(isempty(results.duration));
-assert(isnan(results.meanDuration));
-assert(results.eventsPerWeek == 0);
-
-%% Test 6: check results (without events)
+%% Test 5: check results (without events)
 data.glucose(:) = 120;
-results = findHypoglycemicEvents(data);
+results = findExtendedHypoglycemicEvents(data);
 assert(isempty(results.timeStart));
 assert(isempty(results.timeEnd));
 assert(isempty(results.duration));
 assert(isnan(results.meanDuration));
 assert(results.eventsPerWeek == 0);
-
-
 
 
 

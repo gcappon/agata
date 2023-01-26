@@ -1,13 +1,13 @@
-function timeInHypoglycemia = timeInHypoglycemia(data)
-%timeInHypoglycemia function that computes the time spent in hypoglycemia
-%(ignoring nan values).
+function timeInL2Hypoglycemia = timeInL2Hypoglycemia(data)
+%timeInL2Hypoglycemia function that computes the time spent in level 2 
+%hypoglycemia (ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
-%   - timeInHypoglycemia: percentage of time in hypoglycemia (i.e., 
-%   < 70 mg/dl).
+%   - timeInSevereHypoglycemia: percentage of time in level 2 hypoglycemia (i.e., 
+%   < 54 mg/dl).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -31,23 +31,23 @@ function timeInHypoglycemia = timeInHypoglycemia(data)
     
     %Check preconditions 
     if(~istimetable(data))
-        error('timeInHypoglycemia: data must be a timetable.');
+        error('timeInL2Hypoglycemia: data must be a timetable.');
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
-        error('timeInHypoglycemia: data must have a homogeneous time grid.')
+        error('timeInL2Hypoglycemia: data must have a homogeneous time grid.')
     end
     if(~any(strcmp(fieldnames(data),'Time')))
-        error('timeInHypoglycemia: data must have a column named `Time`.')
+        error('timeInL2Hypoglycemia: data must have a column named `Time`.')
     end
     if(~any(strcmp(fieldnames(data),'glucose')))
-        error('timeInHypoglycemia: data must have a column named `glucose`.')
+        error('timeInL2Hypoglycemia: data must have a column named `glucose`.')
     end
     
     %Remove nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
     %Compute metric
-    timeInHypoglycemia = 100*sum(nonNanGlucose < 70)/length(nonNanGlucose);
+    timeInL2Hypoglycemia = 100*sum(nonNanGlucose < 54)/length(nonNanGlucose);
     
 end
 

@@ -81,10 +81,10 @@ function plotGRI(glucoseProfiles,varargin)
     gris = zeros(length(glucoseProfiles),1);
     for gp = 1:length(glucoseProfiles)
         
-        vlow = timeInSevereHypoglycemia(glucoseProfiles{gp}); % VLow (<54 mg/dL; <3.0 mmol/L)
-        low = timeInHypoglycemia(glucoseProfiles{gp}); % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
-        vhigh = timeInSevereHyperglycemia(glucoseProfiles{gp}); % VHigh (>250 mg/dL; > 13.9 mmol/L)
-        high = timeInHyperglycemia(glucoseProfiles{gp}); % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
+        vlow = timeInL2Hypoglycemia(glucoseProfiles{gp}); % VLow (<54 mg/dL; <3.0 mmol/L)
+        low = timeInL1Hypoglycemia(glucoseProfiles{gp}); % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
+        vhigh = timeInL2Hyperglycemia(glucoseProfiles{gp}); % VHigh (>250 mg/dL; > 13.9 mmol/L)
+        high = timeInL1Hyperglycemia(glucoseProfiles{gp}); % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
         hypoComponents(gp) = vlow + (0.8*low);
         hyperComponents(gp) = vhigh + (0.5*high);
         gris(gp) = (3.0 * vlow) + (2.4 * low) + (1.6 * vhigh) + (0.8 * high);

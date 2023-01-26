@@ -1,13 +1,13 @@
-function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
-%timeInSevereHyperglycemia function that computes the time spent in severe
-%hyperglycemia (Level 2) (ignoring nan values).
+function timeInL1Hypoglycemia = timeInL1Hypoglycemia(data)
+%timeInL1Hypoglycemia function that computes the time spent in hypoglycemia
+%(Level 1) (ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl). 
 %Output:
-%   - timeInSevereHyperglycemia: percentage of time in hyperglycemia (i.e., 
-%   > 250 mg/dl).
+%   - timeInHypoglycemia: percentage of time in level 1 hypoglycemia (i.e., 
+%   54-70 mg/dl).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -31,23 +31,23 @@ function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
     
     %Check preconditions 
     if(~istimetable(data))
-        error('timeInSevereHyperglycemia: data must be a timetable.');
+        error('timeInL1Hypoglycemia: data must be a timetable.');
     end
     if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
-        error('timeInSevereHyperglycemia: data must have a homogeneous time grid.')
+        error('timeInL1Hypoglycemia: data must have a homogeneous time grid.')
     end
     if(~any(strcmp(fieldnames(data),'Time')))
-        error('timeInSevereHyperglycemia: data must have a column named `Time`.')
+        error('timeInL1Hypoglycemia: data must have a column named `Time`.')
     end
     if(~any(strcmp(fieldnames(data),'glucose')))
-        error('timeInSevereHyperglycemia: data must have a column named `glucose`.')
+        error('timeInL1Hypoglycemia: data must have a column named `glucose`.')
     end
     
     %Remove nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
     %Compute metric
-    timeInSevereHyperglycemia = 100*sum(nonNanGlucose > 250)/length(nonNanGlucose);
+    timeInL1Hypoglycemia = 100*sum(nonNanGlucose >= 54 & nonNanGlucose < 70)/length(nonNanGlucose);
     
 end
 

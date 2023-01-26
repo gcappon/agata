@@ -92,16 +92,26 @@ function plotGlucoseAsOneDay(data,varargin)
     plt.area70180 = fill([dummyTime(1) dummyTime(end) dummyTime(end) dummyTime(1)],[70 70 180 180],'g',...
         'FaceColor',[199, 200, 202]/255,'EdgeColor','none','FaceAlpha',0.5);
 
-
-    agp.section.agp.area595 = fill([dataDaily.Time', fliplr(dataDaily.Time')],[prctile(dataMat',5) fliplr(prctile(dataMat',95))],'g--');
-    agp.section.agp.area595.FaceColor = [204, 219, 237]/255;
-    agp.section.agp.area595.EdgeColor = [131, 165, 206]/255;
-    agp.section.agp.area595.FaceAlpha = 0.5;
-    agp.section.agp.area2575 = fill([dataDaily.Time', fliplr(dataDaily.Time')],[prctile(dataMat',25) fliplr(prctile(dataMat',75))],'g');
-    agp.section.agp.area2575.FaceColor = [131, 165, 206]/255;
-    agp.section.agp.area2575.EdgeColor = [131, 165, 206]/255;
-    agp.section.agp.area2575.FaceAlpha = 0.5;
-    agp.section.agp.median = plot(dataDaily.Time,nanmedian(dataMat'),'k','linewidth',2);
+    X = dataDaily.Time';
+    Y1 = prctile(dataMat',5);
+    Y2 = prctile(dataMat',95);
+    idx = ~isnan(Y1) & ~isnan(Y2);
+    X = X(idx);
+    Y1 = Y1(idx);
+    Y2 = Y2(idx);
+    plt.area595 = fill([X, fliplr(X)],[Y1 fliplr(Y2)],'g--',...
+         'FaceColor',[204, 219, 237]/255, 'EdgeColor', [131, 165, 206]/255);
+    X = dataDaily.Time';
+    Y1 = prctile(dataMat',25);
+    Y2 = prctile(dataMat',75);
+    idx = ~isnan(Y1) & ~isnan(Y2);
+    X = X(idx);
+    Y1 = Y1(idx);
+    Y2 = Y2(idx);
+    plt.area2575 = fill([X, fliplr(X)],[Y1 fliplr(Y2)],'g--',...
+            'FaceColor',[131, 165, 206]/255, 'EdgeColor', [131, 165, 206]/255);
+    plt.median = plot(dataDaily.Time,nanmedian(dataMat'),'k','linewidth',2);
+        
 
     plt.line70 = plot([dummyTime(1) dummyTime(end)],[70 70],'--','linewidth',2,'Color',[77 189 109]/255);
     plt.line180 = plot([dummyTime(1) dummyTime(end)],[180 180],'--','linewidth',2,'Color',[77 189 109]/255);

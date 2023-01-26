@@ -1,7 +1,8 @@
 function hypoglycemicEvents = findHypoglycemicEvents(data, varargin)
 %findHypoglycemicEvents function that finds the hypoglycemic events in a 
 %given glucose trace. The definition of hypoglycemic event can be found 
-%in Danne et al.
+%in Battellino et al. (event begins: at least consecutive 15 minutes < 70 mg/dl, 
+%event ends: at least 15 consecutive minutes > 70 mg/dl)
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
@@ -11,10 +12,12 @@ function hypoglycemicEvents = findHypoglycemicEvents(data, varargin)
 %Output:
 %   - hypoglycemicEvents: a structure containing the information on the
 %   hypoglycemic events found by the function with fields:
-%       - time: a vector containing the starting timestamps of each found 
+%       - timeStart: a vector containing the starting timestamps of each found 
 %       hypoglycemic event;
-%       - duration: a vector containing the duration (in min) of each found 
+%       - timeEnd: a vector containing the ending timestamps of each found 
 %       hypoglycemic event;
+%       - meanDuration: metric, the average duration of the events;
+%       - numberPerWeek: metric, the number of events per week.
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -23,9 +26,10 @@ function hypoglycemicEvents = findHypoglycemicEvents(data, varargin)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - Danne et al., "International consensus on use of continuous glucose
-%   monitoring", Diabetes Care, 2017, vol. 40, pp. 1631-1640. DOI: 
-%   10.2337/dc17-1600.
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet
+%   Diabetes & Endocrinology, 2022, pp. 1-16.
+%   DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %
@@ -133,7 +137,12 @@ function hypoglycemicEvents = findHypoglycemicEvents(data, varargin)
         hypoglycemicEvents.duration = [];
     end
     
-    
+    hypoglycemicEvents.timeStart = hypoglycemicEvents.time;
+    hypoglycemicEvents = rmfield(hypoglycemicEvents,"time");
+    hypoglycemicEvents.timeEnd = hypoglycemicEvents.timeStart + minutes(hypoglycemicEvents.duration);
+    hypoglycemicEvents.meanDuration = mean(hypoglycemicEvents.duration);
+    nDays = days(data.Time(end) - data.Time(1)); 
+    hypoglycemicEvents.eventsPerWeek = length(hypoglycemicEvents.timeStart)/nDays*7;
     
 end
 

@@ -13,7 +13,6 @@ function data = toMGDL(data)
 %   glucose data to analyze (in mg/dL). 
 %
 %Preconditions:
-%   - data must be a timetable having an homogeneous time grid;
 %   - data must contain a column named `Time` and another named `glucose`.
 % 
 % ------------------------------------------------------------------------
@@ -32,9 +31,6 @@ function data = toMGDL(data)
     %Check preconditions 
     if(~istimetable(data))
         error('toMGDL: data must be a timetable.');
-    end
-    if(var(seconds(diff(data.Time))) > 0 || isnan(var(seconds(diff(data.Time)))))
-        error('toMGDL: data must have a homogeneous time grid.')
     end
     if(~any(strcmp(fieldnames(data),'Time')))
         error('toMGDL: data must have a column named `Time`.')

@@ -94,12 +94,24 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
     plt1.area70180 = fill([dummyTime(1) dummyTime(end) dummyTime(end) dummyTime(1)],[70 70 180 180],'g',...
         'FaceColor',[199, 200, 202]/255,'EdgeColor','none','FaceAlpha',0.5);
         
-        
-    plt1.area595 = fill([dataDaily.Time', fliplr(dataDaily.Time')],[prctile(dataMat',5) fliplr(prctile(dataMat',95))],'g--',...
-            'FaceColor',[204, 219, 237]/255, 'EdgeColor', [131, 165, 206]/255, 'FaceAlpha', 0.5);
-    plt1.section.agp.area2575 = fill([dataDaily.Time', fliplr(dataDaily.Time')],[prctile(dataMat',25) fliplr(prctile(dataMat',75))],'g',...
+    X = dataDaily.Time';
+    Y1 = prctile(dataMat',5);
+    Y2 = prctile(dataMat',95);
+    idx = ~isnan(Y1) & ~isnan(Y2);
+    X = X(idx);
+    Y1 = Y1(idx);
+    Y2 = Y2(idx);
+    plt1.area595 = fill([X, fliplr(X)],[Y1 fliplr(Y2)],'g--',...
+         'FaceColor',[204, 219, 237]/255, 'EdgeColor', [131, 165, 206]/255, 'FaceAlpha', 0.5);
+    X = dataDaily.Time';
+    Y1 = prctile(dataMat',25);
+    Y2 = prctile(dataMat',75);
+    idx = ~isnan(Y1) & ~isnan(Y2);
+    X = X(idx);
+    Y1 = Y1(idx);
+    Y2 = Y2(idx);
+    plt1.area2575 = fill([X, fliplr(X)],[Y1 fliplr(Y2)],'g--',...
             'FaceColor',[131, 165, 206]/255, 'EdgeColor', [131, 165, 206]/255, 'FaceAlpha',0.5);
-        
     plt1.median = plot(dataDaily.Time,nanmedian(dataMat'),'b','linewidth',2);
         
     %Generate the plot of data2
@@ -141,10 +153,25 @@ function plotGlucoseAsOneDayComparison(data1,data2,varargin)
         dataDaily.glucose2 = [];
 
     end
-        
-    plt2.area595 = fill([dataDaily.Time', fliplr(dataDaily.Time')],[prctile(dataMat',5) fliplr(prctile(dataMat',95))],'g--',...
+    
+    
+    X = dataDaily.Time';
+    Y1 = prctile(dataMat',5);
+    Y2 = prctile(dataMat',95);
+    idx = ~isnan(Y1) & ~isnan(Y2);
+    X = X(idx);
+    Y1 = Y1(idx);
+    Y2 = Y2(idx);
+    plt2.area595 = fill([X, fliplr(X)],[Y1 fliplr(Y2)],'g--',...
             'FaceColor',[243,32,50]/255, 'EdgeColor', [243,32,50]/255, 'FaceAlpha', 0.5);
-    plt2.section.agp.area2575 = fill([dataDaily.Time', fliplr(dataDaily.Time')],[prctile(dataMat',25) fliplr(prctile(dataMat',75))],'g',...
+    X = dataDaily.Time';
+    Y1 = prctile(dataMat',25);
+    Y2 = prctile(dataMat',75);
+    idx = ~isnan(Y1) & ~isnan(Y2);
+    X = X(idx);
+    Y1 = Y1(idx);
+    Y2 = Y2(idx);
+    plt2.area2575 = fill([X, fliplr(X)],[Y1 fliplr(Y2)],'g--',...
             'FaceColor',[172,27,45]/255, 'EdgeColor', [172,27,45]/255, 'FaceAlpha',0.5);
         
     plt2.median = plot(dataDaily.Time,nanmedian(dataMat'),'r','linewidth',2);

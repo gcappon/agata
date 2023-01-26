@@ -13,26 +13,25 @@ function results = analyzeGlucoseProfile(data)
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
 %           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) of the 
-%           metrics for each glucose profile; 
+%           glucose profile; 
 %        - `riskMetrics`: a structure with fields containing the values of the computed 
 %           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`, `gri`}) of the 
-%           metrics for each glucose profile;
+%           glucose profile;
 %        - `dataQualityMetrics`: a structure with fields containing the values of the computed 
 %           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) of 
-%           the metrics for each glucose profile;
+%           the glucose profile;
 %        - `timeMetrics`: a structure with fields containing the values of the computed 
 %           time related metrics (i.e., {`timeInHyperglycemia`, 
-%           `timeInSevereHyperglycemia`, `timeInHypoglycemia`, 
-%           `timeInSevereHypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
-%           of the metrics for each glucose profile;
+%           `timeInL1Hyperglycemia`, `timeInL2Hyperglycemia`, `timeInHypoglycemia`, 
+%           `timeInL1Hypoglycemia`, `timeInL2Hypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
+%           of the glucose profile;
 %        - `glycemicTransformationMetrics`: a structure with fields containing the values of the computed 
 %           glycemic transformed metrics (i.e., {`gradeScore`, `gradeEuScore`, 
 %           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
 %           `igc`, `mrIndex`}) of the metrics for each glucose profile;
 %        - `eventMetrics`: a structure with fields containing the values of the computed 
-%           event related metrics (i.e., {`gradeScore`, `gradeEuScore`, 
-%           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
-%           `igc`, `mrIndex`}) of the metrics for each glucose profile.
+%           event related metrics (i.e., {`hypoglycemicEvents`, `hyperglycemicEvents`, 
+%           `extendedHypoglycemicEvents`}) of the glucose profile.
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
@@ -90,7 +89,9 @@ function results = analyzeGlucoseProfile(data)
     
     
     %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInSevereHyperglycemia','timeInHypoglycemia','timeInSevereHypoglycemia','timeInTarget','timeInTightTarget'};
+    timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+        'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+        'timeInTarget','timeInTightTarget'};
     
     for t = timeMetrics
         
@@ -122,15 +123,12 @@ function results = analyzeGlucoseProfile(data)
     
     
     %Event metrics
-    eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','prolongedHypoglycemicEvents'};
-    eventFunc = {'findHyperglycemicEvents','findHypoglycemicEvents','findProlongedHypoglycemicEvents'};
+    eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','extendedHypoglycemicEvents'};
+    eventFunc = {'findHyperglycemicEventsByLevel','findHypoglycemicEventsByLevel','findExtendedHypoglycemicEvents'};
     for e = 1:length(eventMetrics)
         
         %Compute metric for glucose profile
-        r = feval(eventFunc{e}, data);
-        results.event.([eventMetrics{e} 'MeanDuration']) = mean(r.duration);
-        nDays = days(data.Time(end) - data.Time(1)); 
-        results.event.([eventMetrics{e} 'PerWeek']) = length(r.time)/nDays*7;
+        results.event.(eventMetrics{e}) = feval(eventFunc{e}, data);
       
     end
     

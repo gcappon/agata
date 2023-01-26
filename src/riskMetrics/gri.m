@@ -47,10 +47,10 @@ function gri = gri(data)
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
     %Compute metric
-    vlow = timeInSevereHypoglycemia(data); % VLow (<54 mg/dL; <3.0 mmol/L)
-    low = timeInHypoglycemia(data); % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
-    vhigh = timeInSevereHyperglycemia(data); % VHigh (>250 mg/dL; > 13.9 mmol/L)
-    high = timeInHyperglycemia(data); % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
+    vlow = timeInL2Hypoglycemia(data); % VLow (<54 mg/dL; <3.0 mmol/L)
+    low = timeInL1Hypoglycemia(data); % Low (54–<70 mg/dL; 3.0–< 3.9 mmol/L)
+    vhigh = timeInL2Hyperglycemia(data); % VHigh (>250 mg/dL; > 13.9 mmol/L)
+    high = timeInL1Hyperglycemia(data); % High (>180–250 mg/dL; >10.0–13.9 mmol/L)
     gri = (3.0 * vlow) + (2.4 * low) + (1.6 * vhigh) + (0.8 * high);
     
     %Limit gri between 0-100
