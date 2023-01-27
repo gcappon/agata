@@ -9,7 +9,7 @@ function results = analyzeGlucoseProfile(data)
 %    - results: a structure with field containing the computed metrics of
 %    the glucose profile, i.e.:
 %        - `variabilityMetrics`: a structure with fields containing the values of the computed 
-%           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, 
+%           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cogi`,`cvGlucose`, 
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
 %           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) of the 
@@ -66,7 +66,7 @@ function results = analyzeGlucoseProfile(data)
     
     
     %Variability metrics
-    variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
+    variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
         'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
     

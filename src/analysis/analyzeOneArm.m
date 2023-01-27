@@ -10,7 +10,7 @@ function results = analyzeOneArm(arm)
 %    - results: a structure with field containing the computed metrics in the arm, i.e.:
 %        - `variabilityMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, 
+%           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cogi`, `cvGlucose`, 
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
 %           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`}) of the 
@@ -122,7 +122,7 @@ function results = analyzeOneArm(arm)
     
     
     %Variability metrics
-    variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
+    variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
         'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
     

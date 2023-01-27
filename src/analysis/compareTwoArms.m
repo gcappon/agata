@@ -17,7 +17,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %   structures with field containing the computed metrics in the two arms, i.e.:
 %        - `variabilityMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cvGlucose`, 
+%           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cogi`, `cvGlucose`, 
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
 %           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) of the 
@@ -161,6 +161,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         end
     end
     
+    
     if(~(isPaired == 0 || isPaired == 1))
         error(['compareTwoArms: isPaired must be 0 or 1.']);
     end
@@ -174,7 +175,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     results.arm2 = analyzeOneArm(arm2);
     
     %Variability metrics
-    variabilityMetrics = {'aucGlucose','CVGA','cvGlucose','efIndex','gmi','iqrGlucose',...
+    variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
         'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
         'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
     
