@@ -8,7 +8,7 @@
       <file>${PROJECT_ROOT}/agata_resources/icon_24.png</file>
       <file>${PROJECT_ROOT}/agata_resources/icon_16.png</file>
     </param.icons>
-    <param.version>2.0</param.version>
+    <param.version>2.1.1</param.version>
     <param.authnamewatermark>Giacomo Cappon</param.authnamewatermark>
     <param.email>cappongiacomo@gmail.com</param.email>
     <param.company />
@@ -54,9 +54,7 @@ ${DYLD_LIBRARY_PATH}:MR/v97/runtime/maci64:MR/v97/sys/os/maci64:MR/v97/bin/maci6
 	 
  Input Arguments 
 	 -?  print help on how to use the application 
-	 input arguments 
- Description 
- 	 AGATA (Automated Glucose dATa Analysis) is a toolbox to analyse glucose data.</param.help.text>
+	 input arguments</param.help.text>
     <unset>
       <param.company />
       <param.guid />
@@ -104,7 +102,7 @@ ${DYLD_LIBRARY_PATH}:MR/v97/runtime/maci64:MR/v97/sys/os/maci64:MR/v97/bin/maci6
     </build-deliverables>
     <workflow />
     <matlab>
-      <root>/Applications/MATLAB_R2019bgod27.app</root>
+      <root>/Applications/MATLAB_R2019bgod29.app</root>
       <toolboxes>
         <toolbox name="matlabcoder" />
         <toolbox name="embeddedcoder" />
