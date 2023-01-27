@@ -9,6 +9,7 @@
 % ---------------------------------------------------------------------
 
 addpath(fullfile('..','..','src','variabilityMetrics'));
+addpath(fullfile('..','..','src','time'));
 
 time = datetime(2000,1,1,0,0,0):minutes(5):datetime(2000,1,1,0,0,0)+minutes(50); % length = 11;
 data = timetable(zeros(length(time),1),'VariableNames', {'glucose'}, 'RowTimes', time);
