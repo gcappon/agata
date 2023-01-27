@@ -18,10 +18,12 @@ List of functions that can be used to get an overall report/analysis of glucose 
 
 List of functions that can be used to compute time related glucose metrics:
    - `timeInHypoglycemia`: function that computes the percentage of time spent in hypoglycemia.
+   - `timeInL1Hypoglycemia`: function that computes the percentage of time spent in level 1 hypoglycemia.
+   - `timeInL2Hypoglycemia`: function that computes the percentage of time spent in level 2 hypoglycemia.
    - `timeInHyperglycemia`: function that computes the percentage of time spent in hyperglycemia;
+   - `timeInL1Hyperglycemia`: function that computes the percentage of time spent in level 1 hyperglycemia;
+   - `timeInL2Hyperglycemia`: function that computes the percentage of time spent in level 2 hyperglycemia;
    - `timeInTarget`: function that computes the percentage of time spent in the target range;
-   - `timeInSevereHypoglycemia`: function that computes the percentage of time spent in severe hypoglycemia;
-   - `timeInSevereHyperglycemia`: function that computes the percentage of time spent in severe hyperglycemia;
    - `timeInTightTarget`: function that computes the percentage of time spent in the tight target range;
    - `timeInGivenRange`: function that computes the percentage of time spent in the given range.
 
@@ -47,6 +49,7 @@ List of functions that can be used to compute variability related glucose metric
    - `CVGA`: function that performs the control variablity grid analysis (CVGA);
    - `conga`: function that computes the Continuous Overall Net Glycemic Action (CONGA) index;
    - `modd`: function that computes the mean of daily difference (MODD) index;
+   - `cogi`: function that computes the Continuous Glucose Monitoring Index (COGI);
    - `poincareGlucose`: function that fits an ellipse corresponding to the Poincare' plot of the ```(x,y) = (glucose(t-1),glucose(t))``` graph;
    - `glucoseROC`: function that computes the glucose rate-of-change (ROC) trace. As defined in the given reference, ROC at time t is defined as the difference between the glucose at time t and t-15 minutes divided by 15 (ignores nan values). By definition, the first two samples are always nan;
    - `stdGlucoseROC`: function that computes the standard deviation of the glucose ROC (ignores nan values).
@@ -98,9 +101,13 @@ List of functions that can be used to find particular events in a given glucose 
    - `findNanIslands`: function that locates nan sequences in vector `data`, and classifies them based on their length;
    - `findHypoglycemicEvents`: function that finds the hypoglycemic events in a 
    given glucose trace;
+   - `findHypoglycemicEventsByLevel`: function that finds the hypoglycemic events in a 
+   given glucose trace classifying them by level, i.e., hypoglycemia, level 1 hypoglycemia, level 2 hypoglycemia;
    - `findHyperglycemicEvents`: function that finds the hyperglycemic events in a 
    given glucose trace;
-   - `findProlongedHypoglycemicEvents`: function that finds the prolonged hypoglycemic events in a given glucose trace;
+   - `findHyperglycemicEventsByLevel`: function that finds the hyperglycemic events in a 
+   given glucose trace classifying them by level, i.e., hyperglycemia, level 1 hyperglycemia, level 2 hyperglycemia;
+   - `findExtendedHypoglycemicEvents`: function that finds the extended hypoglycemic events in a given glucose trace;
    - `missingGlucosePercentage`: function that computes the percentage of missing values in the given glucose trace;
    - `numberDaysOfObservation(data)` : function that computes the number of days of observation of the given glucose trace.
 

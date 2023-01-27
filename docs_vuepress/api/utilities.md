@@ -97,7 +97,6 @@ Function that converts a timetable with column `Time` and `glucose` containing t
    - **data: timetable (required)** <br>
    A timetable with column `Time` and `glucose` containing the glucose data (in mg/dl). 
 ### Preconditions
-   - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference
    - None
@@ -115,7 +114,6 @@ Function that converts a timetable with column `Time` and `glucose` containing t
    - **data: timetable (required)** <br>
    A timetable with column `Time` and `glucose` containing the glucose data (in mmol/l). 
 ### Preconditions
-   - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference
    - None

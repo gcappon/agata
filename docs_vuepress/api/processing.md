@@ -24,7 +24,7 @@ new timetable with homogeneous `timestep`. It puts nans where glucose datapoints
 
 ## imputeGlucose
 ```MATLAB
-function dataImputed = imputeGlucose(data, timestep)
+function dataImputed = imputeGlucose(data, maxGap)
 ```
 Function that imputes missing glucose data using linear interpolation. The function imputes only missing data gaps of maximum `maxGap` minutes. Gaps longer than `maxGap` minutes are ignored.
 

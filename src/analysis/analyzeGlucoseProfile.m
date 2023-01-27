@@ -28,7 +28,7 @@ function results = analyzeGlucoseProfile(data)
 %        - `glycemicTransformationMetrics`: a structure with fields containing the values of the computed 
 %           glycemic transformed metrics (i.e., {`gradeScore`, `gradeEuScore`, 
 %           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
-%           `igc`, `mrIndex`}) of the metrics for each glucose profile;
+%           `igc`, `mrIndex`}) of the glucose profile;
 %        - `eventMetrics`: a structure with fields containing the values of the computed 
 %           event related metrics (i.e., {`hypoglycemicEvents`, `hyperglycemicEvents`, 
 %           `extendedHypoglycemicEvents`}) of the glucose profile.

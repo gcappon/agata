@@ -14,6 +14,9 @@ function generateAGP(data,varargin)
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid.
 %   - data must contain a column named `Time` and another named `glucose`.
+%   - Name must be a vector of characters.
+%   - DOB must be a vector of characters.
+%   - PrintFigure can be 0 or 1.
 %
 % ---------------------------------------------------------------------
 %

@@ -17,6 +17,10 @@ function plotCVGA(glucoseProfiles,varargin)
 %   - glucoseProfiles must be a cell array containing timetables;
 %   - Each timetable in glucoseProfiles must have a column names `Time` and a
 %   column named `glucose`.
+%   - `PlotZoneNames` can be 0 or 1;
+%   - `HighlightBestControl` can be 0 or 1;
+%   - `PrintFigure` can be 0 or 1.
+%   - `FontSize` must be an integer.
 %
 % ------------------------------------------------------------------------
 % 

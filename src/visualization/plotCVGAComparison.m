@@ -23,6 +23,10 @@ function plotCVGAComparison(glucoseProfilesArm1,glucoseProfilesArm2,varargin)
 %   column named `glucose`.
 %   - Each timetable in glucoseProfilesArm2 must have a column names `Time` and a
 %   column named `glucose`.
+%   - `PlotZoneNames` can be 0 or 1;
+%   - `HighlightBestControl` can be 0 or 1;
+%   - `PrintFigure` can be 0 or 1.
+%   - `FontSize` must be an integer.
 %
 % ------------------------------------------------------------------------
 % 

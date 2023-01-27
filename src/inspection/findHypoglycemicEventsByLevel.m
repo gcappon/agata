@@ -1,6 +1,6 @@
 function hypoglycemicEvents = findHypoglycemicEventsByLevel(data)
 %findHypoglycemicEventsByLevel function that finds the hypoglycemic events in a 
-%given glucose trace classifying them by level, i.e., All, Level 1 or 2.
+%given glucose trace classifying them by level, i.e., hypo, level 1 hypo or level 2 hypo.
 %The definition of hypoglycemic event can be found in Battellino et al.
 %
 %Input:
@@ -47,9 +47,10 @@ function hypoglycemicEvents = findHypoglycemicEventsByLevel(data)
 % ------------------------------------------------------------------------
 % 
 % Reference:
-%   - Danne et al., "International consensus on use of continuous glucose
-%   monitoring", Diabetes Care, 2017, vol. 40, pp. 1631-1640. DOI: 
-%   10.2337/dc17-1600.
+%   - Battelino et al., "Continuous glucose monitoring and merics for 
+%   clinical trials: An international consensus statement", The Lancet 
+%   Diabetes & Endocrinology, 2022, pp. 1-16. DOI: 
+%   https://doi.org/10.1016/S2213-8587(22)00319-9.
 % 
 % ------------------------------------------------------------------------
 %

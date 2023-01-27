@@ -44,7 +44,6 @@ Function that generates a plot of data in a single plot where each daily glucose
 Currently `plotGlucoseAsOneDay` is not CI tested.
 :::
 
-
 ## plotGlucoseAsOneDayComparison
 ```MATLAB
 function plotGlucoseAsOneDayComparison(data1,data2,varargin) 
@@ -130,15 +129,15 @@ Function that generates the ambulatory glucose profile (AGP) reports of the give
 
    - **Name: vector of characters (optional, default: '')** <br>
    A vector of characters defining the name of the patient; 
-   - **MRN: vector of characters (optional, default: '')** <br> 
-   A vector of characters defining the medical record number of the patient; 
+   - **DOB: vector of characters (optional, default: '')** <br> 
+   A vector of characters defining the date of birth of the patient; 
    - **PrintFigure: integer (optional, default: 0, {0, 1})** <br> 
    A numeric flag defining whether to output the .pdf files associated to each AGP or not.
 ### Preconditions
    - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`;
    - `Name` must be a vector of characters;
-   - `MRN` must be a vector of characters;
+   - `DOB` must be a vector of characters;
    - `PrintFigure` can be 0 or 1.
 ### Reference
    - Danne et al., "International consensus on use of continuous glucose monitoring", Diabetes Care, 2017, vol. 40, pp. 1631-1640. DOI: [10.2337/dc17-1600](https://doi.org/10.2337/dc17-1600).
@@ -172,6 +171,7 @@ Function that plots the control variablity grid analysis (CVGA).
    - `PlotZoneNames` can be 0 or 1;
    - `HighlightBestControl` can be 0 or 1;
    - `PrintFigure` can be 0 or 1.
+   - `FontSize` must be an integer.
 
 ### Reference
   - Magni et al., "Evaluating the efficacy of closed-loop glucose regulation via control-variability grid analysis", Journal of Diabetes Science and Technology, 2008, vol. 2, pp. 630-635. DOI: 10.1177/193229680800200414.
@@ -210,6 +210,7 @@ Function that plots and visually compares the control variablity grid analysis (
    - `PlotZoneNames` can be 0 or 1;
    - `HighlightBestControl` can be 0 or 1;
    - `PrintFigure` can be 0 or 1.
+   - `FontSize` must be an integer.
 
 ### Reference
   - Magni et al., "Evaluating the efficacy of closed-loop glucose regulation via control-variability grid analysis", Journal of Diabetes Science and Technology, 2008, vol. 2, pp. 630-635. DOI: 10.1177/193229680800200414.
@@ -239,6 +240,7 @@ Function that plots the control variablity grid analysis (CVGA).
    - `glucoseProfiles` must be a cell array containing timetables;
    - Each timetable in `glucoseProfiles` must have a column names `Time` and a column named `glucose`;
    - `HighlightBest` can be 0 or 1.
+   - `FontSize` must be an integer.
    - `PrintFigure` can be 0 or 1.
 
 ### Reference
@@ -276,6 +278,7 @@ Function that plots and visually compares the control variablity grid analysis (
    - `PlotZoneNames` can be 0 or 1;
    - `HighlightBestControl` can be 0 or 1;
    - `PrintFigure` can be 0 or 1.
+   - `FontSize` must be an integer.
 
 ### Reference
   - Klonoff et al., "A Glycemia Risk Index (GRI) of hypoglycemia and hyperglycemia for continuous glucose monitoring validated by clinician ratings", Journal of Diabetes Science and Technology, 2022, pp. 1-17. DOI: 10.1177/19322968221085273.

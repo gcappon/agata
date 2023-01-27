@@ -20,8 +20,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %           variability metrics (i.e., {`aucGlucose`, `CVGA`, `cogi`, `cvGlucose`, 
 %           `efIndex`, `gmi`, `iqrGlucose`, `jIndex`, `mageIndex`, 
 %           `magePlusIndex`, `mageMinusIndex`, `meanGlucose`, `medianGlucose`, 
-%           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) of the 
-%           metrics for each glucose profile;
+%           `rangeGlucose`, `sddmIndex`, `sdwIndex`, `stdGlucose`,`conga`,`modd`, `stdGlucoseROC`}) for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;
@@ -42,8 +41,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `prc95`: the 95th percentile of `values`;   
 %        - `dataQualityMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
-%           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) of 
-%           the metrics for each glucose profile;
+%           data quality metrics (i.e., {`missingGlucosePercentage`,`numberDaysOfObservation`}) for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;
@@ -55,8 +53,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `values`: a vector containing the values of the computed 
 %           time related metrics (i.e., {`timeInHyperglycemia`, 
 %           `timeInL1Hyperglycemia`, `timeInL2Hyperglycemia`, `timeInHypoglycemia`, 
-%           `timeInL1Hypoglycemia`, `timeInL2Hypoglycemia`, `timeInTarget`, `timeInTightTarget`}) 
-%           of the metrics for each glucose profile;
+%           `timeInL1Hypoglycemia`, `timeInL2Hypoglycemia`, `timeInTarget`, `timeInTightTarget`}) for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;
@@ -68,7 +65,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `values`: a vector containing the values of the computed 
 %           glycemic transformed metrics (i.e., {`gradeScore`, `gradeEuScore`, 
 %           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
-%           `igc`, `mrIndex`}) of the metrics for each glucose profile;
+%           `igc`, `mrIndex`}) for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;
@@ -79,7 +76,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %        - `eventMetrics`: a structure with fields:
 %            - `values`: a vector containing the values of the computed 
 %           event related metrics (i.e., {`hypoglycemicEvents`, `hyperglycemicEvents`, 
-%           `extendedHypoglycemicEvents`}) of the metrics for each glucose profile;
+%           `extendedHypoglycemicEvents`}) for each glucose profile;
 %            - `mean`: the mean of `values`;
 %            - `median`: the median of `values`;
 %            - `std`: the standard deviation of `values`;

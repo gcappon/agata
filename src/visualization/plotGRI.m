@@ -16,6 +16,7 @@ function plotGRI(glucoseProfiles,varargin)
 %   - glucoseProfiles must be a cell array containing timetables;
 %   - Each timetable in glucoseProfiles must have a column names `Time` and a
 %   column named `glucose`.
+%   
 %
 % ------------------------------------------------------------------------
 % 

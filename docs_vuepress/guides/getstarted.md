@@ -1,5 +1,13 @@
 # Getting started
 
+## Citing
+
+If you are using AGATA in your research, please support the research by citing:  
+```
+Cappon G, Sparacino G, Facchinetti A. AGATA: A toolbox for automated glucose data analysis.  
+J Diabetes Sci Technol. 2022. DOI: 10.1177/19322968221147570.
+```
+
 ## Step 1: Install AGATA
 
 Installation of AGATA can be easily performed by including the AGATA folder in the MATLAB® *PATH*. To do so: 
@@ -13,6 +21,14 @@ Installation of AGATA can be easily performed by including the AGATA folder in t
 addpath(genpath('~/MATLAB/agata-X.Y.Z/src'))
 ```
 5. Enjoy!
+
+As an alternative, AGATA functionalities can be accessed via a dedicated graphical user interface (GUI) which can be installed as a standalone application. This solution is particularly convenient since it does not require users to have a valid MATLAB® licence to run AGATA.
+
+To install AGATA's standalone version:
+
+1. Download the latest AGATA release (e.g. `X.Y.Z`) from Github --> [here](https://github.com/gcappon/agata/releases);
+2. Run the installer that you can find in the `standalone` folder. Be careful to run the right installer depending on the target operating system. 
+3. Enjoy!
 
 ## Step 2: Test AGATA
 

@@ -1,8 +1,8 @@
 function extendedHypoglycemicEvents = findExtendedHypoglycemicEvents(data, varargin)
 %findExtendedHypoglycemicEvents function that finds the extended 
 %hypoglycemic events in a given glucose trace. The definition of extended
-%hypoglycemic event can be found in Battellino et al. (event begins: at least consecutive 120 minutes < 70 mg/dl, 
-%event ends: at least 15 consecutive minutes > 70 mg/dl)
+%hypoglycemic event can be found in Battellino et al. (event begins: at least consecutive 120 minutes < threshold mg/dl, 
+%event ends: at least 15 consecutive minutes > threshold mg/dl)
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 

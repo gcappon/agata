@@ -1,8 +1,8 @@
 function hypoglycemicEvents = findHypoglycemicEvents(data, varargin)
 %findHypoglycemicEvents function that finds the hypoglycemic events in a 
 %given glucose trace. The definition of hypoglycemic event can be found 
-%in Battellino et al. (event begins: at least consecutive 15 minutes < 70 mg/dl, 
-%event ends: at least 15 consecutive minutes > 70 mg/dl)
+%in Battellino et al. (event begins: at least consecutive 15 minutes < threshold mg/dl, 
+%event ends: at least 15 consecutive minutes > threshold mg/dl)
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
@@ -15,6 +15,8 @@ function hypoglycemicEvents = findHypoglycemicEvents(data, varargin)
 %       - timeStart: a vector containing the starting timestamps of each found 
 %       hypoglycemic event;
 %       - timeEnd: a vector containing the ending timestamps of each found 
+%       hypoglycemic event;
+%       - duration: a vector containing the duration (in min) of each found 
 %       hypoglycemic event;
 %       - meanDuration: metric, the average duration of the events;
 %       - numberPerWeek: metric, the number of events per week.

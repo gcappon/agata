@@ -1,13 +1,13 @@
 function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
 %findHyperglycemicEvents function that finds the hyperglycemic events in a 
 %given glucose trace. The definition of hyperglycemic event can be found 
-%in Battellino et al. (event begins: at least consecutive 15 minutes > 180 mg/dl, 
-%event ends: at least 15 consecutive minutes < 180 mg/dl)
+%in Battellino et al. (event begins: at least consecutive 15 minutes > threshold mg/dl, 
+%event ends: at least 15 consecutive minutes < threshold mg/dl)
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl).
-%   - th: an integer with the selected hypoglycemia threshold (in mg/dl)
+%   - th: an integer with the selected hyperglycemia threshold (in mg/dl)
 %   the default value is 180 mg/dl.
 %Output:
 %   - hyperglycemicEvents: a structure containing the information on the

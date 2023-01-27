@@ -417,3 +417,21 @@ Function that computes the standard deviation of the glucose ROC (ignores nan va
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference
    - Clarke et al., "Statistical Tools to Analyze Continuous Glucose Monitor Data", Diabetes Technol Ther, 2009, vol. 11, pp. S45-S54. DOI: 10.1089=dia.2008.0138.
+
+## cogi
+```MATLAB
+function cogi = cogi(data)
+```
+Function that computes the Continuous Glucose Monitoring Index (COGI) (ignores nan values).
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **cogi: double** <br>
+   the COGI index. 
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference
+   - Leelaranthna et al., "Evaluating glucose control with a novel composite Continuous Glucose Monitoring Index", Journal of Diabetes Science and Technology, 2019, vol. 14, pp. 277-283. DOI: 10.1177/1932296819838525.

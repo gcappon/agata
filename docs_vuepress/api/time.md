@@ -16,7 +16,43 @@ Function that computes the percentage of time spent in hypoglycemia (ignoring na
    - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference 
-   - None
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
+
+## timeInL1Hypoglycemia
+```MATLAB
+function timeInL1Hypoglycemia = timeInL1Hypoglycemia(data)
+```
+Function that computes the percentage of time spent in level 1 hypoglycemia (ignoring nan values).
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **timeInL1Hypoglycemia: double** <br>
+   Percentage of time in level 1 hypoglycemia (i.e., 54-70 mg/dl).
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference 
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
+
+## timeInL2Hypoglycemia
+```MATLAB
+function timeInL2Hypoglycemia = timeInL2Hypoglycemia(data)
+```
+Function that computes the percentage of time spent in level 2 hypoglycemia (ignoring nan values).
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **timeInL2Hypoglycemia: double** <br>
+   Percentage of time in level 2 hypoglycemia (i.e., < 54 mg/dl).
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference 
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
 
 ## timeInHyperglycemia
 ```MATLAB
@@ -34,7 +70,44 @@ Function that computes the percentage of time spent in hyperglycemia (ignoring n
    - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference 
-   - None
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
+
+## timeInL1Hyperglycemia
+```MATLAB
+function timeInL1Hyperglycemia = timeInL1Hyperglycemia(data)
+```
+Function that computes the percentage of time spent in level 1 hyperglycemia (ignoring nan values).
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **timeInL1Hyperglycemia: double** <br>
+   Percentage of time in level 1 hyperglycemia (i.e., 180-250 mg/dl).
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference 
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
+
+## timeInL2Hyperglycemia
+```MATLAB
+function timeInL2Hyperglycemia = timeInL2Hyperglycemia(data)
+```
+Function that computes the percentage of time spent in level 2 hyperglycemia (ignoring nan values).
+
+### Input
+   - **data: timetable (required)** <br>
+   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
+### Output
+   - **timeInL2Hyperglycemia: double** <br>
+   Percentage of time in level 2 hyperglycemia (i.e., > 250 mg/dl).
+### Preconditions
+   - `data` must be a timetable having an homogeneous time grid;
+   - `data` must contain a column named `Time` and another named `glucose`.
+### Reference 
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
+
    
 ## timeInTarget
 ```MATLAB
@@ -52,43 +125,7 @@ Function that computes the percentage of time spent in the target range (ignorin
    - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference 
-   - None
-   
-## timeInSevereHypoglycemia
-```MATLAB
-function timeInSevereHypoglycemia = timeInSevereHypoglycemia(data)
-```
-Function that computes the percentage of time spent in severe hypoglycemia (ignoring nan values).
-
-### Input
-   - **data: timetable (required)** <br>
-   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
-### Output
-   - **timeInSevereHypoglycemia: double** <br>
-   Percentage of time in severe hypoglycemia (i.e., < 54 mg/dl).
-### Preconditions
-   - `data` must be a timetable having an homogeneous time grid;
-   - `data` must contain a column named `Time` and another named `glucose`.
-### Reference 
-   - None
-   
-## timeInSevereHyperglycemia
-```MATLAB
-function timeInSevereHyperglycemia = timeInSevereHyperglycemia(data)
-```
-Function that computes the percentage of time spent in severe hyperglycemia (ignoring nan values).
-
-### Input
-   - **data: timetable (required)** <br>
-   A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
-### Output
-   - **timeInSevereHyperglycemia: double** <br>
-   Percentage of time in severe hyperglycemia (i.e., > 250 mg/dl).
-### Preconditions
-   - `data` must be a timetable having an homogeneous time grid;
-   - `data` must contain a column named `Time` and another named `glucose`.
-### Reference 
-   - None
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
    
 ## timeInTightTarget
 ```MATLAB
@@ -101,12 +138,13 @@ Function that computes the percentage of time spent in the tight target range (i
    A timetable with columns `Time` and `glucose` containing the glucose data to analyze (mg/dl).
 ### Output
    - **timeInTightTarget: double** <br>
-   Percentage of time in the tight target range (i.e., >= 90 and <= 140 mg/dl).
+   Percentage of time in the tight target range (i.e., >= 70 and <= 140 mg/dl).
 ### Preconditions
    - `data` must be a timetable having an homogeneous time grid;
    - `data` must contain a column named `Time` and another named `glucose`.
 ### Reference 
-   - None
+   - Battelino et al., "Continuous glucose monitoring and merics for clinical trials: An international consensus statement", The Lancet Diabetes & Endocrinology, 2022, pp. 1-16. DOI: https://doi.org/10.1016/S2213-8587(22)00319-9.
+
    
 ## timeInGivenRange
 ```MATLAB

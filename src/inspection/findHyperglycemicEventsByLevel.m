@@ -1,6 +1,6 @@
 function hyperglycemicEvents = findHyperglycemicEventsByLevel(data)
 %findHyperglycemicEventsByLevel function that finds the hyperglycemic events in a 
-%given glucose trace classifying them by level, i.e., All, Level 1 or 2.
+%given glucose trace classifying them by level, i.e., hyper, level 1 hyper or level 2 hyper.
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 

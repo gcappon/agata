@@ -1,6 +1,5 @@
 function timeInL1Hypoglycemia = timeInL1Hypoglycemia(data)
-%timeInL1Hypoglycemia function that computes the time spent in hypoglycemia
-%(Level 1) (ignoring nan values).
+%timeInL1Hypoglycemia function that computes the time spent in level 1 hypoglycemia (ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
