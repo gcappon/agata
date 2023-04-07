@@ -59,7 +59,15 @@ function data = readDexcomData(file)
                 d = raw{r,8};
             end
             if(ischar(d) || isstring(d))
-                d = str2num(d);
+                if(strcmp(d,'Low'))
+                    d = 39;
+                else
+                    if(strcmp(d,'High'))
+                        d = 401;
+                    else
+                        d = str2num(d);
+                    end
+                end
             end
             if(isempty(d))
                 d = nan;
