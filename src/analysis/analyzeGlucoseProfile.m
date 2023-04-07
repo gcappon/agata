@@ -136,7 +136,7 @@ function results = analyzeGlucoseProfile(data, varargin)
     for t = timeMetrics
         
         %Compute metric for glucose profile
-        results.time.(t{:}) = feval(t{:}, data);
+        results.time.(t{:}) = feval(t{:}, data,'GlycemicTarget',glycemicTarget);
         
     end
     

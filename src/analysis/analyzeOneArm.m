@@ -225,7 +225,7 @@ function results = analyzeOneArm(arm,varargin)
         
         %Compute metrics for arm
         for g = 1:length(arm)
-            results.time.(t{:}).values(g) = feval(t{:}, arm{g});
+            results.time.(t{:}).values(g) = feval(t{:}, arm{g},'GlycemicTarget',glycemicTarget);
         end
         
         %Compute metrics stats
