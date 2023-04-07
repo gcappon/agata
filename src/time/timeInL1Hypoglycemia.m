@@ -1,16 +1,20 @@
-function timeInL1Hypoglycemia = timeInL1Hypoglycemia(data)
+function timeInL1Hypoglycemia = timeInL1Hypoglycemia(data,varargin)
 %timeInL1Hypoglycemia function that computes the time spent in level 1 hypoglycemia (ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
-%   glucose data to analyze (in mg/dl). 
+%   glucose data to analyze (in mg/dl);
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Output:
 %   - timeInHypoglycemia: percentage of time in level 1 hypoglycemia (i.e., 
-%   54-70 mg/dl).
+%   54-70 mg/dl if `GlycemicTarget` is `diabetes`, 54-63 mg/dl if `GlycemicTarget` is `pregnancy`).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`.
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 % 
 % ------------------------------------------------------------------------
 % 
@@ -42,11 +46,37 @@ function timeInL1Hypoglycemia = timeInL1Hypoglycemia(data)
         error('timeInL1Hypoglycemia: data must have a column named `glucose`.')
     end
     
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
+    
+    params = inputParser;
+    params.CaseSensitive = false;
+    
+    addRequired(params,'data',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
+
+    parse(params,data,varargin{:});
+
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
+    
     %Remove nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
+    %Set the threshold
+    if(strcmp(glycemicTarget,'diabetes'))
+        thL = 54;
+        thH = 70;
+    else
+        if(strcmp(glycemicTarget,'pregnancy'))
+            thL = 54;
+            thH = 63;
+        end
+    end
+    
     %Compute metric
-    timeInL1Hypoglycemia = 100*sum(nonNanGlucose >= 54 & nonNanGlucose < 70)/length(nonNanGlucose);
+    timeInL1Hypoglycemia = 100*sum(nonNanGlucose >= thL & nonNanGlucose < thH)/length(nonNanGlucose);
     
 end
 

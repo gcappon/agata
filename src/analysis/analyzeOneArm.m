@@ -1,11 +1,14 @@
-function results = analyzeOneArm(arm)
+function results = analyzeOneArm(arm,varargin)
 %analyzeOneArm function that computes the glycemic outcomes of an arm.
 %
 %Inputs:
 %    - arm: a cell array of timetables containing the glucose data of the 
 %   arm. Each timetable corresponds to a patient and contains a 
 %   column `Time` and a column `glucose` containg the glucose recordings
-%   (in mg/dl).
+%   (in mg/dl);
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Output:
 %    - results: a structure with field containing the computed metrics in the arm, i.e.:
 %        - `variabilityMetrics`: a structure with fields:
@@ -21,7 +24,7 @@ function results = analyzeOneArm(arm)
 %            - `prc25`: the 25th percentile of `values`;
 %            - `prc75`: the 75th percentile of `values`;
 %            - `prc95`: the 95th percentile of `values`;   
-%        - `riskMetrics`: a structure with fields:
+%        - `riskMetrics`: a structure (contains only `gri` is GlycemicTarget is `pregnancy`) with fields:
 %            - `values`: a vector containing the values of the computed 
 %           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`,`gri`}) for each glucose profile;
 %            - `mean`: the mean of `values`;
@@ -53,7 +56,7 @@ function results = analyzeOneArm(arm)
 %            - `prc25`: the 25th percentile of `values`;
 %            - `prc75`: the 75th percentile of `values`;
 %            - `prc95`: the 95th percentile of `values`; 
-%        - `glycemicTransformationMetrics`: a structure with fields:
+%        - `glycemicTransformationMetrics`: a structure (empty if GlycemicTarget is `pregnancy`) with fields:
 %            - `values`: a vector containing the values of the computed 
 %           glycemic transformed metrics (i.e., {`gradeScore`, `gradeEuScore`, 
 %           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
@@ -82,6 +85,7 @@ function results = analyzeOneArm(arm)
 %    - Each timetable in `arm` must have a column names `Time` and a
 %    column named `glucose`.
 %    - Each timetable in `arm` must have an homogeneous time grid.
+%    - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 %
 % ---------------------------------------------------------------------
 %
@@ -116,12 +120,33 @@ function results = analyzeOneArm(arm)
         end
     end
     
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
+    
+    params = inputParser;
+    params.CaseSensitive = false;
+    
+    addRequired(params,'arm',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
+
+    parse(params,arm,varargin{:});
+
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
     
     %Variability metrics
-    variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
-        'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
-    
+    if(strcmp(glycemicTarget,'diabetes'))
+        variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
+            'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
+            'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
+    else 
+        if(strcmp(glycemicTarget,'pregnancy'))
+            variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
+                'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
+                'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
+        end
+    end
     for v = variabilityMetrics
         
         %Preallocate
@@ -147,7 +172,13 @@ function results = analyzeOneArm(arm)
     end
     
     %Risk metrics
-    riskMetrics = {'adrr','bgri','hbgi','lbgi','gri'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        riskMetrics = {'adrr','bgri','hbgi','lbgi','gri'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                riskMetrics = {'gri'};
+            end
+    end
     
     for r = riskMetrics
         
@@ -175,9 +206,17 @@ function results = analyzeOneArm(arm)
     
     
     %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
-        'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
-        'timeInTarget','timeInTightTarget'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+            'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+            'timeInTarget','timeInTightTarget'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+                'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+                'timeInTarget','timeInTightTarget'};
+            end
+    end
     
     for t = timeMetrics
         
@@ -204,9 +243,15 @@ function results = analyzeOneArm(arm)
     end
     
     %Glycemic transformation metrics
-    glycemicTransformationMetrics = {'gradeEuScore','gradeHyperScore','gradeHypoScore',...
-         'gradeScore','hyperIndex','hypoIndex','igc','mrIndex'};
-     
+    if(strcmp(glycemicTarget,'diabetes'))
+        glycemicTransformationMetrics = {'gradeEuScore','gradeHyperScore','gradeHypoScore',...
+             'gradeScore','hyperIndex','hypoIndex','igc','mrIndex'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                glycemicTransformationMetrics = {};
+            end
+    end
+    
     for gt = glycemicTransformationMetrics
         
         %Preallocate
@@ -232,7 +277,13 @@ function results = analyzeOneArm(arm)
     end
     
     %Data quality metrics
-    dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
+            end
+    end
     
     for d = dataQualityMetrics
         
@@ -260,9 +311,15 @@ function results = analyzeOneArm(arm)
     
     
     %Event metrics
-    eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','extendedHypoglycemicEvents'};
-    eventFunc = {'findHyperglycemicEventsByLevel','findHypoglycemicEventsByLevel','findExtendedHypoglycemicEvents'};
-    
+    if(strcmp(glycemicTarget,'diabetes'))
+        eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','extendedHypoglycemicEvents'};
+        eventFunc = {'findHyperglycemicEventsByLevel','findHypoglycemicEventsByLevel','findExtendedHypoglycemicEvents'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                eventMetrics = {'hyperglycemicEvents','hypoglycemicEvents','extendedHypoglycemicEvents'};
+                eventFunc = {'findHyperglycemicEventsByLevel','findHypoglycemicEventsByLevel','findExtendedHypoglycemicEvents'};
+            end
+    end
     
     for e = 1:length(eventMetrics)
 

@@ -1,4 +1,4 @@
-function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
+function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha,varargin)
 %compareTwoArms function that compares the glycemic outcomes of two arms
 %
 %Inputs:
@@ -12,6 +12,9 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %   analysis. Commonly paired tests are performed when data of the same 
 %   patients are present in both arms, unpaired otherwise;
 %    - alpha: a double representing the significance level to use.
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Outputs;
 %    - results: a structure with field `arm1` and `arm2`, that are two 
 %   structures with field containing the computed metrics in the two arms, i.e.:
@@ -28,7 +31,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `prc25`: the 25th percentile of `values`;
 %            - `prc75`: the 75th percentile of `values`;
 %            - `prc95`: the 95th percentile of `values`;   
-%        - `riskMetrics`: a structure with fields:
+%        - `riskMetrics`: a structure (contains only `gri` if GlycemicTarget is `pregnancy`) with fields:
 %            - `values`: a vector containing the values of the computed 
 %           risk metrics (i.e., {`adrr`, `bgri`, `hbgi`, `lbgi`,`gri`}) of the 
 %           metrics for each glucose profile;
@@ -61,7 +64,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %            - `prc25`: the 25th percentile of `values`;
 %            - `prc75`: the 75th percentile of `values`;
 %            - `prc95`: the 95th percentile of `values`; 
-%        - `glycemicTransformationMetrics`: a structure with fields:
+%        - `glycemicTransformationMetrics`: a structure (empty if GlycemicTarget is `pregnancy`) with fields:
 %            - `values`: a vector containing the values of the computed 
 %           glycemic transformed metrics (i.e., {`gradeScore`, `gradeEuScore`, 
 %           `gradeHyperScore`, `gradeHypoScore`, `hypoIndex`, `hyperIndex`, 
@@ -103,6 +106,7 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
 %    column named `glucose`.
 %    - Each timetable in `arm1` and `arm2` must have an homogeneous time grid;
 %    - `isPaired` can be 0 or 1.
+%   - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 %
 % ---------------------------------------------------------------------
 %
@@ -167,14 +171,39 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
         error(['compareTwoArms: You are trying to perform a paired test but the number of glucose profiles in the two arms is different.']);
     end
     
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
     
-    results.arm1 = analyzeOneArm(arm1);
-    results.arm2 = analyzeOneArm(arm2);
+    params = inputParser;
+    params.CaseSensitive = false;
+    
+    addRequired(params,'arm1',@(x) true); %already checked
+    addRequired(params,'arm2',@(x) true); %already checked
+    addRequired(params,'isPaired',@(x) true); %already checked
+    addRequired(params,'alpha',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
+
+    parse(params,arm1,arm2,isPaired,alpha,varargin{:});
+    
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
+    
+    results.arm1 = analyzeOneArm(arm1,'GlycemicTarget',glycemicTarget);
+    results.arm2 = analyzeOneArm(arm2,'GlycemicTarget',glycemicTarget);
     
     %Variability metrics
-    variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
-        'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
-        'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
+            'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
+            'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
+    else 
+        if(strcmp(glycemicTarget,'pregnancy'))
+            variabilityMetrics = {'aucGlucose','CVGA','cogi','cvGlucose','efIndex','gmi','iqrGlucose',...
+                'jIndex','mageIndex','magePlusIndex','mageMinusIndex','meanGlucose','medianGlucose',...
+                'rangeGlucose','sddmIndex','sdwIndex','stdGlucose','conga','modd', 'stdGlucoseROC'};
+        end
+    end
     
     for v = variabilityMetrics
         
@@ -199,7 +228,13 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     end
     
     %Risk metrics
-    riskMetrics = {'adrr','bgri','hbgi','lbgi','gri'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        riskMetrics = {'adrr','bgri','hbgi','lbgi','gri'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                riskMetrics = {'gri'};
+            end
+    end
     
     for r = riskMetrics
         
@@ -225,9 +260,17 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     
     
     %Time metrics
-    timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
-        'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
-        'timeInTarget','timeInTightTarget'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+            'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+            'timeInTarget','timeInTightTarget'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                timeMetrics = {'timeInHyperglycemia','timeInL1Hyperglycemia','timeInL2Hyperglycemia',...
+                'timeInHypoglycemia','timeInL1Hypoglycemia','timeInL2Hypoglycemia',...
+                'timeInTarget','timeInTightTarget'};
+            end
+    end
     
     
     for t = timeMetrics 
@@ -253,7 +296,13 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     end
     
     %Data quality metrics
-    dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
+    if(strcmp(glycemicTarget,'diabetes'))
+        dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                dataQualityMetrics = {'missingGlucosePercentage','numberDaysOfObservation'};
+            end
+    end
     
     for d = dataQualityMetrics  
         
@@ -278,8 +327,15 @@ function [results, stats] = compareTwoArms(arm1,arm2,isPaired,alpha)
     end
     
     
-    %Glycemic transformation metrics
-    glycemicTransformationMetrics = {'gradeScore','gradeEuScore','gradeHyperScore','gradeHypoScore','hypoIndex','hyperIndex','igc','mrIndex'};
+     %Glycemic transformation metrics
+    if(strcmp(glycemicTarget,'diabetes'))
+        glycemicTransformationMetrics = {'gradeEuScore','gradeHyperScore','gradeHypoScore',...
+             'gradeScore','hyperIndex','hypoIndex','igc','mrIndex'};
+    else 
+            if(strcmp(glycemicTarget,'pregnancy'))
+                glycemicTransformationMetrics = {};
+            end
+    end
     
     for gt = glycemicTransformationMetrics
         

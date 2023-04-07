@@ -1,17 +1,21 @@
-function timeInL1Hyperglycemia = timeInL1Hyperglycemia(data)
+function timeInL1Hyperglycemia = timeInL1Hyperglycemia(data,varargin)
 %timeInL1Hyperglycemia function that computes the time spent in Level 1 hyperglycemia
 %(ignoring nan values).
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
-%   glucose data to analyze (in mg/dl). 
+%   glucose data to analyze (in mg/dl);
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Output:
 %   - timeInHyperglycemia: percentage of time in level 1 hyperglycemia (i.e., 
-%   181-250 mg/dl).
+%   181-250 mg/dl if `GlycemicTarget` is `diabetes`, 141-250 mg/dl if `GlycemicTarget` is `pregnancy`).
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`.
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 % 
 % ------------------------------------------------------------------------
 % 
@@ -43,11 +47,37 @@ function timeInL1Hyperglycemia = timeInL1Hyperglycemia(data)
         error('timeInL1Hyperglycemia: data must have a column named `glucose`.')
     end
     
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
+    
+    params = inputParser;
+    params.CaseSensitive = false;
+    
+    addRequired(params,'data',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
+
+    parse(params,data,varargin{:});
+
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
+    
     %Remove nans
     nonNanGlucose = data.glucose(~isnan(data.glucose));
     
+    %Set the threshold
+    if(strcmp(glycemicTarget,'diabetes'))
+        thL = 180;
+        thH = 250;
+    else
+        if(strcmp(glycemicTarget,'pregnancy'))
+            thL = 140;
+            thH = 250;
+        end
+    end
+    
     %Compute metric
-    timeInL1Hyperglycemia = 100*sum(nonNanGlucose > 180 & nonNanGlucose <= 250)/length(nonNanGlucose);
+    timeInL1Hyperglycemia = 100*sum(nonNanGlucose > thL & nonNanGlucose <= thH)/length(nonNanGlucose);
     
 end
 
