@@ -130,7 +130,7 @@ function hyperglycemicEvents = findHyperglycemicEvents(data, varargin)
         hyperglycemicEvents.duration(k) = minutes(data.Time(t-(nSamples-count-1)) - tempStartTime);
         k = k +  1;
     end
-    if((count == 3 && flag == 1))
+    if((count == nSamples && flag == 1))
         hyperglycemicEvents.time(k) = tempStartTime;
         hyperglycemicEvents.duration(k) = minutes(data.Time(t) - tempStartTime) + sampleTime;
         k = k +  1;
