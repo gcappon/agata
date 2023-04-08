@@ -1,11 +1,14 @@
-function hypoglycemicEvents = findHypoglycemicEventsByLevel(data)
+function hypoglycemicEvents = findHypoglycemicEventsByLevel(data,varargin)
 %findHypoglycemicEventsByLevel function that finds the hypoglycemic events in a 
 %given glucose trace classifying them by level, i.e., hypo, level 1 hypo or level 2 hypo.
 %The definition of hypoglycemic event can be found in Battellino et al.
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
-%   glucose data to analyze (in mg/dl).
+%   glucose data to analyze (in mg/dl);
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Output:
 %   - hypoglycemicEvents: a structure containing the information on the
 %   hypoglycemic events found by the function with fields:
@@ -42,7 +45,8 @@ function hypoglycemicEvents = findHypoglycemicEventsByLevel(data)
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`.
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 %   
 % ------------------------------------------------------------------------
 % 
@@ -73,12 +77,37 @@ function hypoglycemicEvents = findHypoglycemicEventsByLevel(data)
     if(~any(strcmp(fieldnames(data),'glucose')))
         error('findHypoglycemicEventsByLevel: data must have a column named `glucose`.')
     end
+    
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
+    
+    params = inputParser;
+    params.CaseSensitive = false;
+    
+    addRequired(params,'data',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
 
+    parse(params,data,varargin{:});
+    
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
+    
+    if(strcmp(glycemicTarget,'diabetes'))
+        thL1 = 70;
+        thL2 = 54;
+    else
+        if(strcmp(glycemicTarget,'pregnancy'))
+            thL1 = 63;
+            thL2 = 54;
+        end
+    end
+    
     %Get all hypoglycemic events
-    allHypoEvents = findHypoglycemicEvents(data,'th',70);
+    allHypoEvents = findHypoglycemicEvents(data,'th',thL1);
     
     %Get L2 hypoglycemic events
-    l2HypoEvents = findHypoglycemicEvents(data,'th',54);
+    l2HypoEvents = findHypoglycemicEvents(data,'th',thL2);
     
     flagL1Events = true(length(allHypoEvents.timeStart),1);
     

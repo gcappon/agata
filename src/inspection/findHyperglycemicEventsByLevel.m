@@ -1,10 +1,13 @@
-function hyperglycemicEvents = findHyperglycemicEventsByLevel(data)
+function hyperglycemicEvents = findHyperglycemicEventsByLevel(data,varargin)
 %findHyperglycemicEventsByLevel function that finds the hyperglycemic events in a 
 %given glucose trace classifying them by level, i.e., hyper, level 1 hyper or level 2 hyper.
 %
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
-%   glucose data to analyze (in mg/dl).
+%   glucose data to analyze (in mg/dl);
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Output:
 %   - hyperglycemicEvents: a structure containing the information on the
 %   hyperglycemic events found by the function with fields:
@@ -41,7 +44,8 @@ function hyperglycemicEvents = findHyperglycemicEventsByLevel(data)
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`.
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 %   
 % ------------------------------------------------------------------------
 % 
@@ -72,12 +76,37 @@ function hyperglycemicEvents = findHyperglycemicEventsByLevel(data)
     if(~any(strcmp(fieldnames(data),'glucose')))
         error('findHypoglycemicEventsByLevel: data must have a column named `glucose`.')
     end
+    
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
+    
+    params = inputParser;
+    params.CaseSensitive = false;
+    
+    addRequired(params,'data',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
+
+    parse(params,data,varargin{:});
+    
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
+    
+    if(strcmp(glycemicTarget,'diabetes'))
+        thL1 = 180;
+        thL2 = 250;
+    else
+        if(strcmp(glycemicTarget,'pregnancy'))
+            thL1 = 140;
+            thL2 = 250;
+        end
+    end
 
     %Get all hypoglycemic events
-    allHyperEvents = findHyperglycemicEvents(data,'th',180);
+    allHyperEvents = findHyperglycemicEvents(data,'th',thL1);
     
     %Get L2 hypoglycemic events
-    l2HyperEvents = findHyperglycemicEvents(data,'th',250);
+    l2HyperEvents = findHyperglycemicEvents(data,'th',thL2);
     
     flagL1Events = true(length(allHyperEvents.timeStart),1);
     

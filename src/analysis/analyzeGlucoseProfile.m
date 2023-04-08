@@ -187,7 +187,7 @@ function results = analyzeGlucoseProfile(data, varargin)
     for e = 1:length(eventMetrics)
         
         %Compute metric for glucose profile
-        results.event.(eventMetrics{e}) = feval(eventFunc{e}, data);
+        results.event.(eventMetrics{e}) = feval(eventFunc{e}, data,'GlycemicTarget',glycemicTarget);
       
     end
     

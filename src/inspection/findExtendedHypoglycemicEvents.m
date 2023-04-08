@@ -7,8 +7,9 @@ function extendedHypoglycemicEvents = findExtendedHypoglycemicEvents(data, varar
 %Input:
 %   - data: a timetable with column `Time` and `glucose` containing the 
 %   glucose data to analyze (in mg/dl);
-%   - th: an integer with the selected extended hypoglycemia threshold (in mg/dl)
-%   the default value is 70 mg/dl.
+%   - GlycemicTarget: a vector of characters defining the set of glycemic
+%   targets to use. The default value is `diabetes`. It can be {`diabetes`,
+%   `pregnancy`).
 %Output:
 %   - extendedHypoglycemicEvents: a structure containing the information on the
 %   extended hypoglycemic events found by the function with fields:
@@ -23,7 +24,8 @@ function extendedHypoglycemicEvents = findExtendedHypoglycemicEvents(data, varar
 %
 %Preconditions:
 %   - data must be a timetable having an homogeneous time grid;
-%   - data must contain a column named `Time` and another named `glucose`.
+%   - data must contain a column named `Time` and another named `glucose`;
+%   - `GlycemicTarget` can be `pregnancy` or `diabetes`.
 % 
 % ------------------------------------------------------------------------
 % 
@@ -55,14 +57,28 @@ function extendedHypoglycemicEvents = findExtendedHypoglycemicEvents(data, varar
         error('findExtendedHypoglycemicEvents: data must have a column named `glucose`.')
     end
     
-    %Set default threshold value
-    defaultThreshold = 70;
+    %Input parser and check preconditions
+    defaultGlycemicTarget = 'diabetes';
+    expectedGlycemicTarget = {'diabetes','pregnancy'};
+    
     params = inputParser;
     params.CaseSensitive = false;
-    addOptional(params,'th',defaultThreshold,@(x) x > 30 && x < 1000);
-    parse(params,varargin{:});
+    
+    addRequired(params,'data',@(x) true); %already checked
+    addOptional(params,'GlycemicTarget',defaultGlycemicTarget, @(x) any(validatestring(x,expectedGlycemicTarget)));
 
-    th = params.Results.th;
+    parse(params,data,varargin{:});
+    
+    %Initialization
+    glycemicTarget = params.Results.GlycemicTarget;
+    
+    if(strcmp(glycemicTarget,'diabetes'))
+        th = 70;
+    else
+        if(strcmp(glycemicTarget,'pregnancy'))
+            th = 63;
+        end
+    end
     
     k = 1; %prolongedHypoglycemicEvents vector current index
     nSamplesIn = round(120/minutes(data.Time(2) - data.Time(1))); %number of consecutive samples required to define a valid event

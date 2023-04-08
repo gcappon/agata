@@ -326,7 +326,7 @@ function results = analyzeOneArm(arm,varargin)
         for g = 1:length(arm)
         
             %Compute metric for glucose profile
-            event.(eventMetrics{e}).values{g} = feval(eventFunc{e}, arm{g});
+            event.(eventMetrics{e}).values{g} = feval(eventFunc{e}, arm{g},'GlycemicTarget',glycemicTarget);
 
         end
     end
