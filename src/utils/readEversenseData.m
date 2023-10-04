@@ -53,7 +53,7 @@ function data = readEversenseData(file)
         if(is_mg_dl)
             glucose(r-1) = raw{r,3};
         else
-            glucose(r-1) = raw{r,3}/18.018;
+            glucose(r-1) = raw{r,3}*18.018;
         end
         
     end
