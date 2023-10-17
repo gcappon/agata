@@ -60,10 +60,10 @@ function data = readDexcomData(file)
             end
             if(ischar(d) || isstring(d))
                 if(strcmp(d,'Low'))
-                    d = 39;
+                    d = nan;
                 else
                     if(strcmp(d,'High'))
-                        d = 401;
+                        d = nan;
                     else
                         d = str2num(d);
                     end
